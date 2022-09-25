@@ -1,0 +1,13 @@
+{
+  "name": "state-management-react",
+  "private": true,
+  "workspaces": ["frontend", "backend", "packages/*"],
+  "version": "1.0.0",
+  "main": "index.js",
+  "author": "codereviewjs <codereviewjs@gmail.com>",
+  "license": "MIT",
+  "scripts": {
+    "start:backend": "yarn workspace backend start",
+    "start:frontend": "yarn workspace frontend dev"
+  }
+}
