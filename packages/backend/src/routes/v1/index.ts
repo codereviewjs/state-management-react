@@ -1,6 +1,7 @@
 import express from "express";
 import authRoute from "./auth.route";
-import productRoute from "./product.route";
+import bookRoute from "./book.route";
+import authorRoute from "./author.route";
 
 const router = express.Router();
 
@@ -10,8 +11,12 @@ const defaultRoutes = [
     route: authRoute,
   },
   {
-    path: "/product",
-    route: productRoute,
+    path: "/book",
+    route: bookRoute,
+  },
+  {
+    path: "/author",
+    route: authorRoute,
   },
 ];
 

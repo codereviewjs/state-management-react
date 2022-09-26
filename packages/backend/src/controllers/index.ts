@@ -1,2 +1,3 @@
 export * from "./auth.controller";
-export * from "./product.controller";
+export * from "./book.controller";
+export * from "./author.controller";

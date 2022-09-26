@@ -1,12 +1,7 @@
 import { Request, Response } from "express";
-import AuthModule, { IAuth } from "../models/auth.module";
+import { AuthModule } from "../models";
 
-const user = {
-  email: "admin@gmail.com",
-  password: "password",
-};
-
-export async function login(req: Request, res: Response) {
+async function login(req: Request, res: Response) {
   const { email, password } = req.body;
   const user = await AuthModule.findOne({ email });
 
@@ -28,7 +23,7 @@ export async function login(req: Request, res: Response) {
   });
 }
 
-export async function logout(req: Request, res: Response) {
+async function logout(req: Request, res: Response) {
   try {
     const { id } = req.body;
     if (!id) {
@@ -53,3 +48,8 @@ export async function logout(req: Request, res: Response) {
     return res.json({ error: "Something went wrong" }).status(500);
   }
 }
+
+export const authController = {
+  login,
+  logout,
+};
