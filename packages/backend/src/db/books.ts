@@ -110,15 +110,6 @@ export const books = [
     year: 1450,
   },
   {
-    author: "Anton Chekhov",
-    country: "Russia",
-    language: "Russian",
-    link: "https://en.wikipedia.org/wiki/List_of_short_stories_by_Anton_Chekhov\n",
-    pages: 194,
-    title: "Stories",
-    year: 1886,
-  },
-  {
     author: "Joseph Conrad",
     country: "United Kingdom",
     language: "English",
@@ -441,15 +432,6 @@ export const books = [
     pages: 470,
     title: "Independent People",
     year: 1934,
-  },
-  {
-    author: "Giacomo Leopardi",
-    country: "Italy",
-    language: "Italian",
-    link: "\n",
-    pages: 184,
-    title: "Poems",
-    year: 1818,
   },
   {
     author: "Doris Lessing",

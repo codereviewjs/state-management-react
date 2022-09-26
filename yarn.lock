@@ -305,6 +305,11 @@
     "@jridgewell/resolve-uri" "^3.0.3"
     "@jridgewell/sourcemap-codec" "^1.4.10"
 
+"@remix-run/router@1.0.1":
+  version "1.0.1"
+  resolved "https://repo.dev.wixpress.com/artifactory/api/npm/npm-repos/@remix-run/router/-/router-1.0.1.tgz#88d7ac31811ab0cef14aaaeae2a0474923b278bc"
+  integrity sha1-iNesMYEasM7xSqrq4qBHSSOyeLw=
+
 "@tsconfig/node10@^1.0.7":
   version "1.0.9"
   resolved "https://repo.dev.wixpress.com/artifactory/api/npm/npm-repos/@tsconfig/node10/-/node10-1.0.9.tgz#df4907fc07a886922637b15e02d4cebc4c0021b2"
@@ -1442,6 +1447,21 @@ react-refresh@^0.14.0:
   version "0.14.0"
   resolved "https://repo.dev.wixpress.com/artifactory/api/npm/npm-repos/react-refresh/-/react-refresh-0.14.0.tgz#4e02825378a5f227079554d4284889354e5f553e"
   integrity sha1-TgKCU3il8icHlVTUKEiJNU5fVT4=
+
+react-router-dom@^6.4.1:
+  version "6.4.1"
+  resolved "https://repo.dev.wixpress.com/artifactory/api/npm/npm-repos/react-router-dom/-/react-router-dom-6.4.1.tgz#99c9b7c4967890701c888517475aa5d54d25760e"
+  integrity sha1-mcm3xJZ4kHAciIUXR1ql1U0ldg4=
+  dependencies:
+    "@remix-run/router" "1.0.1"
+    react-router "6.4.1"
+
+react-router@6.4.1:
+  version "6.4.1"
+  resolved "https://repo.dev.wixpress.com/artifactory/api/npm/npm-repos/react-router/-/react-router-6.4.1.tgz#dd9cc4dfa264751d143a4b6c9d4faa60ab3ce26c"
+  integrity sha1-3ZzE36JkdR0UOktsnU+qYKs84mw=
+  dependencies:
+    "@remix-run/router" "1.0.1"
 
 react@^18.2.0:
   version "18.2.0"

@@ -7,6 +7,8 @@
   "author": "codereviewjs <codereviewjs@gmail.com>",
   "license": "MIT",
   "scripts": {
+    "init:project": "yarn seed & yarn build:types",
+    "seed": "yarn workspace backend seed",
     "build:types": "yarn workspace types build",
     "start:backend": "yarn workspace backend start",
     "start:frontend": "yarn workspace frontend dev",
