@@ -1,4 +1,4 @@
-import { IBook } from "../models/book.module";
+import { IBook } from "types";
 
 export const books = [
   {

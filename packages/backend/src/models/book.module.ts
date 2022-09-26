@@ -1,15 +1,6 @@
 import mongoose from "mongoose";
+import { IBook } from "types";
 const { Schema } = mongoose;
-
-export interface IBook {
-  author: string;
-  country: string;
-  language: string;
-  link: string;
-  pages: number;
-  title: string;
-  year: number;
-}
 
 const bookSchema = new Schema<IBook>({
   author: String,

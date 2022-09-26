@@ -1,0 +1,14 @@
+{
+  "name": "types",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "types": "./dist/index.d.ts",
+  "scripts": {
+    "build": "tsc --build",
+    "clean": "tsc --build --clean"
+  },
+  "devDependencies": {
+    "typescript": "^4.6.4"
+  }
+}

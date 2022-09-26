@@ -1,11 +1,6 @@
 import mongoose from "mongoose";
-import { IBook } from "./book.module";
+import { IAuthor } from "types";
 const { Schema } = mongoose;
-
-export interface IAuthor {
-  name: string;
-  books: IBook[];
-}
 
 const authorSchema = new Schema<IAuthor>({
   name: String,
