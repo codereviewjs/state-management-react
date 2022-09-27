@@ -1,12 +1,10 @@
 import { Link } from "react-router-dom";
 import { routes } from "../../constants/routes.constants";
-import { useAuthorsContext } from "../../context/Authors.context";
-import { useBooksContext } from "../../context/Books.context";
+import { useStoreContext } from "../../context/Store.context";
 import styles from "./Main.module.css";
 
 const Main = () => {
-  const { books } = useBooksContext();
-  const { authors } = useAuthorsContext();
+  const { books, authors } = useStoreContext();
 
   return (
     <div>

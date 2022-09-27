@@ -1,11 +1,9 @@
+import { useStoreContext } from "../../context/Store.context";
 import styles from "./Books.module.css";
-import BooksContextProvider, {
-  useBooksContext,
-} from "../../context/Books.context";
 import BookCard from "./components/BookCard/BookCard";
 
 const Books = () => {
-  const { books } = useBooksContext();
+  const { books } = useStoreContext();
   return (
     <div>
       <h1>Books</h1>

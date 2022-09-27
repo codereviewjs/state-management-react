@@ -1,15 +1,13 @@
 import { Route, Routes } from "react-router-dom";
 import "./App.css";
 import { routes } from "./constants/routes.constants";
-import { useAuthorsContext } from "./context/Authors.context";
-import { useBooksContext } from "./context/Books.context";
+import { useStoreContext } from "./context/Store.context";
 import { Books, Book, Main } from "./pages";
 
 function App() {
-  const { isPending: isBooksPending } = useBooksContext();
-  const { isPending: isAuthorsPending } = useAuthorsContext();
+  const { isPending } = useStoreContext();
 
-  if (isBooksPending || isAuthorsPending) {
+  if (isPending) {
     return <h4>Loading</h4>;
   }
 

@@ -1,8 +1,8 @@
 import { useParams, Link } from "react-router-dom";
-import { useBooksContext } from "../../context/Books.context";
+import { useStoreContext } from "../../context/Store.context";
 
 const Book = () => {
-  const { getBookByTitle } = useBooksContext();
+  const { getBookByTitle } = useStoreContext();
 
   const { title } = useParams();
   const book = getBookByTitle(title);
