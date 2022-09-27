@@ -1,3 +1,3 @@
 export * from "./auth.controller";
-export * from "./book.controller";
+export * from "./theme.controller";
 export * from "./author.controller";

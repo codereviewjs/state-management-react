@@ -4,22 +4,22 @@ import { useStoreContext } from "../../context/Store.context";
 import styles from "./Main.module.css";
 
 const Main = () => {
-  const { books, authors } = useStoreContext();
+  const { themes, authors } = useStoreContext();
 
   return (
     <div>
-      <h1>Authors and books</h1>
+      <h1>Authors and themes</h1>
       <div className={styles.listsContainer}>
         <div>
-          <h2>Books</h2>
+          <h2>Themes</h2>
           <h3>
-            <Link to={routes.books.root}>To all books</Link>
+            <Link to={routes.themes.root}>To all themes</Link>
           </h3>
           <ul>
-            {books.map((book) => (
-              <li key={book.title + book.author}>
-                <Link to={`${routes.books.root}/${book.title}`}>
-                  {book.title}
+            {themes.map((theme) => (
+              <li key={`${theme.title}-${theme.author}`}>
+                <Link to={`${routes.themes.root}/${theme.title}`}>
+                  {theme.title}
                 </Link>
               </li>
             ))}

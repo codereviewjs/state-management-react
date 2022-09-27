@@ -4,16 +4,15 @@ import {
   useContext,
   useEffect,
   useReducer,
-  useState,
 } from "react";
-import { IBook, IAuthor } from "types";
-import { booksApi, authorsApi } from "../api";
+import { ITheme, IAuthor } from "types";
+import { themeApi, authorsApi } from "../api";
 
 interface StoreContextProps {
-  books: IBook[];
+  themes: ITheme[];
   authors: IAuthor[];
   isPending: boolean;
-  getBookByTitle: (title: string | undefined) => IBook | undefined;
+  getThemeByTitle: (title: string | undefined) => ITheme | undefined;
   getAuthorByName: (name: string | undefined) => IAuthor | undefined;
 }
 
@@ -26,7 +25,7 @@ interface StoreContextProviderProps {
 export const useStoreContext = () => {
   const storeContext = useContext(StoreContext);
 
-  if (!storeContext.books || !storeContext.authors) {
+  if (!storeContext.themes || !storeContext.authors) {
     throw new Error("Please use useStoreContext inside StoreContextProvider");
   }
 
@@ -41,7 +40,7 @@ type StoreData<T> = {
 
 interface StoreState {
   authors: StoreData<IAuthor[]>;
-  books: StoreData<IBook[]>;
+  themes: StoreData<ITheme[]>;
   status: HttpRequestStatus;
 }
 
@@ -49,7 +48,7 @@ const initialState: StoreState = {
   authors: {
     data: [],
   },
-  books: {
+  themes: {
     data: [],
   },
   status: "idle",
@@ -62,14 +61,14 @@ type GetDataSuccess = {
   type: "getDataSuccess";
   payload: {
     authors: IAuthor[];
-    books: IBook[];
+    themes: ITheme[];
   };
 };
 type GetDataError = {
   type: "getDataError";
   payload: {
     authors: string;
-    books: string;
+    themes: string;
   };
 };
 
@@ -90,9 +89,9 @@ const reducer = (state: StoreState, action: Actions): StoreState => {
           ...state.authors,
           data: action.payload.authors,
         },
-        books: {
-          ...state.books,
-          data: action.payload.books,
+        themes: {
+          ...state.themes,
+          data: action.payload.themes,
         },
         status: "success",
       };
@@ -104,9 +103,9 @@ const reducer = (state: StoreState, action: Actions): StoreState => {
           ...state.authors,
           error: action.payload.authors,
         },
-        books: {
-          ...state.books,
-          error: action.payload.books,
+        themes: {
+          ...state.themes,
+          error: action.payload.themes,
         },
         status: "error",
       };
@@ -120,14 +119,14 @@ const StoreContextProvider = ({ children }: StoreContextProviderProps) => {
   const fetchData = useCallback(async () => {
     try {
       dispatch({ type: "getDataRequest" });
-      const [booksResponse, authorsResponse] = await Promise.all([
-        booksApi.useGetAll(),
+      const [themeResponse, authorsResponse] = await Promise.all([
+        themeApi.useGetAll(),
         authorsApi.useGetAll(),
       ]);
       dispatch({
         type: "getDataSuccess",
         payload: {
-          books: booksResponse.books,
+          themes: themeResponse.themes,
           authors: authorsResponse.authors,
         },
       });
@@ -136,7 +135,7 @@ const StoreContextProvider = ({ children }: StoreContextProviderProps) => {
         type: "getDataError",
         payload: {
           authors: "",
-          books: "",
+          themes: "",
         },
       });
     }
@@ -146,9 +145,9 @@ const StoreContextProvider = ({ children }: StoreContextProviderProps) => {
     fetchData();
   }, [fetchData]);
 
-  const getBookByTitle: StoreContextProps["getBookByTitle"] = (title) => {
+  const getThemeByTitle: StoreContextProps["getThemeByTitle"] = (title) => {
     if (!title) return undefined;
-    return state.books.data.find((book) => book.title === title);
+    return state.themes.data.find((theme) => theme.title === title);
   };
 
   const getAuthorByName: StoreContextProps["getAuthorByName"] = (name) => {
@@ -161,10 +160,10 @@ const StoreContextProvider = ({ children }: StoreContextProviderProps) => {
   return (
     <StoreContext.Provider
       value={{
-        books: state.books.data,
+        themes: state.themes.data,
         authors: state.authors.data,
         isPending,
-        getBookByTitle,
+        getThemeByTitle,
         getAuthorByName,
       }}
     >

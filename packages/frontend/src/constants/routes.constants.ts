@@ -2,9 +2,9 @@ export const routes = {
   main: {
     root: "/",
   },
-  books: {
-    root: "/books",
-    book: "/books/:title",
+  themes: {
+    root: "/themes",
+    theme: "/themes/:title",
   },
   authors: {
     root: "/authors",

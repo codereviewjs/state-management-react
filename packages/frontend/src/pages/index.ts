@@ -1,3 +1,3 @@
-export * from "./book";
-export * from "./books";
+export * from "./theme";
+export * from "./themes";
 export * from "./main";

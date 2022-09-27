@@ -1,9 +1,8 @@
 import { disconnect } from "mongoose";
 import { connect } from "../config/mongo";
-import AuthModule, { IAuth } from "../models/auth.module";
-import AuthorModule from "../models/author.module";
-import BookModule from "../models/book.module";
-import { books } from "./books";
+import { IAuth } from "../models/auth.module";
+import { AuthModule, ThemeModule, AuthorModule } from "../models";
+import { themes, authors } from "./data";
 
 const user: IAuth = {
   email: "admin@gmail.com",
@@ -16,8 +15,8 @@ async function cleanAll() {
   console.log("Removed auth");
   await AuthorModule.remove();
   console.log("Removed authors");
-  await BookModule.remove();
-  console.log("Removed books");
+  await ThemeModule.remove();
+  console.log("Removed themes");
 }
 
 async function seed() {
@@ -29,15 +28,15 @@ async function seed() {
       await AuthModule.create(user);
       console.log("Created user");
 
-      const booksDoc = await BookModule.insertMany(books);
-      console.log("Created books");
+      const themesDoc = await ThemeModule.insertMany(themes);
+      console.log("Created themes");
 
-      for (const bookDoc of booksDoc) {
+      for (const themeDoc of themesDoc) {
         console.log("finding author");
         const author = await AuthorModule.findOneAndUpdate(
-          { name: bookDoc.author },
+          { name: themeDoc.author },
           {
-            $push: { books: bookDoc },
+            $push: { themes: themeDoc },
           },
           {
             new: true,
@@ -46,7 +45,7 @@ async function seed() {
           }
         );
         console.log("Updated or created", author.value?.name);
-        console.log("books", author.value?.books);
+        console.log("themes", author.value?.themes);
 
         // const author = await AuthorModule.findOne({ name: bookDoc.author });
         // if (author) {

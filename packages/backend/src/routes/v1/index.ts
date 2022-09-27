@@ -1,6 +1,6 @@
 import express from "express";
 import authRoute from "./auth.route";
-import bookRoute from "./book.route";
+import themeRoute from "./theme.route";
 import authorRoute from "./author.route";
 
 const router = express.Router();
@@ -11,8 +11,8 @@ const defaultRoutes = [
     route: authRoute,
   },
   {
-    path: "/book",
-    route: bookRoute,
+    path: "/theme",
+    route: themeRoute,
   },
   {
     path: "/author",

@@ -2,7 +2,7 @@ import { Route, Routes } from "react-router-dom";
 import "./App.css";
 import { routes } from "./constants/routes.constants";
 import { useStoreContext } from "./context/Store.context";
-import { Books, Book, Main } from "./pages";
+import { Themes, Theme, Main } from "./pages";
 
 function App() {
   const { isPending } = useStoreContext();
@@ -15,8 +15,8 @@ function App() {
     <div className='App'>
       <Routes>
         <Route path={routes.main.root} element={<Main />} />
-        <Route path={routes.books.root} element={<Books />} />
-        <Route path={routes.books.book} element={<Book />} />
+        <Route path={routes.themes.root} element={<Themes />} />
+        <Route path={routes.themes.theme} element={<Theme />} />
       </Routes>
     </div>
   );

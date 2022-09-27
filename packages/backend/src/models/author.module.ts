@@ -4,10 +4,10 @@ const { Schema } = mongoose;
 
 const authorSchema = new Schema<IAuthor>({
   name: String,
-  books: [
+  themes: [
     {
       type: Schema.Types.ObjectId,
-      ref: "Book",
+      ref: "Theme",
     },
   ],
 });
