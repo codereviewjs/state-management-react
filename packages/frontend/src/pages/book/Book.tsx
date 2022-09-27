@@ -3,6 +3,7 @@ import { useBooksContext } from "../../context/Books.context";
 
 const Book = () => {
   const { getBookByTitle } = useBooksContext();
+
   const { title } = useParams();
   const book = getBookByTitle(title);
 

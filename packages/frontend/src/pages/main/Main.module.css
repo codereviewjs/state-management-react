@@ -1,0 +1,9 @@
+.listsContainer {
+  display: flex;
+  justify-content: space-between;
+  text-align: left;
+}
+
+.listsContainer ul {
+  padding: 0;
+}

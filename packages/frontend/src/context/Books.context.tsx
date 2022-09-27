@@ -6,6 +6,7 @@ import {
   useState,
 } from "react";
 import { IBook } from "types";
+import { booksApi } from "../api/books.api";
 
 interface BooksContextProps {
   books: IBook[];
@@ -29,27 +30,25 @@ export const useBooksContext = () => {
   return booksContext;
 };
 
+type HttpRequestStatus = "idle" | "loading" | "success" | "error";
+
 const BooksContextProvider = ({ children }: BooksContextProviderProps) => {
   const [books, setBooks] = useState<IBook[]>([]);
-  const [status, setStatus] = useState<
-    "idle" | "loading" | "success" | "error"
-  >("idle");
+  const [status, setStatus] = useState<HttpRequestStatus>("idle");
 
-  const fetchBooks = useCallback(async () => {
-    setStatus("loading");
-    const booksRequest = await fetch("http://localhost:8000/v1/book");
-    if (booksRequest.ok) {
-      const { books }: { books: IBook[] } = await booksRequest.json();
+  const fetchAllBooks = useCallback(async () => {
+    try {
+      setStatus("loading");
+      const { books } = await booksApi.useGetAll();
       setBooks(books);
       setStatus("success");
-    } else {
+    } catch (e) {
       setStatus("error");
     }
   }, []);
-
   useEffect(() => {
-    fetchBooks();
-  }, [fetchBooks]);
+    fetchAllBooks();
+  }, [fetchAllBooks]);
 
   const getBookByTitle: BooksContextProps["getBookByTitle"] = (title) => {
     if (!title) return undefined;
