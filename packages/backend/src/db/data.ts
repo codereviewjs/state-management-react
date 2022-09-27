@@ -14,10 +14,10 @@ export const authors = [
 export const themes = [
   {
     author: authors[0].name,
-    backgroundColor: "#85DCB",
+    backgroundColor: "#4acb98",
     primaryColor: "#E27D60",
     secondaryColor: "#C38D9E",
-    textColor: "#fffff",
+    textColor: "#ffffff",
     title: "Colorful and Balanced",
   },
   {
@@ -25,7 +25,7 @@ export const themes = [
     backgroundColor: "#242582",
     primaryColor: "#F64C72",
     secondaryColor: "#553D67",
-    textColor: "#fffff",
+    textColor: "#1a1a1a",
     title: "Bright Accent Colors",
   },
   {
@@ -41,7 +41,7 @@ export const themes = [
     backgroundColor: "#2D3047",
     primaryColor: "#0FA3B1",
     secondaryColor: "#B5E2FA",
-    textColor: "#F9F7F3",
+    textColor: "#111111",
     title: `${authors[2].name}'s`,
   },
   {
@@ -62,25 +62,25 @@ export const themes = [
   },
   {
     author: authors[5].name,
-    backgroundColor: "#0A210F",
+    backgroundColor: "#eeeeee",
     primaryColor: "#F7A9A8",
     secondaryColor: "#BFD2BF",
-    textColor: "#ffffff",
+    textColor: "#111111",
     title: `${authors[5].name}'s`,
   },
   {
     author: authors[6].name,
-    backgroundColor: "#0A210F",
+    backgroundColor: "#eeeeee",
     primaryColor: "#4A2545",
-    secondaryColor: "#AEF6C7",
-    textColor: "#eeeeee",
+    secondaryColor: "#BFD2BF",
+    textColor: "#111111",
     title: `${authors[6].name}'s`,
   },
   {
     author: authors[7].name,
     backgroundColor: "#080705",
     primaryColor: "#912F40",
-    secondaryColor: "#AEF6C7",
+    secondaryColor: "#646cff",
     textColor: "#ffffff",
     title: `${authors[7].name}'s`,
   },
@@ -88,8 +88,8 @@ export const themes = [
     author: authors[7].name,
     backgroundColor: "#0D0628",
     primaryColor: "#A1BA89",
-    secondaryColor: "#F5DDDD",
-    textColor: "#F1F2EB",
+    secondaryColor: "#646cff",
+    textColor: "#ffffff",
     title: `${authors[7].name}'s v2`,
   },
 ] as ITheme[];

@@ -7,13 +7,16 @@ import {
 } from "react";
 import { ITheme, IAuthor } from "types";
 import { themeApi, authorsApi } from "../api";
+import { defaultTheme } from "../constants/theme.constants";
 
 interface StoreContextProps {
   themes: ITheme[];
+  theme: ITheme;
   authors: IAuthor[];
   isPending: boolean;
   getThemeByTitle: (title: string | undefined) => ITheme | undefined;
   getAuthorByName: (name: string | undefined) => IAuthor | undefined;
+  setSelectedTheme: (theme: ITheme) => void;
 }
 
 const StoreContext = createContext({} as StoreContextProps);
@@ -39,12 +42,14 @@ type StoreData<T> = {
 };
 
 interface StoreState {
+  selectedTheme: ITheme;
   authors: StoreData<IAuthor[]>;
   themes: StoreData<ITheme[]>;
   status: HttpRequestStatus;
 }
 
 const initialState: StoreState = {
+  selectedTheme: defaultTheme,
   authors: {
     data: [],
   },
@@ -64,6 +69,7 @@ type GetDataSuccess = {
     themes: ITheme[];
   };
 };
+
 type GetDataError = {
   type: "getDataError";
   payload: {
@@ -72,7 +78,16 @@ type GetDataError = {
   };
 };
 
-type Actions = GetDataRequest | GetDataSuccess | GetDataError;
+type SetSelectedTheme = {
+  type: "setSelectedTheme";
+  payload: ITheme;
+};
+
+type Actions =
+  | GetDataRequest
+  | GetDataSuccess
+  | GetDataError
+  | SetSelectedTheme;
 
 const reducer = (state: StoreState, action: Actions): StoreState => {
   switch (action.type) {
@@ -110,6 +125,15 @@ const reducer = (state: StoreState, action: Actions): StoreState => {
         status: "error",
       };
     }
+
+    case "setSelectedTheme": {
+      return {
+        ...state,
+        selectedTheme: action.payload,
+      };
+    }
+    default:
+      return state;
   }
 };
 
@@ -126,7 +150,7 @@ const StoreContextProvider = ({ children }: StoreContextProviderProps) => {
       dispatch({
         type: "getDataSuccess",
         payload: {
-          themes: themeResponse.themes,
+          themes: [defaultTheme, ...themeResponse.themes],
           authors: authorsResponse.authors,
         },
       });
@@ -155,16 +179,25 @@ const StoreContextProvider = ({ children }: StoreContextProviderProps) => {
     return state.authors.data.find((author) => author.name === name);
   };
 
+  const setSelectedTheme = (theme: ITheme) => {
+    dispatch({
+      type: "setSelectedTheme",
+      payload: theme,
+    });
+  };
+
   const isPending = state.status === "idle" || state.status === "loading";
 
   return (
     <StoreContext.Provider
       value={{
         themes: state.themes.data,
+        theme: state.selectedTheme,
         authors: state.authors.data,
         isPending,
         getThemeByTitle,
         getAuthorByName,
+        setSelectedTheme,
       }}
     >
       {children}

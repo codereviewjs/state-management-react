@@ -1,10 +1,10 @@
 export interface ITheme {
-  author: String;
-  title: String;
-  primaryColor: String;
-  secondaryColor: String;
-  textColor: String;
-  backgroundColor: String;
+  author: string;
+  title: string;
+  primaryColor: string;
+  secondaryColor: string;
+  textColor: string;
+  backgroundColor: string;
 }
 
 export interface IAuthor {

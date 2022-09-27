@@ -1,7 +1,8 @@
 .card {
+  position: relative;
   border-radius: 8px;
   box-shadow: 0 0 2px 1px rgba(255, 255, 255, 0.4);
-  background-color: #2c2c2c;
+  background-color: rgba(255, 255, 255, 0.1);
 }
 
 .cardHeader {
@@ -12,9 +13,17 @@
   justify-content: space-between;
 }
 
+.themeTitle {
+  margin: 4px 0;
+}
+
+.themeTitle a {
+  color: var(--textColor);
+}
+
 .bookTitle {
   margin: 4px 0;
-  color: white;
+  color: var(--textColor);
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -23,7 +32,7 @@
 }
 
 .bookTitle:hover {
-  color: whitesmoke;
+  color: rgba(var(--textColor), 0.8);
 }
 
 .cardBody {
@@ -36,26 +45,28 @@
   padding: 0;
 }
 
-.cardBody li {
+.colorContainer {
+  justify-self: center;
   display: flex;
-  flex-direction: column;
+  flex-flow: column;
+  justify-content: center;
+  align-items: center;
+  width: fit-content;
 }
 
-.cardBody li span:first-child {
-  font-weight: 800;
+.colorBox {
+  margin-top: 2px;
+  height: 40px;
+  width: 56px;
+  border: 1px solid black;
 }
 
 .cardFooter {
   width: 100%;
-  background-color: whitesmoke;
+
+  background-color: rgba(var(--textColor), 0.8);
   border-bottom-left-radius: 8px;
   border-bottom-right-radius: 8px;
   border-top: 1px solid black;
-}
-
-.cardFooter a {
-  color: #2c2c2c;
-  margin: 4px 0;
-  font-size: 18px;
-  font-weight: 700;
+  padding: 8px 16px;
 }
