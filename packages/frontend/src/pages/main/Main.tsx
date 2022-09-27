@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { Layout } from "../../components";
 import { routes } from "../../constants/routes.constants";
 import { useStoreContext } from "../../context/Store.context";
 import styles from "./Main.module.css";
@@ -7,8 +8,7 @@ const Main = () => {
   const { themes, authors } = useStoreContext();
 
   return (
-    <div>
-      <h1>Authors and themes</h1>
+    <Layout title='Authors and themes'>
       <div className={styles.listsContainer}>
         <div>
           <h2>Themes</h2>
@@ -41,7 +41,7 @@ const Main = () => {
           </ul>
         </div>
       </div>
-    </div>
+    </Layout>
   );
 };
 

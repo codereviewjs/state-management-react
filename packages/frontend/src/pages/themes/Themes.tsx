@@ -1,12 +1,11 @@
 import { useStoreContext } from "../../context/Store.context";
 import styles from "./Themes.module.css";
-import ThemeCard from "./components/ThemeCard/ThemeCard";
+import { Layout, ThemeCard } from "../../components";
 
 const Themes = () => {
   const { themes, setSelectedTheme } = useStoreContext();
   return (
-    <div>
-      <h1>Themes</h1>
+    <Layout title='Themes'>
       <div className={styles.themes}>
         {themes.map((theme) => (
           <ThemeCard
@@ -16,7 +15,7 @@ const Themes = () => {
           />
         ))}
       </div>
-    </div>
+    </Layout>
   );
 };
 

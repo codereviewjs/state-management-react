@@ -1,8 +1,8 @@
 import { ITheme } from "types";
 import { Link } from "react-router-dom";
 import styles from "./ThemeCard.module.css";
-import { routes } from "../../../../constants/routes.constants";
-import { colors } from "../../../../constants/theme.constants";
+import { routes } from "../../constants/routes.constants";
+import { colors } from "../../constants/theme.constants";
 
 interface Props {
   theme: ITheme;

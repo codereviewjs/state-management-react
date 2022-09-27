@@ -1,4 +1,5 @@
 import { useParams, Link } from "react-router-dom";
+import { Layout } from "../../components";
 import { routes } from "../../constants/routes.constants";
 import { useStoreContext } from "../../context/Store.context";
 
@@ -9,18 +10,17 @@ const Theme = () => {
   const theme = getThemeByTitle(title);
 
   if (!theme) {
-    return <div>Error</div>;
+    return <div>Theme not found</div>;
   }
 
   return (
-    <div>
-      <h1>{theme.title}</h1>
+    <Layout title={theme.title}>
       <h2>
         <Link to={`${routes.authors.root}/${theme.author}`}>
           {theme.author}
         </Link>
       </h2>
-    </div>
+    </Layout>
   );
 };
 

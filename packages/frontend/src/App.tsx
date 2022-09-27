@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { Route, Routes } from "react-router-dom";
 import "./App.css";
+import { Navbar } from "./components";
 import { routes } from "./constants/routes.constants";
 import { colors } from "./constants/theme.constants";
 import { useStoreContext } from "./context/Store.context";
@@ -18,8 +19,10 @@ function App() {
       document.documentElement.style.setProperty(`--${color}`, theme[color]);
     });
   }, [theme]);
+
   return (
     <div className='App'>
+      <Navbar />
       <Routes>
         <Route path={routes.main.root} element={<Main />} />
         <Route path={routes.themes.root} element={<Themes />} />
