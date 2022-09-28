@@ -1,4 +1,5 @@
 export interface ITheme {
+  _id?: string;
   author: string;
   title: string;
   primaryColor: string;
@@ -8,6 +9,7 @@ export interface ITheme {
 }
 
 export interface IAuthor {
+  _id?: string;
   name: string;
   themes: ITheme[];
 }

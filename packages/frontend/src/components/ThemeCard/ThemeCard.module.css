@@ -5,6 +5,25 @@
   background-color: rgba(255, 255, 255, 0.1);
 }
 
+.card.selected {
+  box-shadow: 0 0 2px 1px var(--primaryColor);
+}
+
+.card.selected::after {
+  content: "Selected";
+  position: absolute;
+  font-size: 12px;
+  font-weight: 800;
+  color: var(--primaryColor);
+  background-color: white;
+  top: 0px;
+  left: 0px;
+  border-top-left-radius: 8px;
+  border-bottom-right-radius: 8px;
+  border: 1px solid var(--primaryColor);
+  width: 70px;
+}
+
 .cardHeader {
   margin-top: 8px;
   display: flex;

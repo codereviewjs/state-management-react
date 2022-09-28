@@ -6,7 +6,9 @@ import { colors } from "../../constants/theme.constants";
 
 interface Props {
   theme: ITheme;
-  onApply: (theme: ITheme) => void;
+  isSelected: boolean;
+  onApply?: (theme: ITheme) => void;
+  className?: string;
 }
 
 function capitalize(str: string) {
@@ -14,9 +16,11 @@ function capitalize(str: string) {
   return `${firstLetter}${str.slice(1, str.length)}`;
 }
 
-const ThemeCard = ({ theme, onApply }: Props) => {
+const ThemeCard = ({ theme, onApply, className, isSelected }: Props) => {
   return (
-    <div className={styles.card}>
+    <div
+      className={`${styles.card} ${className} ${isSelected && styles.selected}`}
+    >
       <div className={styles.cardHeader}>
         <h3 className={styles.themeTitle}>
           <Link to={`${routes.themes.root}/${theme.title}`}>{theme.title}</Link>
@@ -46,9 +50,11 @@ const ThemeCard = ({ theme, onApply }: Props) => {
           );
         })}
       </div>
-      <div className={styles.cardFooter}>
-        <button onClick={() => onApply(theme)}>Apply theme</button>
-      </div>
+      {onApply && (
+        <div className={styles.cardFooter}>
+          <button onClick={() => onApply(theme)}>Apply theme</button>
+        </div>
+      )}
     </div>
   );
 };

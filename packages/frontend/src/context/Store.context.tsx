@@ -11,11 +11,12 @@ import { defaultTheme } from "../constants/theme.constants";
 
 interface StoreContextProps {
   themes: ITheme[];
-  theme: ITheme;
+  selectedTheme: ITheme;
   authors: IAuthor[];
   isPending: boolean;
   getThemeByTitle: (title: string | undefined) => ITheme | undefined;
   getAuthorByName: (name: string | undefined) => IAuthor | undefined;
+  getAuthorsThemes: (author: IAuthor) => ITheme[];
   setSelectedTheme: (theme: ITheme) => void;
 }
 
@@ -186,17 +187,27 @@ const StoreContextProvider = ({ children }: StoreContextProviderProps) => {
     });
   };
 
+  const getAuthorsThemes = (author: IAuthor) => {
+    return author.themes
+      .map((themeId) =>
+        // @ts-expect-error
+        state.themes.data.find((theme) => theme._id === themeId)
+      )
+      .filter(Boolean) as ITheme[];
+  };
+
   const isPending = state.status === "idle" || state.status === "loading";
 
   return (
     <StoreContext.Provider
       value={{
         themes: state.themes.data,
-        theme: state.selectedTheme,
+        selectedTheme: state.selectedTheme,
         authors: state.authors.data,
         isPending,
         getThemeByTitle,
         getAuthorByName,
+        getAuthorsThemes,
         setSelectedTheme,
       }}
     >

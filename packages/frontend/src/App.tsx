@@ -8,17 +8,22 @@ import { useStoreContext } from "./context/Store.context";
 import { Themes, Theme, Main, Authors, Author } from "./pages";
 
 function App() {
-  const { isPending, theme } = useStoreContext();
+  const { isPending, selectedTheme } = useStoreContext();
 
   if (isPending) {
     return <h4>Loading</h4>;
   }
 
   useEffect(() => {
-    colors.forEach((color) => {
-      document.documentElement.style.setProperty(`--${color}`, theme[color]);
-    });
-  }, [theme]);
+    if (selectedTheme) {
+      colors.forEach((color) => {
+        document.documentElement.style.setProperty(
+          `--${color}`,
+          selectedTheme[color]
+        );
+      });
+    }
+  }, [selectedTheme]);
 
   return (
     <div className='App'>
