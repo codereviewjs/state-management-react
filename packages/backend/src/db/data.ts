@@ -1,95 +1,73 @@
-import { IAuthor, ITheme } from "types";
+import { IReport, IReporter, IMetadata, Categories, ITheme } from "types";
+import { LoremIpsum } from "lorem-ipsum";
+import { IAuth } from "../models/auth.module";
 
-export const authors = [
-  { name: "Leonardo da Vinci", themes: [] },
-  { name: "Vincent van Gogh", themes: [] },
-  { name: "Claude Monet", themes: [] },
-  { name: "Pablo Picasso", themes: [] },
-  { name: "Michelangelo", themes: [] },
-  { name: "Rembrandt", themes: [] },
-  { name: "Salvador Dalí", themes: [] },
-  { name: "Frida Kahlo", themes: [] },
-] as IAuthor[];
+const lorem = new LoremIpsum({
+  sentencesPerParagraph: {
+    max: 8,
+    min: 4,
+  },
+  wordsPerSentence: {
+    max: 16,
+    min: 4,
+  },
+});
 
-export const themes = [
-  {
-    author: authors[0].name,
-    backgroundColor: "#4acb98",
-    primaryColor: "#E27D60",
-    secondaryColor: "#C38D9E",
-    textColor: "#ffffff",
-    title: "Colorful and Balanced",
-  },
-  {
-    author: authors[0].name,
-    backgroundColor: "#242582",
-    primaryColor: "#F64C72",
-    secondaryColor: "#553D67",
-    textColor: "#1a1a1a",
-    title: "Bright Accent Colors",
-  },
-  {
-    author: authors[1].name,
-    backgroundColor: "#222831",
-    primaryColor: "#00ADB5",
-    secondaryColor: "#553D67",
-    textColor: "#EEEEEE",
-    title: `${authors[1].name}'s`,
-  },
-  {
-    author: authors[2].name,
-    backgroundColor: "#2D3047",
-    primaryColor: "#0FA3B1",
-    secondaryColor: "#B5E2FA",
-    textColor: "#111111",
-    title: `${authors[2].name}'s`,
-  },
-  {
-    author: authors[3].name,
-    backgroundColor: "#2D3047",
-    primaryColor: "#ED217C",
-    secondaryColor: "#1B998B",
-    textColor: "#ffffff",
-    title: `${authors[4].name}'s`,
-  },
-  {
-    author: authors[4].name,
-    backgroundColor: "#DBD4D3",
-    primaryColor: "#387780",
-    secondaryColor: "#D2CCA1",
-    textColor: "#111111",
-    title: `${authors[4].name}'s v2`,
-  },
-  {
-    author: authors[5].name,
-    backgroundColor: "#eeeeee",
-    primaryColor: "#F7A9A8",
-    secondaryColor: "#BFD2BF",
-    textColor: "#111111",
-    title: `${authors[5].name}'s`,
-  },
-  {
-    author: authors[6].name,
-    backgroundColor: "#eeeeee",
-    primaryColor: "#4A2545",
-    secondaryColor: "#BFD2BF",
-    textColor: "#111111",
-    title: `${authors[6].name}'s`,
-  },
-  {
-    author: authors[7].name,
-    backgroundColor: "#080705",
-    primaryColor: "#912F40",
-    secondaryColor: "#646cff",
-    textColor: "#ffffff",
-    title: `${authors[7].name}'s`,
-  },
-  {
-    author: authors[7].name,
-    backgroundColor: "#0D0628",
-    primaryColor: "#A1BA89",
-    secondaryColor: "#646cff",
-    textColor: "#ffffff",
-    title: `${authors[7].name}'s v2`,
-  },
-] as ITheme[];
+export const user: IAuth = {
+  email: "admin@gmail.com",
+  password: "password",
+  isLoggedIn: false,
+};
+
+const theme: ITheme = {
+  backgroundColor: "#242424",
+  primaryColor: "#646cff",
+  secondaryColor: "#1a1a1a",
+  textColor: "#ffffff",
+};
+
+export const metadata: IMetadata = {
+  theme,
+};
+
+export const reporters = [
+  { name: "Haiden Roberson", reports: [] },
+  { name: "Imaad Ramirez", reports: [] },
+  { name: "Mandeep Fountain", reports: [] },
+  { name: "Rowena Patton", reports: [] },
+  { name: "Devin Easton", reports: [] },
+  { name: "Nana Wells", reports: [] },
+] as IReporter[];
+
+function randomIntFromInterval(min: number, max: number) {
+  // min and max included
+  return Math.floor(Math.random() * (max - min + 1) + min);
+}
+
+function getRandomItemFromArray<T extends any[]>(arr: T) {
+  return arr[Math.floor(Math.random() * arr.length)] as T[number];
+}
+function randomDate(start = new Date(2012, 0, 1), end = new Date()) {
+  return new Date(
+    start.getTime() + Math.random() * (end.getTime() - start.getTime())
+  );
+}
+
+const categories: Categories[] = [
+  Categories.FOOD,
+  Categories.POLITICS,
+  Categories.SCIENCE,
+  Categories.SPORTS,
+  Categories.WEATHER,
+];
+
+export const reports: IReport[] = Array.from({ length: 30 }).map(
+  () =>
+    ({
+      category: getRandomItemFromArray(categories),
+      reporter: getRandomItemFromArray(reporters),
+      date: randomDate(),
+      description: lorem.generateParagraphs(randomIntFromInterval(2, 5)),
+      title: lorem.generateWords(randomIntFromInterval(1, 3)),
+    } as IReport)
+);

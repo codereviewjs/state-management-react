@@ -1,7 +1,8 @@
 import express from "express";
 import authRoute from "./auth.route";
-import themeRoute from "./theme.route";
-import authorRoute from "./author.route";
+import reportRoute from "./report.route";
+import reporterRoute from "./reporter.route";
+import metadataRoute from "./metadata.route";
 
 const router = express.Router();
 
@@ -11,12 +12,16 @@ const defaultRoutes = [
     route: authRoute,
   },
   {
-    path: "/theme",
-    route: themeRoute,
+    path: "/metadata",
+    route: metadataRoute,
   },
   {
-    path: "/author",
-    route: authorRoute,
+    path: "/report",
+    route: reportRoute,
+  },
+  {
+    path: "/reporter",
+    route: reporterRoute,
   },
 ];
 

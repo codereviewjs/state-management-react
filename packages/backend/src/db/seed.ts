@@ -1,22 +1,23 @@
 import { disconnect } from "mongoose";
+import { IReporter } from "types";
 import { connect } from "../config/mongo";
-import { IAuth } from "../models/auth.module";
-import { AuthModule, ThemeModule, AuthorModule } from "../models";
-import { themes, authors } from "./data";
-
-const user: IAuth = {
-  email: "admin@gmail.com",
-  password: "password",
-  isLoggedIn: false,
-};
+import {
+  AuthModule,
+  MetadataModule,
+  ReportModule,
+  ReporterModule,
+} from "../models";
+import { metadata, reporters, reports, user } from "./data";
 
 async function cleanAll() {
   await AuthModule.remove();
   console.log("Removed auth");
-  await AuthorModule.remove();
-  console.log("Removed authors");
-  await ThemeModule.remove();
-  console.log("Removed themes");
+  await MetadataModule.remove();
+  console.log("Removed metadata");
+  await ReportModule.remove();
+  console.log("Removed reports");
+  await ReporterModule.remove();
+  console.log("Removed reporters");
 }
 
 async function seed() {
@@ -28,40 +29,33 @@ async function seed() {
       await AuthModule.create(user);
       console.log("Created user");
 
-      const themesDoc = await ThemeModule.insertMany(themes);
-      console.log("Created themes");
+      await MetadataModule.create(metadata);
+      console.log("Created metadata");
 
-      for (const themeDoc of themesDoc) {
-        console.log("finding author");
-        const author = await AuthorModule.findOneAndUpdate(
-          { name: themeDoc.author },
-          {
-            $push: { themes: themeDoc },
-          },
-          {
-            new: true,
-            upsert: true,
-            rawResult: true,
-          }
-        );
-        console.log("Updated or created", author.value?.name);
-        console.log("themes", author.value?.themes);
+      await ReporterModule.insertMany(reporters);
+      console.log("Created reporters");
 
-        // const author = await AuthorModule.findOne({ name: bookDoc.author });
-        // if (author) {
-        //   console.log("found author ", author.name);
-        //   author.books.push(bookDoc);
-        //   await author.save();
-        //   console.log("Added new book to ", author.name);
-        // } else {
-        //   console.log("did not found author");
-        //   const createdAuthor = await AuthorModule.create({
-        //     name: bookDoc.author,
-        //     books: [bookDoc],
-        //   });
-        //   console.log("created new author", createdAuthor.name);
-        // }
+      for (const report of reports) {
+        const reporter = await ReporterModule.findOne({
+          name: report.reporter.name,
+        });
+
+        if (!reporter) {
+          continue;
+        }
+
+        console.log("Reporter", reporter.name);
+        console.log("Reporter", report.title);
+        const reportDoc = await ReportModule.create({
+          ...report,
+          reporter,
+        });
+
+        reporter.reports.push(reportDoc);
+        await reporter.save();
+        console.log("Reporters reports", reporter.reports.length);
       }
+      console.log("Created reports");
     } catch (e: any) {
       console.log(e.message);
     } finally {

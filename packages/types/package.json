@@ -1,7 +1,7 @@
 {
   "name": "types",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "src/index.ts",
   "license": "MIT",
   "types": "./dist/index.d.ts",
   "scripts": {
