@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+import { routes } from "../../constants/routes.constants";
 import styles from "./Navbar.module.css";
 
 const Navbar = () => {
@@ -6,10 +8,18 @@ const Navbar = () => {
       <div>
         <img src='logo' alt='logo' />
       </div>
-      <ul>
-        <li>Main</li>
+      <ul className={styles.links}>
+        <li>
+          <Link to={routes.main.root}>Main</Link>
+        </li>
+        <li>
+          <Link to={routes.themes.root}>Themes</Link>
+        </li>
+        <li>
+          <Link to={routes.authors.root}>Authors</Link>
+        </li>
       </ul>
-      <div>Profile</div>
+      <div className={styles.profile} />
     </nav>
   );
 };

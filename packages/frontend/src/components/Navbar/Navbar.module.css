@@ -11,3 +11,18 @@
   left: 0;
   top: 0;
 }
+
+.links {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  gap: 24px;
+}
+
+.profile {
+  height: 32px;
+  width: 32px;
+  border-radius: 100%;
+  background-color: white;
+}

@@ -5,7 +5,7 @@ import { Navbar } from "./components";
 import { routes } from "./constants/routes.constants";
 import { colors } from "./constants/theme.constants";
 import { useStoreContext } from "./context/Store.context";
-import { Themes, Theme, Main } from "./pages";
+import { Themes, Theme, Main, Authors, Author } from "./pages";
 
 function App() {
   const { isPending, theme } = useStoreContext();
@@ -27,6 +27,8 @@ function App() {
         <Route path={routes.main.root} element={<Main />} />
         <Route path={routes.themes.root} element={<Themes />} />
         <Route path={routes.themes.theme} element={<Theme />} />
+        <Route path={routes.authors.root} element={<Authors />} />
+        <Route path={routes.authors.author} element={<Author />} />
       </Routes>
     </div>
   );
