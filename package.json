@@ -1,7 +1,7 @@
 {
   "name": "state-management-react",
   "private": true,
-  "workspaces": ["frontend", "backend", "types", "packages/*"],
+  "workspaces": ["administrator-app", "backend", "types","news-site", "packages/*"],
   "version": "1.0.0",
   "main": "index.js",
   "author": "codereviewjs <codereviewjs@gmail.com>",
@@ -11,7 +11,8 @@
     "seed": "yarn workspace backend seed",
     "build:types": "yarn workspace types build",
     "start:backend": "yarn workspace backend start",
-    "start:frontend": "yarn workspace frontend dev",
-    "start:all": "yarn start:backend & yarn start:frontend"
+    "start:news": "yarn workspace news-site dev",
+    "start:administrator": "yarn workspace administrator-app dev",
+    "start:all": "yarn start:backend & yarn start:administrator & yarn start:news"
   }
 }
