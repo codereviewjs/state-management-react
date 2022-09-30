@@ -1,7 +1,14 @@
 {
   "name": "state-management-react",
   "private": true,
-  "workspaces": ["administrator-app", "backend", "types","news-site", "packages/*"],
+  "workspaces": [
+    "administrator-app",
+    "backend",
+    "ui",
+    "types",
+    "news-site",
+    "packages/*"
+  ],
   "version": "1.0.0",
   "main": "index.js",
   "author": "codereviewjs <codereviewjs@gmail.com>",
@@ -14,5 +21,10 @@
     "start:news": "yarn workspace news-site dev",
     "start:administrator": "yarn workspace administrator-app dev",
     "start:all": "yarn start:backend & yarn start:administrator & yarn start:news"
+  },
+  "devDependencies": {
+    "@parcel/packager-ts": "2.7.0",
+    "@parcel/transformer-typescript-types": "2.7.0",
+    "typescript": ">=3.0.0"
   }
 }

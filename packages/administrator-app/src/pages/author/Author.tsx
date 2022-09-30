@@ -1,4 +1,4 @@
-import { Layout } from "../../components";
+import { Layout } from "ui";
 
 const Author = () => {
   return (

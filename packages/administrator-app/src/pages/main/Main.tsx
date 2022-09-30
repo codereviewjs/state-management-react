@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { Layout } from "../../components";
+import { Layout } from "ui";
 import { routes } from "../../constants/routes.constants";
 import { useStoreContext } from "../../context/Store.context";
 import styles from "./Main.module.css";

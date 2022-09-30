@@ -1,6 +1,7 @@
+import { Layout } from "ui";
 import { useStoreContext } from "../../context/Store.context";
 import styles from "./Themes.module.css";
-import { Layout, ThemeCard } from "../../components";
+import { ThemeCard } from "../../components";
 
 const Themes = () => {
   const { themes, setSelectedTheme, selectedTheme } = useStoreContext();

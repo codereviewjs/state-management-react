@@ -1,4 +1,5 @@
-import { Layout, ThemeCard } from "../../components";
+import { Layout } from "ui";
+import { ThemeCard } from "../../components";
 import { useStoreContext } from "../../context/Store.context";
 import styles from "./Authors.module.css";
 
