@@ -3,8 +3,7 @@
   "version": "1.0.0",
   "license": "MIT",
   "types": "dist/types.d.ts",
-  "module": "dist/ui.js",
-  "type": "module",
+  "module": "dist/ui.mjs",
   "peerDependencies": {
     "react": "^18.2.0"
   },

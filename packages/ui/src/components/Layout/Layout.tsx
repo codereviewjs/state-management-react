@@ -1,7 +1,7 @@
 import React from "react";
 import styles from "./Layout.module.css";
 
-interface Props {
+export interface Props {
   children: React.ReactNode;
   title: string;
 }
