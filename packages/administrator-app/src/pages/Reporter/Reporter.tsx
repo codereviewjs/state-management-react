@@ -1,11 +1,11 @@
 import { Layout } from "ui";
 
-const Author = () => {
+const Reporter = () => {
   return (
-    <Layout title='Author'>
+    <Layout title='Reporter'>
       <div>hi</div>
     </Layout>
   );
 };
 
-export default Author;
+export default Reporter;

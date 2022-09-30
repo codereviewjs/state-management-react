@@ -2,12 +2,12 @@ export const routes = {
   main: {
     root: "/",
   },
-  themes: {
-    root: "/themes",
-    theme: "/themes/:title",
+  reports: {
+    root: "/report",
+    theme: "/report/:id",
   },
-  authors: {
-    root: "/authors",
-    author: "/authors/:name",
+  reporters: {
+    root: "/reporters",
+    author: "/reporters/:id",
   },
 };

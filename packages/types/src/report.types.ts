@@ -8,6 +8,7 @@ export enum Categories {
   WEATHER = "WEATHER",
 }
 export interface IReport {
+  _id?: string;
   title: string;
   description: string;
   date: Date;

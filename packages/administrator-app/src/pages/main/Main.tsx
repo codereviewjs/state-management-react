@@ -5,35 +5,35 @@ import { useStoreContext } from "../../context/Store.context";
 import styles from "./Main.module.css";
 
 const Main = () => {
-  const { themes, authors } = useStoreContext();
+  const { reports, reporters } = useStoreContext();
 
   return (
-    <Layout title='Authors and themes'>
+    <Layout title='Reporters and reports'>
       <div className={styles.listsContainer}>
         <div>
           <h2>Themes</h2>
           <h3>
-            <Link to={routes.themes.root}>To all themes</Link>
+            <Link to={routes.reports.root}>To all reports</Link>
           </h3>
           <ul>
-            {themes.map((theme) => (
-              <li key={`${theme.title}-${theme.author}`}>
-                <Link to={`${routes.themes.root}/${theme.title}`}>
-                  {theme.title}
+            {reports.map((report) => (
+              <li key={`${report.title}-${report._id}`}>
+                <Link to={`${routes.reports.root}/${report._id}`}>
+                  {report.title}
                 </Link>
               </li>
             ))}
           </ul>
         </div>
         <div>
-          <h2>Authors</h2>
+          <h2>Reporters</h2>
           <h3>
-            <Link to={routes.authors.root}>To all authors</Link>
+            <Link to={routes.reporters.root}>To all reporters</Link>
           </h3>
           <ul>
-            {authors.map((author) => (
+            {reporters.map((author) => (
               <li key={author.name}>
-                <Link to={`${routes.authors.root}/${author.name}`}>
+                <Link to={`${routes.reporters.root}/${author._id}`}>
                   {author.name}
                 </Link>
               </li>

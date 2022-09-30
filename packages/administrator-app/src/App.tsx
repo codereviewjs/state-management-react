@@ -1,11 +1,11 @@
 import { useEffect } from "react";
 import { Route, Routes } from "react-router-dom";
+import { ITheme } from "types";
 import "./App.css";
 import { Navbar } from "./components";
 import { routes } from "./constants/routes.constants";
-import { colors } from "./constants/theme.constants";
 import { useStoreContext } from "./context/Store.context";
-import { Themes, Theme, Main, Authors, Author } from "./pages";
+import { Reports, Report, Main, Reporters, Reporter } from "./pages";
 
 function App() {
   const { isPending, selectedTheme } = useStoreContext();
@@ -16,6 +16,13 @@ function App() {
 
   useEffect(() => {
     if (selectedTheme) {
+      const colors: (keyof Omit<ITheme, "_id">)[] = [
+        "primaryColor",
+        "secondaryColor",
+        "backgroundColor",
+        "textColor",
+      ];
+
       colors.forEach((color) => {
         document.documentElement.style.setProperty(
           `--${color}`,
@@ -30,10 +37,10 @@ function App() {
       <Navbar />
       <Routes>
         <Route path={routes.main.root} element={<Main />} />
-        <Route path={routes.themes.root} element={<Themes />} />
-        <Route path={routes.themes.theme} element={<Theme />} />
-        <Route path={routes.authors.root} element={<Authors />} />
-        <Route path={routes.authors.author} element={<Author />} />
+        <Route path={routes.reports.root} element={<Reports />} />
+        <Route path={routes.reports.theme} element={<Report />} />
+        <Route path={routes.reporters.root} element={<Reporters />} />
+        <Route path={routes.reporters.author} element={<Reporter />} />
       </Routes>
     </div>
   );

@@ -5,19 +5,16 @@ import {
   useEffect,
   useReducer,
 } from "react";
-import { ITheme, IAuthor } from "types";
-import { themeApi, authorsApi } from "../api";
-import { defaultTheme } from "../constants/theme.constants";
+import { IReport, IReporter, ITheme } from "types";
+import { reportsApi, reportersApi } from "../api";
 
 interface StoreContextProps {
-  themes: ITheme[];
-  selectedTheme: ITheme;
-  authors: IAuthor[];
+  reporters: IReporter[];
+  selectedTheme?: ITheme;
+  reports: IReport[];
   isPending: boolean;
-  getThemeByTitle: (title: string | undefined) => ITheme | undefined;
-  getAuthorByName: (name: string | undefined) => IAuthor | undefined;
-  getAuthorsThemes: (author: IAuthor) => ITheme[];
-  setSelectedTheme: (theme: ITheme) => void;
+  getReporterById: (id: string | undefined) => IReporter | undefined;
+  getReportById: (id: string | undefined) => IReport | undefined;
 }
 
 const StoreContext = createContext({} as StoreContextProps);
@@ -29,7 +26,7 @@ interface StoreContextProviderProps {
 export const useStoreContext = () => {
   const storeContext = useContext(StoreContext);
 
-  if (!storeContext.themes || !storeContext.authors) {
+  if (!storeContext.reporters || !storeContext.reports) {
     throw new Error("Please use useStoreContext inside StoreContextProvider");
   }
 
@@ -43,18 +40,17 @@ type StoreData<T> = {
 };
 
 interface StoreState {
-  selectedTheme: ITheme;
-  authors: StoreData<IAuthor[]>;
-  themes: StoreData<ITheme[]>;
+  selectedTheme?: ITheme;
+  reporters: StoreData<IReporter[]>;
+  reports: StoreData<IReport[]>;
   status: HttpRequestStatus;
 }
 
 const initialState: StoreState = {
-  selectedTheme: defaultTheme,
-  authors: {
+  reporters: {
     data: [],
   },
-  themes: {
+  reports: {
     data: [],
   },
   status: "idle",
@@ -66,16 +62,16 @@ type GetDataRequest = {
 type GetDataSuccess = {
   type: "getDataSuccess";
   payload: {
-    authors: IAuthor[];
-    themes: ITheme[];
+    reports: IReport[];
+    reporters: IReporter[];
   };
 };
 
 type GetDataError = {
   type: "getDataError";
   payload: {
-    authors: string;
-    themes: string;
+    reporters: string;
+    reports: string;
   };
 };
 
@@ -101,13 +97,13 @@ const reducer = (state: StoreState, action: Actions): StoreState => {
     case "getDataSuccess": {
       return {
         ...state,
-        authors: {
-          ...state.authors,
-          data: action.payload.authors,
+        reporters: {
+          ...state.reporters,
+          data: action.payload.reporters,
         },
-        themes: {
-          ...state.themes,
-          data: action.payload.themes,
+        reports: {
+          ...state.reports,
+          data: action.payload.reports,
         },
         status: "success",
       };
@@ -115,13 +111,13 @@ const reducer = (state: StoreState, action: Actions): StoreState => {
     case "getDataError": {
       return {
         ...state,
-        authors: {
-          ...state.authors,
-          error: action.payload.authors,
+        reporters: {
+          ...state.reporters,
+          error: action.payload.reporters,
         },
-        themes: {
-          ...state.themes,
-          error: action.payload.themes,
+        reports: {
+          ...state.reports,
+          error: action.payload.reports,
         },
         status: "error",
       };
@@ -144,23 +140,23 @@ const StoreContextProvider = ({ children }: StoreContextProviderProps) => {
   const fetchData = useCallback(async () => {
     try {
       dispatch({ type: "getDataRequest" });
-      const [themeResponse, authorsResponse] = await Promise.all([
-        themeApi.useGetAll(),
-        authorsApi.useGetAll(),
+      const [reportsResponse, reportersResponse] = await Promise.all([
+        reportsApi.useGetAll(),
+        reportersApi.useGetAll(),
       ]);
       dispatch({
         type: "getDataSuccess",
         payload: {
-          themes: [defaultTheme, ...themeResponse.themes],
-          authors: authorsResponse.authors,
+          reports: reportsResponse.reports,
+          reporters: reportersResponse.reporters,
         },
       });
     } catch (e) {
       dispatch({
         type: "getDataError",
         payload: {
-          authors: "",
-          themes: "",
+          reporters: "",
+          reports: "",
         },
       });
     }
@@ -170,30 +166,14 @@ const StoreContextProvider = ({ children }: StoreContextProviderProps) => {
     fetchData();
   }, [fetchData]);
 
-  const getThemeByTitle: StoreContextProps["getThemeByTitle"] = (title) => {
-    if (!title) return undefined;
-    return state.themes.data.find((theme) => theme.title === title);
+  const getReportById: StoreContextProps["getReportById"] = (id) => {
+    if (!id) return undefined;
+    return state.reports.data.find((report) => report._id === id);
   };
 
-  const getAuthorByName: StoreContextProps["getAuthorByName"] = (name) => {
-    if (!name) return undefined;
-    return state.authors.data.find((author) => author.name === name);
-  };
-
-  const setSelectedTheme = (theme: ITheme) => {
-    dispatch({
-      type: "setSelectedTheme",
-      payload: theme,
-    });
-  };
-
-  const getAuthorsThemes = (author: IAuthor) => {
-    return author.themes
-      .map((themeId) =>
-        // @ts-expect-error
-        state.themes.data.find((theme) => theme._id === themeId)
-      )
-      .filter(Boolean) as ITheme[];
+  const getReporterById: StoreContextProps["getReporterById"] = (id) => {
+    if (!id) return undefined;
+    return state.reporters.data.find((reporter) => reporter._id === id);
   };
 
   const isPending = state.status === "idle" || state.status === "loading";
@@ -201,14 +181,12 @@ const StoreContextProvider = ({ children }: StoreContextProviderProps) => {
   return (
     <StoreContext.Provider
       value={{
-        themes: state.themes.data,
+        reports: state.reports.data,
         selectedTheme: state.selectedTheme,
-        authors: state.authors.data,
+        reporters: state.reporters.data,
         isPending,
-        getThemeByTitle,
-        getAuthorByName,
-        getAuthorsThemes,
-        setSelectedTheme,
+        getReportById,
+        getReporterById,
       }}
     >
       {children}

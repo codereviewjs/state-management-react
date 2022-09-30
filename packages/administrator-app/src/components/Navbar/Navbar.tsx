@@ -13,10 +13,10 @@ const Navbar = () => {
           <Link to={routes.main.root}>Main</Link>
         </li>
         <li>
-          <Link to={routes.themes.root}>Themes</Link>
+          <Link to={routes.reports.root}>Themes</Link>
         </li>
         <li>
-          <Link to={routes.authors.root}>Authors</Link>
+          <Link to={routes.reporters.root}>Authors</Link>
         </li>
       </ul>
       <div className={styles.profile} />

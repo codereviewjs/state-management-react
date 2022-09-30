@@ -1,2 +1,2 @@
-export * from "./authors.api";
-export * from "./theme.api";
+export * from "./reporters.api";
+export * from "./reports.api";

@@ -1,0 +1,8 @@
+.card {
+  min-width: 320px;
+  max-width: 80vw;
+  width: 100%;
+  margin: 0 auto;
+  border-bottom: 1px solid var(--secondaryColor);
+  padding-bottom: 24px;
+}
