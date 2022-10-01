@@ -94,7 +94,7 @@ function randomIntFromInterval(min: number, max: number) {
   return Math.floor(Math.random() * (max - min + 1) + min);
 }
 
-function getRandomItemFromArray<T extends any[]>(arr: T) {
+function getRandomItemFromArray<T extends unknown[]>(arr: T) {
   return arr[Math.floor(Math.random() * arr.length)] as T[number];
 }
 function randomDate(start = new Date(2012, 0, 1), end = new Date()) {

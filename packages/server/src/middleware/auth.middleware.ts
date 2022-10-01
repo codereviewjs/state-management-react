@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from "express";
-import jwt, { Jwt } from "jsonwebtoken";
+import jwt from "jsonwebtoken";
 import Auth from "../models/auth.module";
 
 const requireAuth = async (req: Request, res: Response, next: NextFunction) => {
@@ -7,7 +7,7 @@ const requireAuth = async (req: Request, res: Response, next: NextFunction) => {
   const token = authHeader && authHeader.split(" ")[1];
 
   if (token) {
-    jwt.verify(token, "some-secret", (err: any) => {
+    jwt.verify(token, "some-secret", (err: unknown) => {
       if (err) {
         return res.status(403).json({ error: "not authenticated" });
       }

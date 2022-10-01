@@ -1,7 +1,7 @@
 import app from "./app";
 import { connect } from "./config/mongo";
 
-let server: any;
+let server: ReturnType<typeof app.listen>;
 const port = 8000;
 
 connect((err) => {
@@ -27,7 +27,7 @@ const exitHandler = () => {
   }
 };
 
-const unexpectedErrorHandler = (error: any) => {
+const unexpectedErrorHandler = (error: unknown) => {
   console.error(error);
   exitHandler();
 };

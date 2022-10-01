@@ -36,7 +36,7 @@ async function login(req: Request, res: Response) {
 async function logout(req: Request, res: Response) {
   try {
     return res.json({ message: "logged out successfully" });
-  } catch (e: any) {
+  } catch (e: unknown) {
     return res.json({ error: "Something went wrong" }).status(500);
   }
 }
