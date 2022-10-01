@@ -25,9 +25,6 @@ async function seed() {
       if (err) throw err;
       await cleanAll();
 
-      await AuthModule.insertMany(users);
-      console.log("Created users");
-
       await MetadataModule.create(metadata);
       console.log("Created metadata");
 
@@ -55,6 +52,21 @@ async function seed() {
         console.log("Reporters reports", reporter.reports.length);
       }
       console.log("Created reports");
+
+      for (const user of users) {
+        const userDoc = await AuthModule.create(user);
+
+        if (!user.admin) {
+          const reportersDoc = await ReporterModule.findOne({
+            email: user.email,
+          });
+          if (reportersDoc) {
+            userDoc.reporter = reportersDoc;
+            await userDoc.save();
+          }
+        }
+      }
+      console.log("Created users");
     } catch (e: any) {
       console.log(e.message);
     } finally {
