@@ -22,12 +22,12 @@ async function customFetch<D>(path: string, options?: RequestInit) {
 
 export const api = {
   get: <D>(path: string) => customFetch<D>(path),
-  post: <D>(path: string, body: any) =>
+  post: <D>(path: string, body: unknown) =>
     customFetch<D>(path, {
       method: "POST",
       body: JSON.stringify(body),
     }),
-  put: <D>(path: string, body: any) =>
+  put: <D>(path: string, body: unknown) =>
     customFetch<D>(path, {
       method: "PUT",
       body: JSON.stringify(body),

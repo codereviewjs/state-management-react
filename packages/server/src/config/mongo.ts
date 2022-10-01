@@ -1,9 +1,5 @@
-import dotenv from "dotenv";
 import mongoose from "mongoose";
 
-dotenv.config();
-
-// Set up default mongoose connection
 const uri = process.env.MONGO_URI;
 
 export function connect(cb: mongoose.CallbackWithoutResult) {

@@ -1,13 +1,12 @@
 import { Request, Response, NextFunction } from "express";
-import jwt from "jsonwebtoken";
 import Auth from "../models/auth.module";
+import { authUtils } from "../utils";
 
 const requireAuth = async (req: Request, res: Response, next: NextFunction) => {
-  const authHeader = req.headers["authorization"];
-  const token = authHeader && authHeader.split(" ")[1];
+  const token = authUtils.getTokenFromRequest(req);
 
   if (token) {
-    jwt.verify(token, "some-secret", (err: unknown) => {
+    authUtils.verifyJwt(token, (err) => {
       if (err) {
         return res.status(403).json({ error: "not authenticated" });
       }
@@ -18,26 +17,21 @@ const requireAuth = async (req: Request, res: Response, next: NextFunction) => {
   }
 };
 
-const getUserFromJwtCb =
-  (res: Response, next: NextFunction): jwt.VerifyCallback =>
-  async (err, decodedToken) => {
-    if (err || !decodedToken || typeof decodedToken !== "object") {
-      res.locals.user = null;
-      next();
-    } else {
-      // @ts-expect-error
-      const user = await Auth.findById(decodedToken.id).populate("reporter");
-      res.locals.user = user;
-      next();
-    }
-  };
-
 const getAuthUser = (req: Request, res: Response, next: NextFunction) => {
-  const authHeader = req.headers["authorization"];
-  const token = authHeader && authHeader.split(" ")[1];
+  const token = authUtils.getTokenFromRequest(req);
 
   if (token) {
-    jwt.verify(token, "some-secret", getUserFromJwtCb(res, next));
+    authUtils.verifyJwt(token, async (err, decodedToken) => {
+      if (err || !decodedToken || typeof decodedToken !== "object") {
+        res.locals.user = null;
+        next();
+      } else {
+        // @ts-expect-error
+        const user = await Auth.findById(decodedToken.id).populate("reporter");
+        res.locals.user = user;
+        next();
+      }
+    });
   } else {
     res.locals.user = null;
     next();

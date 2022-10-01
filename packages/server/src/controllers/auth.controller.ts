@@ -1,30 +1,17 @@
 import { Request, Response } from "express";
 import { IAuth, IUser } from "types";
-import jwt from "jsonwebtoken";
 import { AuthModule } from "../models";
-
-function createToken(id: string) {
-  // TODO - replace secret from env
-  return jwt.sign({ id }, "some-secret", {
-    expiresIn: "1h",
-  });
-}
+import { authUtils } from "../utils";
 
 async function login(req: Request, res: Response) {
   const { email, password } = req.body;
 
   try {
     const user = await AuthModule.login(email, password);
-    const token = await createToken(user._id || "");
 
     const response: { user: IUser; token: string } = {
-      user: {
-        _id: user._id,
-        email: user.email,
-        admin: user.admin,
-        reporter: user.reporter,
-      },
-      token,
+      user: authUtils.parseAuthToUser(user),
+      token: authUtils.createToken(user._id || ""),
     };
 
     return res.json(response);
@@ -48,13 +35,8 @@ async function getSession(req: Request, res: Response) {
   }
 
   const response: { user: IUser; token: string } = {
-    user: {
-      _id: user._id,
-      email: user.email,
-      admin: user.admin,
-      reporter: user.reporter,
-    },
-    token: createToken(user._id || ""),
+    user: authUtils.parseAuthToUser(user),
+    token: authUtils.createToken(user._id || ""),
   };
   res.json(response);
 }
