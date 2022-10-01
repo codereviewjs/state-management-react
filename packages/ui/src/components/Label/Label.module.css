@@ -1,5 +1,7 @@
 .label {
   display: flex;
+  width: 100%;
+  text-align: left;
   flex-direction: column;
   justify-content: start;
   gap: 8px;

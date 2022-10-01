@@ -15,9 +15,7 @@ const Button = ({
     <button
       className={`${styles.button} ${className} ${styles[variant]}`}
       {...buttonProps}
-    >
-      hi
-    </button>
+    />
   );
 };
 

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Layout } from "ui";
+import { Button, InputLabel, Layout } from "ui";
 import { useStoreContext } from "../../context/Store.context";
 import styles from "./Login.module.css";
 
@@ -15,27 +15,29 @@ const Login = () => {
   return (
     <Layout title='Login'>
       <form className={styles.form} onSubmit={handleSubmit}>
-        <div className={styles.formInputContainer}>
-          <label htmlFor='email'>Email</label>
-          <input
-            type='email'
-            onChange={(e) => setEmail(e.target.value)}
-            value={email}
-            placeholder='email@gmail.com'
-            required
-          />
-        </div>
-        <div className={styles.formInputContainer}>
-          <label htmlFor='password'>Password</label>
-          <input
-            type='password'
-            onChange={(e) => setPassword(e.target.value)}
-            value={password}
-            placeholder='********'
-            required
-          />
-        </div>
-        <button type='submit'>submit</button>
+        <InputLabel
+          labelProps={{ label: "Email" }}
+          inputProps={{
+            type: "email",
+            onChange: (e) => setEmail(e.target.value),
+            value: email,
+            placeholder: "email@gmail.com",
+            required: true,
+          }}
+        />
+        <InputLabel
+          labelProps={{
+            label: "Password",
+          }}
+          inputProps={{
+            type: "password",
+            onChange: (e) => setPassword(e.target.value),
+            value: password,
+            placeholder: "********",
+            required: true,
+          }}
+        />
+        <Button type='submit'>submit</Button>
       </form>
     </Layout>
   );
