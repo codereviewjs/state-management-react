@@ -4,7 +4,7 @@ import routes from "./routes/v1";
 
 const app = express();
 
-// parse json request body
+// middleware
 app.use(express.json());
 
 // parse urlencoded request body

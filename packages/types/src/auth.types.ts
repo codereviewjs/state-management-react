@@ -8,4 +8,4 @@ export interface IAuth {
   reporter?: IReporter;
 }
 
-export interface User extends Pick<IAuth, "admin" | "email"> {}
+export interface IUser extends Pick<IAuth, "admin" | "email" | "reporter"> {}

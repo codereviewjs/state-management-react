@@ -5,16 +5,21 @@ import {
   useEffect,
   useReducer,
 } from "react";
-import { IReport, IReporter, ITheme } from "types";
-import { reportsApi, reportersApi } from "../api";
+import { IReport, IReporter, ITheme, IUser } from "types";
+import { reportsApi, reportersApi, authApi } from "../api";
 
 interface StoreContextProps {
+  user?: IUser;
   reporters: IReporter[];
   selectedTheme?: ITheme;
   reports: IReport[];
-  isPending: boolean;
+  isDataPending: boolean;
+  isAuthPending: boolean;
+  isLoggedIn: boolean;
   getReporterById: (id: string | undefined) => IReporter | undefined;
   getReportById: (id: string | undefined) => IReport | undefined;
+  login: (email: string, password: string) => Promise<boolean>;
+  logout: () => void;
 }
 
 const StoreContext = createContext({} as StoreContextProps);
@@ -41,12 +46,29 @@ type StoreData<T> = {
 
 interface StoreState {
   selectedTheme?: ITheme;
+  user: {
+    data?: IUser;
+    error?: string;
+    isLoggedIn: boolean;
+    status: HttpRequestStatus;
+  };
+  logout: {
+    error?: string;
+    status: HttpRequestStatus;
+  };
   reporters: StoreData<IReporter[]>;
   reports: StoreData<IReport[]>;
   status: HttpRequestStatus;
 }
 
 const initialState: StoreState = {
+  user: {
+    status: "idle",
+    isLoggedIn: false,
+  },
+  logout: {
+    status: "idle",
+  },
   reporters: {
     data: [],
   },
@@ -75,16 +97,61 @@ type GetDataError = {
   };
 };
 
-type SetSelectedTheme = {
-  type: "setSelectedTheme";
-  payload: ITheme;
+type LoginRequest = {
+  type: "loginRequest";
+};
+
+type LoginSuccess = {
+  type: "loginSuccess";
+  payload: IUser;
+};
+
+type LoginError = {
+  type: "loginError";
+  payload: string;
+};
+
+type LogoutRequest = {
+  type: "logoutRequest";
+};
+
+type LogoutSuccess = {
+  type: "logoutSuccess";
+};
+
+type LogoutError = {
+  type: "logoutError";
+  payload: string;
+};
+
+type getSessionRequest = {
+  type: "getSessionRequest";
+};
+type getSessionError = {
+  type: "getSessionError";
+  payload: string;
+};
+type getSessionSuccess = {
+  type: "getSessionSuccess";
+  payload: {
+    user?: IUser;
+    authenticated: boolean;
+  };
 };
 
 type Actions =
   | GetDataRequest
   | GetDataSuccess
   | GetDataError
-  | SetSelectedTheme;
+  | LoginRequest
+  | LoginSuccess
+  | LoginError
+  | LogoutError
+  | LogoutSuccess
+  | LogoutRequest
+  | getSessionRequest
+  | getSessionError
+  | getSessionSuccess;
 
 const reducer = (state: StoreState, action: Actions): StoreState => {
   switch (action.type) {
@@ -122,11 +189,94 @@ const reducer = (state: StoreState, action: Actions): StoreState => {
         status: "error",
       };
     }
-
-    case "setSelectedTheme": {
+    case "loginRequest":
+    case "getSessionRequest": {
       return {
         ...state,
-        selectedTheme: action.payload,
+        user: {
+          status: "loading",
+          isLoggedIn: false,
+        },
+        logout: {
+          status: "idle",
+        },
+      };
+    }
+
+    case "loginSuccess": {
+      return {
+        ...state,
+        user: {
+          status: "success",
+          data: action.payload,
+          isLoggedIn: true,
+        },
+      };
+    }
+
+    case "getSessionSuccess": {
+      return {
+        ...state,
+        user: {
+          data: action.payload.user,
+          isLoggedIn: action.payload.authenticated,
+          status: "success",
+        },
+      };
+    }
+    case "getSessionError": {
+      return {
+        ...state,
+        user: {
+          data: undefined,
+          isLoggedIn: false,
+          status: "error",
+          error: action.payload,
+        },
+      };
+    }
+
+    case "loginError": {
+      return {
+        ...state,
+        user: {
+          status: "error",
+          error: action.payload,
+          isLoggedIn: false,
+        },
+      };
+    }
+
+    case "logoutRequest": {
+      return {
+        ...state,
+        logout: {
+          status: "loading",
+        },
+      };
+    }
+
+    case "logoutSuccess": {
+      return {
+        ...state,
+        logout: {
+          status: "success",
+        },
+        user: {
+          data: undefined,
+          status: "idle",
+          isLoggedIn: false,
+        },
+      };
+    }
+
+    case "logoutError": {
+      return {
+        ...state,
+        logout: {
+          status: "error",
+          error: action.payload,
+        },
       };
     }
     default:
@@ -137,12 +287,58 @@ const reducer = (state: StoreState, action: Actions): StoreState => {
 const StoreContextProvider = ({ children }: StoreContextProviderProps) => {
   const [state, dispatch] = useReducer(reducer, initialState);
 
+  const getSession = async () => {
+    dispatch({ type: "getSessionRequest" });
+    try {
+      const { user, token } = await authApi.getSession();
+      const isAuthenticated = !!user;
+      if (!isAuthenticated) {
+        localStorage.clear();
+      }
+
+      localStorage.setItem("token", token);
+      dispatch({
+        type: "getSessionSuccess",
+        payload: {
+          user,
+          authenticated: isAuthenticated,
+        },
+      });
+      return user;
+    } catch (e: any) {
+      dispatch({ type: "getSessionError", payload: e.message });
+      return null;
+    }
+  };
+  const login = async (email: string, password: string) => {
+    try {
+      dispatch({ type: "loginRequest" });
+      const { user, token } = await authApi.login({ email, password });
+      localStorage.setItem("token", token);
+      dispatch({ type: "loginSuccess", payload: user });
+      return true;
+    } catch (e: any) {
+      dispatch({ type: "loginError", payload: e.message });
+      return false;
+    }
+  };
+
+  const logout = async () => {
+    try {
+      localStorage.clear();
+      dispatch({ type: "logoutSuccess" });
+    } catch (e: any) {
+      dispatch({ type: "logoutError", payload: e.message });
+    }
+  };
+
   const fetchData = useCallback(async () => {
     try {
+      const user = await getSession();
       dispatch({ type: "getDataRequest" });
       const [reportsResponse, reportersResponse] = await Promise.all([
-        reportsApi.useGetAll(),
-        reportersApi.useGetAll(),
+        reportsApi.getAll(),
+        reportersApi.getAll(),
       ]);
       dispatch({
         type: "getDataSuccess",
@@ -176,17 +372,24 @@ const StoreContextProvider = ({ children }: StoreContextProviderProps) => {
     return state.reporters.data.find((reporter) => reporter._id === id);
   };
 
-  const isPending = state.status === "idle" || state.status === "loading";
+  const isDataPending = state.status === "idle" || state.status === "loading";
+  const isAuthPending =
+    state.user.status === "idle" || state.user.status === "loading";
 
   return (
     <StoreContext.Provider
       value={{
+        user: state.user.data,
+        isLoggedIn: state.user.isLoggedIn,
         reports: state.reports.data,
         selectedTheme: state.selectedTheme,
         reporters: state.reporters.data,
-        isPending,
+        isDataPending,
+        isAuthPending,
         getReportById,
         getReporterById,
+        login,
+        logout,
       }}
     >
       {children}

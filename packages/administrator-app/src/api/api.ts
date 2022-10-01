@@ -1,11 +1,21 @@
 import { BE_URL } from "../constants/url.constants";
 
 async function customFetch<D>(path: string, options?: RequestInit) {
-  const result = await fetch(`${BE_URL}${path}`, options);
+  const result = await fetch(`${BE_URL}${path}`, {
+    ...options,
+    headers: {
+      ...options?.headers,
+      "Content-Type": "application/json",
+      authorization: `Bearer ${localStorage.getItem("token")}`,
+    },
+  });
   if (result.ok) {
     const data = await result.json();
     return data as D;
   } else {
+    if (result.status === 401) {
+      localStorage.clear();
+    }
     throw result;
   }
 }

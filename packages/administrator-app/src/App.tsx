@@ -5,12 +5,13 @@ import "./App.css";
 import { Navbar } from "./components";
 import { routes } from "./constants/routes.constants";
 import { useStoreContext } from "./context/Store.context";
-import { Reports, Report, Main, Reporters, Reporter } from "./pages";
+import { Reports, Report, Main, Reporters, Reporter, Login } from "./pages";
 
 function App() {
-  const { isPending, selectedTheme } = useStoreContext();
+  const { isDataPending, isAuthPending, isLoggedIn, selectedTheme } =
+    useStoreContext();
 
-  if (isPending) {
+  if (isDataPending) {
     return <h4>Loading</h4>;
   }
 
@@ -31,6 +32,10 @@ function App() {
       });
     }
   }, [selectedTheme]);
+
+  if (!isLoggedIn) {
+    return <Login />;
+  }
 
   return (
     <div className='App'>

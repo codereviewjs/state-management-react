@@ -1,9 +1,11 @@
 import express from "express";
 import { authController } from "../../controllers";
+import { authMiddleware } from "../../middleware";
 
 const router = express.Router();
 
+router.get("/session", authMiddleware.authUser, authController.getSession);
 router.post("/login", authController.login);
-router.post("/logout", authController.logout);
+router.delete("/logout", authMiddleware.required, authController.logout);
 
 export default router;

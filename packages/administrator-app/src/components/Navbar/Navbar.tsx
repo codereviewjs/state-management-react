@@ -1,8 +1,10 @@
 import { Link } from "react-router-dom";
 import { routes } from "../../constants/routes.constants";
+import { useStoreContext } from "../../context/Store.context";
 import styles from "./Navbar.module.css";
 
 const Navbar = () => {
+  const { logout, isLoggedIn } = useStoreContext();
   return (
     <nav className={styles.nav}>
       <div>
@@ -19,7 +21,14 @@ const Navbar = () => {
           <Link to={routes.reporters.root}>Authors</Link>
         </li>
       </ul>
-      <div className={styles.profile} />
+      {isLoggedIn && (
+        <div>
+          <button type='button' onClick={logout}>
+            Logout
+          </button>
+          <div className={styles.profile} />
+        </div>
+      )}
     </nav>
   );
 };
