@@ -2,6 +2,8 @@ import { IReport } from "./report.types";
 
 export interface IReporter {
   _id?: string;
-  name: string;
+  firstName: string;
+  lastName: string;
+  email: string;
   reports: IReport[];
 }

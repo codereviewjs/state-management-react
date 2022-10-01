@@ -1,5 +1,4 @@
 import { disconnect } from "mongoose";
-import { IReporter } from "types";
 import { connect } from "../config/mongo";
 import {
   AuthModule,
@@ -7,7 +6,7 @@ import {
   ReportModule,
   ReporterModule,
 } from "../models";
-import { metadata, reporters, reports, user } from "./data";
+import { metadata, reporters, reports, users } from "./data";
 
 async function cleanAll() {
   await AuthModule.remove();
@@ -26,8 +25,8 @@ async function seed() {
       if (err) throw err;
       await cleanAll();
 
-      await AuthModule.create(user);
-      console.log("Created user");
+      await AuthModule.insertMany(users);
+      console.log("Created users");
 
       await MetadataModule.create(metadata);
       console.log("Created metadata");
@@ -37,14 +36,14 @@ async function seed() {
 
       for (const report of reports) {
         const reporter = await ReporterModule.findOne({
-          name: report.reporter.name,
+          email: report.reporter.email,
         });
 
         if (!reporter) {
           continue;
         }
 
-        console.log("Reporter", reporter.name);
+        console.log("Reporter", reporter.firstName + reporter.lastName);
         console.log("Reporter", report.title);
         const reportDoc = await ReportModule.create({
           ...report,

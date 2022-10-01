@@ -3,7 +3,7 @@
   "private": true,
   "workspaces": [
     "administrator-app",
-    "backend",
+    "server",
     "ui",
     "types",
     "news-site",
@@ -15,13 +15,13 @@
   "license": "MIT",
   "scripts": {
     "init:project": "yarn seed & yarn build:types & yarn build:ui",
-    "seed": "yarn workspace backend seed",
+    "seed": "yarn workspace server seed",
     "BUILD SCRIPTS": "------------------------",
     "build:types": "yarn workspace types build",
     "build:ui": "yarn workspace ui build",
     "START SCRIPTS": "------------------------",
     "start:ui": "yarn workspace ui storybook",
-    "start:backend": "yarn workspace backend start",
+    "start:server": "yarn workspace server start",
     "start:news": "yarn workspace news-site dev",
     "start:administrator": "yarn workspace administrator-app dev"
   }

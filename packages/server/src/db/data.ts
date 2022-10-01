@@ -1,6 +1,12 @@
-import { IReport, IReporter, IMetadata, Categories, ITheme } from "types";
+import {
+  IReport,
+  IReporter,
+  IMetadata,
+  Categories,
+  ITheme,
+  IAuth,
+} from "types";
 import { LoremIpsum } from "lorem-ipsum";
-import { IAuth } from "../models/auth.module";
 
 const lorem = new LoremIpsum({
   sentencesPerParagraph: {
@@ -13,10 +19,11 @@ const lorem = new LoremIpsum({
   },
 });
 
-export const user: IAuth = {
+export const admin: IAuth = {
   email: "admin@gmail.com",
   password: "password",
   isLoggedIn: false,
+  admin: true,
 };
 
 const theme: ITheme = {
@@ -30,14 +37,57 @@ export const metadata: IMetadata = {
   theme,
 };
 
-export const reporters = [
-  { name: "Haiden Roberson", reports: [] },
-  { name: "Imaad Ramirez", reports: [] },
-  { name: "Mandeep Fountain", reports: [] },
-  { name: "Rowena Patton", reports: [] },
-  { name: "Devin Easton", reports: [] },
-  { name: "Nana Wells", reports: [] },
-] as IReporter[];
+export const reporters: IReporter[] = [
+  {
+    firstName: "Haiden",
+    lastName: "Roberson",
+    email: "haidenRoberson@gmail.com",
+    reports: [],
+  },
+  {
+    firstName: "Imaad",
+    lastName: "Ramirez",
+    email: "imaadRamirez@gmail.com",
+    reports: [],
+  },
+  {
+    firstName: "Mandeep",
+    lastName: "Fountain",
+    email: "mandeepFountain@gmail.com",
+    reports: [],
+  },
+  {
+    firstName: "Rowena",
+    lastName: "Patton",
+    email: "rowenaPatton",
+    reports: [],
+  },
+  {
+    firstName: "Devin",
+    lastName: "Easton",
+    email: "devinEaston@gmail.com",
+    reports: [],
+  },
+  {
+    firstName: "Nana",
+    lastName: "Wells",
+    email: "nanaWells@gmail.com",
+    reports: [],
+  },
+];
+
+export const users: IAuth[] = [
+  admin,
+  ...reporters.map(
+    (reporter, i) =>
+      ({
+        email: reporter.email,
+        isLoggedIn: false,
+        admin: false,
+        password: `${reporter.firstName}-${reporter.lastName}-${i}`,
+      } as IAuth)
+  ),
+];
 
 function randomIntFromInterval(min: number, max: number) {
   // min and max included

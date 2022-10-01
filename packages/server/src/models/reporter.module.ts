@@ -3,7 +3,9 @@ import { IReporter } from "types";
 const { Schema } = mongoose;
 
 const reporterSchema = new Schema<IReporter>({
-  name: String,
+  firstName: String,
+  lastName: String,
+  email: String,
   reports: [
     {
       type: Schema.Types.ObjectId,
