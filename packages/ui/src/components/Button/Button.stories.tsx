@@ -12,5 +12,9 @@ export default {
 } as ComponentMeta<typeof Button>;
 
 export const Primary = () => {
-  return <Button />;
+  return <Button variant='primary' />;
+};
+
+export const Secondary = () => {
+  return <Button variant='secondary' />;
 };

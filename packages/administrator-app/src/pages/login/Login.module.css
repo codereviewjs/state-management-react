@@ -1,0 +1,17 @@
+.form {
+  display: flex;
+  flex-direction: column;
+  min-width: 320px;
+  max-width: 720px;
+  width: 40vw;
+  justify-content: center;
+  align-items: center;
+  margin: 0 auto;
+}
+
+.formInputContainer {
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+  width: 100%;
+}
