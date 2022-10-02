@@ -22,7 +22,6 @@ const lorem = new LoremIpsum({
 export const admin: IAuth = {
   email: "admin@gmail.com",
   password: "password",
-  isLoggedIn: false,
   admin: true,
 };
 
@@ -82,9 +81,8 @@ export const users: IAuth[] = [
     (reporter, i) =>
       ({
         email: reporter.email,
-        isLoggedIn: false,
         admin: false,
-        password: `${reporter.firstName}-${reporter.lastName}-${i}`,
+        password: "Aa123456!",
       } as IAuth)
   ),
 ];

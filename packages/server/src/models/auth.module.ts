@@ -20,10 +20,6 @@ const authSchema: Schema<IAuthDocument> = new mongoose.Schema({
     required: true,
     minlength: 6,
   },
-  isLoggedIn: {
-    type: Boolean,
-    default: false,
-  },
   admin: {
     type: Boolean,
     default: false,
@@ -35,14 +31,18 @@ const authSchema: Schema<IAuthDocument> = new mongoose.Schema({
 });
 
 authSchema.pre("save", async function (next) {
-  this.password = await authUtils.hashPassword(this.password)
+  this.password = await authUtils.hashPassword(this.password);
   next();
 });
 
 authSchema.statics.login = async function (email: string, password: string) {
-  const user = await this.findOne({ email });
+  const user = await this.findOne({ email }).populate('reporter');
   if (user) {
-    const isAuthenticated = await authUtils.comparePassword(password, user.password);
+    const isAuthenticated = await authUtils.comparePassword(
+      password,
+      user.password
+    );
+
     if (isAuthenticated) {
       return user;
     }

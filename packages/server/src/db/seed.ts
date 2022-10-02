@@ -40,8 +40,6 @@ async function seed() {
           continue;
         }
 
-        console.log("Reporter", reporter.firstName + reporter.lastName);
-        console.log("Reporter", report.title);
         const reportDoc = await ReportModule.create({
           ...report,
           reporter,
@@ -54,17 +52,19 @@ async function seed() {
       console.log("Created reports");
 
       for (const user of users) {
-        const userDoc = await AuthModule.create(user);
+        console.log(user.password);
+
 
         if (!user.admin) {
           const reportersDoc = await ReporterModule.findOne({
             email: user.email,
           });
-          if (reportersDoc) {
-            userDoc.reporter = reportersDoc;
-            await userDoc.save();
+          if(reportersDoc) {
+            user.reporter = reportersDoc;
           }
         }
+
+        await AuthModule.create(user);
       }
       console.log("Created users");
     } catch (e: any) {

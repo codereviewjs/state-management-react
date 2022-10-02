@@ -18,8 +18,9 @@ const requireAuth = async (req: Request, res: Response, next: NextFunction) => {
 };
 
 const getAuthUser = (req: Request, res: Response, next: NextFunction) => {
+  try {
   const token = authUtils.getTokenFromRequest(req);
-
+  
   if (token) {
     authUtils.verifyJwt(token, async (err, decodedToken) => {
       if (err || !decodedToken || typeof decodedToken !== "object") {
@@ -28,6 +29,7 @@ const getAuthUser = (req: Request, res: Response, next: NextFunction) => {
       } else {
         // @ts-expect-error
         const user = await Auth.findById(decodedToken.id).populate("reporter");
+        
         res.locals.user = user;
         next();
       }
@@ -36,6 +38,12 @@ const getAuthUser = (req: Request, res: Response, next: NextFunction) => {
     res.locals.user = null;
     next();
   }
+}
+catch(e){
+  console.log(e);
+  
+  return res.status(500)
+}
 };
 
 export const authMiddleware = {

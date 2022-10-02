@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Button, InputLabel, Layout } from "ui";
-import { useStoreContext } from "../../context/Store.context";
+import { useStoreContext } from "../../context/store/Store.context";
 import styles from "./Login.module.css";
 
 const Login = () => {
@@ -37,7 +37,9 @@ const Login = () => {
             required: true,
           }}
         />
-        <Button type='submit'>submit</Button>
+        <Button fluid type='submit'>
+          submit
+        </Button>
       </form>
     </Layout>
   );

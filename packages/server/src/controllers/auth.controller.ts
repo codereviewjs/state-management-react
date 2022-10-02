@@ -8,7 +8,7 @@ async function login(req: Request, res: Response) {
 
   try {
     const user = await AuthModule.login(email, password);
-
+    
     const response: { user: IUser; token: string } = {
       user: authUtils.parseAuthToUser(user),
       token: authUtils.createToken(user._id || ""),

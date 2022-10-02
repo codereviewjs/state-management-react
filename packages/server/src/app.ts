@@ -2,6 +2,7 @@ import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
 import routes from "./routes/v1";
+import morgan from 'morgan';
 
 dotenv.config();
 
@@ -9,9 +10,8 @@ const app = express();
 
 // middleware
 app.use(express.json());
-
-// parse urlencoded request body
 app.use(express.urlencoded({ extended: true }));
+app.use(morgan('tiny'))
 
 // enable cors
 app.use(cors());

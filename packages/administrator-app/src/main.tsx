@@ -4,7 +4,7 @@ import { BrowserRouter } from "react-router-dom";
 import "ui/dist/style.css";
 
 import App from "./App";
-import StoreContextProvider from "./context/Store.context";
+import StoreContextProvider from "./context/store/Store.context";
 import "./index.css";
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(

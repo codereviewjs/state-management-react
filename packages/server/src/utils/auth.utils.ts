@@ -5,7 +5,8 @@ import { IAuth, IUser } from "types";
 
 async function hashPassword(password: string) {
   const salt = await bcrypt.genSalt();
-  return await bcrypt.hash(password, salt);
+  const hash = await bcrypt.hashSync(password, salt);
+  return hash;
 }
 
 async function comparePassword(password: string, encryptedPassword: string) {

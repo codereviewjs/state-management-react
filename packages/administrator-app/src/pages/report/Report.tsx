@@ -1,7 +1,7 @@
 import { useParams, Link } from "react-router-dom";
 import { Layout } from "ui";
 import { routes } from "../../constants/routes.constants";
-import { useStoreContext } from "../../context/Store.context";
+import { useStoreContext } from "../../context/store/Store.context";
 
 const Report = () => {
   const { getReportById } = useStoreContext();
