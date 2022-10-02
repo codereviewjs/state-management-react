@@ -9,3 +9,7 @@
   margin: 0 auto;
   gap: 16px;
 }
+
+.form button {
+  margin-top: 24px;
+}

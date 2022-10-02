@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { Layout } from "ui";
+import { Layout, Card } from "ui";
 import { routes } from "../../constants/routes.constants";
 import { useStoreContext } from "../../context/store/Store.context";
 import styles from "./Main.module.css";
@@ -12,9 +12,30 @@ const Main = () => {
     <Layout title={`Hello ${userName}`}>
       <div>
         <h3>Your'e reports</h3>
-        {
-          reports.map(report => <pre key={report._id}>{JSON.stringify(report,null,2)}</pre>)
-        }
+        <div className={styles.cards}>
+          {reports.map((report) => (
+            <Card className={styles.card}>
+              <Card.Header className={styles.cardHeader}>
+                {report.title}
+              </Card.Header>
+              <Card.Content className={styles.cardContent}>
+                <div>
+                  <div className={styles.cardContentHeader}>
+                    <span>{report.category}</span>
+                    <span>{new Date(report.date).toLocaleString()}</span>
+                  </div>
+                  <p>{report.description}</p>
+                </div>
+              </Card.Content>
+              <Card.Footer flex='end'>
+                <Card.ActionButtons
+                  primaryButtonProps={{ content: "Edit" }}
+                  secondaryButtonProps={{ content: "Delete" }}
+                />
+              </Card.Footer>
+            </Card>
+          ))}
+        </div>
       </div>
     </Layout>
   );

@@ -4,6 +4,34 @@
   text-align: left;
 }
 
+.cards {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 16px;
+}
+
+.card {
+  min-width: 300px;
+  max-width: 32%;
+}
+
+.cardContent {
+  color: black;
+}
+
+.cardContentHeader {
+  display: flex;
+  justify-content: space-between;
+  padding: 0 16px;
+  font-size: 12px;
+}
+
+.cardHeader {
+  background-color: #eee;
+  color: black;
+}
+
 .listsContainer ul {
   padding: 0;
 }
