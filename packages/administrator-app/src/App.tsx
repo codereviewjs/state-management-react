@@ -31,7 +31,7 @@ function App() {
       <Routes>
         <Route path={routes.main.root} element={<Main />} />
         <Route path={routes.reports.root} element={<Reports />} />
-        <Route path={routes.reports.theme} element={<Report />} />
+        <Route path={routes.reports.report} element={<Report />} />
       </Routes>
     </div>
   );

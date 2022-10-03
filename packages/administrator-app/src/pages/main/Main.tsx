@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import { Layout, Card } from "ui";
 import { routes } from "../../constants/routes.constants";
 import { useStoreContext } from "../../context/store/Store.context";
+import { routeUtils } from "../../utils/route.utils";
 import styles from "./Main.module.css";
 
 const Main = () => {
@@ -27,7 +28,15 @@ const Main = () => {
                   <p>{report.description}</p>
                 </div>
               </Card.Content>
-              <Card.Footer flex='end'>
+              <Card.Footer style={{ fontSize: 14 }} flex='space-between'>
+                <Link
+                  to={routeUtils.replaceIdParamWithValue(
+                    routes.reports.report,
+                    report._id
+                  )}
+                >
+                  Read more
+                </Link>
                 <Card.ActionButtons
                   primaryButtonProps={{ content: "Edit" }}
                   secondaryButtonProps={{ content: "Delete" }}

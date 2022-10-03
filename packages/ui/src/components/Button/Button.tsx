@@ -3,7 +3,8 @@ import styles from "./Button.module.css";
 
 export interface ButtonProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  variant?: "primary" | "secondary";
+  variant?: "primary" | "secondary" | "danger";
+  size?: "large" | "medium" | "small";
   fluid?: boolean;
   outline?: boolean;
 }
@@ -13,13 +14,15 @@ const Button = ({
   className,
   fluid,
   outline,
+  size = "medium",
   ...buttonProps
 }: ButtonProps) => {
   return (
     <button
-      className={`${styles.button} ${className} ${styles[variant]} 
-      ${fluid && styles.fluid}
-      ${outline && styles.outline}
+      className={`${styles.button} ${className} ${styles[variant] || ""} 
+      ${(fluid && styles.fluid) || ""}
+      ${(outline && styles.outline) || ""}
+      ${styles[size] || ""}
       `}
       {...buttonProps}
     />

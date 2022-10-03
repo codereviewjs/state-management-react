@@ -22,11 +22,12 @@
 
 a {
   font-weight: 500;
-  color: var(--primary-color);
+  color: var(--primaryColor);
   text-decoration: inherit;
 }
 a:hover {
   color: var(--primaryColor);
+  filter: brightness(0.8);
 }
 
 body {

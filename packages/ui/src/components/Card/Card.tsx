@@ -49,12 +49,13 @@ const CardContent = ({ className, ...rest }: CardProps) => {
 const CardFooter = ({
   className,
   flex = "start",
+  style,
   ...rest
 }: CardProps & { flex: React.CSSProperties["justifyContent"] }) => {
   return (
     <footer
       className={`${styles.footer} ${className}`}
-      style={{ justifyContent: flex }}
+      style={{ justifyContent: flex, ...style }}
       {...rest}
     />
   );

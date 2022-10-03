@@ -4,10 +4,6 @@ export const routes = {
   },
   reports: {
     root: "/report",
-    theme: "/report/:id",
-  },
-  reporters: {
-    root: "/reporters",
-    author: "/reporters/:id",
+    report: "/report/:id",
   },
 };

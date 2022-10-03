@@ -1,5 +1,5 @@
 import { useParams, Link } from "react-router-dom";
-import { Layout } from "ui";
+import { Button, Layout } from "ui";
 import { routes } from "../../constants/routes.constants";
 import { useStoreContext } from "../../context/store/Store.context";
 
@@ -15,9 +15,15 @@ const Report = () => {
 
   return (
     <Layout title={report.title}>
-      <h2>
-        <Link to={`${routes.reporters.root}/${report._id}`}>{report._id}</Link>
-      </h2>
+      <div>
+        <div>{report.category}</div>
+        <div>{new Date(report.date).toDateString()}</div>
+      </div>
+      <p>{report.description}</p>
+      <div>
+        <Button>Edit</Button>
+        <Button>Delete</Button>
+      </div>
     </Layout>
   );
 };
