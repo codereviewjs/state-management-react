@@ -16,14 +16,7 @@ const Navbar = () => {
       </div>
 
       {isLoggedIn && (
-        <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
-            width: "130px",
-          }}
-        >
+        <div className={styles.actions}>
           <Button type='button' outline variant='primary' onClick={logout}>
             Logout
           </Button>

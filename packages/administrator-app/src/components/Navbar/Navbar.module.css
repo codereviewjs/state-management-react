@@ -31,3 +31,10 @@
   border-radius: 100%;
   background-color: white;
 }
+
+.actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 130px;
+}

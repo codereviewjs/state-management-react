@@ -39,7 +39,7 @@ const Main = () => {
                 </Link>
                 <Card.ActionButtons
                   primaryButtonProps={{ content: "Edit" }}
-                  secondaryButtonProps={{ content: "Delete" }}
+                  dangerButtonProps={{ content: "Delete" }}
                 />
               </Card.Footer>
             </Card>

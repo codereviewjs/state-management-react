@@ -9,29 +9,38 @@ export interface CardProps extends React.HTMLAttributes<HTMLDivElement> {
 
 export type CardButtonProps = Omit<
   ButtonProps,
-  "variant" | "outline" | "children"
+  "variant" | "outline" | "children" | "size"
 > & { content: React.ReactNode };
 
 export interface CardActionButtonProps
   extends Omit<React.HTMLAttributes<HTMLDivElement>, "children"> {
   primaryButtonProps?: CardButtonProps;
   secondaryButtonProps?: CardButtonProps;
+  dangerButtonProps?: CardButtonProps;
 }
 
 const CardActionButtons = ({
   primaryButtonProps,
   secondaryButtonProps,
+  dangerButtonProps,
   className,
   ...rest
 }: CardActionButtonProps) => {
   return (
     <div className={`${styles.actionButtons} ${className}`} {...rest}>
       {primaryButtonProps && (
-        <Button {...primaryButtonProps}>{primaryButtonProps.content}</Button>
+        <Button {...primaryButtonProps} size='small'>
+          {primaryButtonProps.content}
+        </Button>
       )}
       {secondaryButtonProps && (
-        <Button {...secondaryButtonProps} outline>
+        <Button {...secondaryButtonProps} outline size='small'>
           {secondaryButtonProps.content}
+        </Button>
+      )}
+      {dangerButtonProps && (
+        <Button {...dangerButtonProps} variant='danger' size='small'>
+          {dangerButtonProps.content}
         </Button>
       )}
     </div>
