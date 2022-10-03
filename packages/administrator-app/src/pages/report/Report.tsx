@@ -15,14 +15,23 @@ const Report = () => {
 
   return (
     <Layout title={report.title}>
-      <div>
+      <div
+        style={{
+          display: "flex",
+          maxWidth: "50vw",
+          margin: "0 auto",
+          justifyContent: "space-between",
+        }}
+      >
         <div>{report.category}</div>
         <div>{new Date(report.date).toDateString()}</div>
       </div>
       <p>{report.description}</p>
-      <div>
-        <Button>Edit</Button>
-        <Button>Delete</Button>
+      <div style={{ display: "flex", gap: 32, justifyContent: "center" }}>
+        <Button size='large'>Edit</Button>
+        <Button size='large' variant='danger'>
+          Delete
+        </Button>
       </div>
     </Layout>
   );

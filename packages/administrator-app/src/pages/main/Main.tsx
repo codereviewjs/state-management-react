@@ -32,7 +32,7 @@ const Main = () => {
                 <Link
                   to={routeUtils.replaceIdParamWithValue(
                     routes.reports.report,
-                    report._id
+                    report._id || ""
                   )}
                 >
                   Read more

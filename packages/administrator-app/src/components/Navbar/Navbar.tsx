@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import Logo from "../../assets/logo.svg";
 import { Button } from "ui";
 import { routes } from "../../constants/routes.constants";
 import { useStoreContext } from "../../context/store/Store.context";
@@ -9,16 +10,11 @@ const Navbar = () => {
   return (
     <nav className={styles.nav}>
       <div>
-        <img src='logo' alt='logo' />
+        <Link to={routes.main.root}>
+          <img src={Logo} alt='logo' />
+        </Link>
       </div>
-      <ul className={styles.links}>
-        <li>
-          <Link to={routes.main.root}>Main</Link>
-        </li>
-        <li>
-          <Link to={routes.reports.root}>Reports</Link>
-        </li>
-      </ul>
+
       {isLoggedIn && (
         <div
           style={{
