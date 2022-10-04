@@ -1,10 +1,4 @@
-import {
-  IReport,
-  IReporter,
-  Categories,
-  ITheme,
-  IAuth,
-} from "types";
+import { IReport, IReporter, Categories, IAuth, Roles } from "types";
 import { LoremIpsum } from "lorem-ipsum";
 
 const lorem = new LoremIpsum({
@@ -21,9 +15,8 @@ const lorem = new LoremIpsum({
 export const admin: IAuth = {
   email: "admin@gmail.com",
   password: "password",
-  admin: true,
+  role: Roles.ADMIN,
 };
-
 
 export const reporters: IReporter[] = [
   {
@@ -67,11 +60,12 @@ export const reporters: IReporter[] = [
 export const users: IAuth[] = [
   admin,
   ...reporters.map(
-    (reporter, i) =>
+    (reporter) =>
       ({
         email: reporter.email,
         admin: false,
         password: "Aa123456!",
+        role: Roles.REPORTER,
       } as IAuth)
   ),
 ];

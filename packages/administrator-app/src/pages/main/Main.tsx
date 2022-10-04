@@ -1,4 +1,5 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { Roles } from "types";
 import { Layout, Card } from "ui";
 import { routes } from "../../constants/routes.constants";
 import { useStoreContext } from "../../context/store/Store.context";
@@ -6,8 +7,10 @@ import { routeUtils } from "../../utils/route.utils";
 import styles from "./Main.module.css";
 
 const Main = () => {
-  const { reports, user } = useStoreContext();
-  const userName = user?.admin ? "Admin" : user?.reporter?.firstName || "";
+  const { reports, user, deleteReport } = useStoreContext();
+  const navigate = useNavigate();
+  const userName =
+    user?.role === Roles.ADMIN ? "Admin" : user?.reporter?.firstName || "";
 
   return (
     <Layout title={`Hello ${userName}`}>
@@ -15,7 +18,7 @@ const Main = () => {
         <h3>Your'e reports</h3>
         <div className={styles.cards}>
           {reports.map((report) => (
-            <Card className={styles.card}>
+            <Card key={report._id} className={styles.card}>
               <Card.Header className={styles.cardHeader}>
                 {report.title}
               </Card.Header>
@@ -38,8 +41,21 @@ const Main = () => {
                   Read more
                 </Link>
                 <Card.ActionButtons
-                  primaryButtonProps={{ content: "Edit" }}
-                  dangerButtonProps={{ content: "Delete" }}
+                  primaryButtonProps={{
+                    content: "Edit",
+                    onClick: () =>
+                      report._id &&
+                      navigate(
+                        routeUtils.replaceIdParamWithValue(
+                          routes.reports.reportEdit,
+                          report._id
+                        )
+                      ),
+                  }}
+                  dangerButtonProps={{
+                    content: "Delete",
+                    onClick: () => report._id && deleteReport(report._id),
+                  }}
                 />
               </Card.Footer>
             </Card>

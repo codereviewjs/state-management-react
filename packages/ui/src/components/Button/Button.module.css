@@ -41,7 +41,7 @@
   font-weight: 700;
 }
 
-.button.primary:not(.outline) {
+.button.primary:not(.outline):not(:disabled) {
   background-color: var(--primaryColor);
   color: white;
 }

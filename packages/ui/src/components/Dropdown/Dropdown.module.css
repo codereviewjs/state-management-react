@@ -1,0 +1,53 @@
+.select {
+  /* styling */
+  background-color: white;
+  position: relative;
+  width: 100%;
+  color: #24292e;
+  border: 1px solid #e1e4e8;
+  border-radius: 6px;
+  display: inline-block;
+  font: inherit;
+  font-size: 14px;
+  padding: 5px 15px;
+  line-height: 20px;
+
+  /* reset */
+
+  margin: 0;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+}
+
+.wrapper {
+  position: relative;
+}
+
+.wrapper::after {
+  content: "";
+  top: 50%;
+  right: 10px;
+  display: block;
+  position: absolute;
+  transform: translateY(-2px);
+  border: 6px solid transparent;
+  border-color: black transparent transparent transparent;
+}
+
+.wrapper:focus-within::after {
+  border-color: var(--primaryColor) transparent transparent transparent;
+}
+
+.select:focus {
+  background-repeat: no-repeat;
+  border-color: var(--primaryColor);
+  outline: 0;
+}
+
+.select:-moz-focusring {
+  color: transparent;
+  text-shadow: 0 0 0 #000;
+}

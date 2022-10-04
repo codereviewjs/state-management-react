@@ -5,7 +5,7 @@ import {
   useEffect,
   useReducer,
 } from "react";
-import { IReport, IUser } from "types";
+import { IReport, IUser, Roles } from "types";
 import { reportsApi, authApi } from "../../api";
 import { initialState, storeReducer } from "./Store.reducer";
 import { HttpRequestStatus } from "./store.types";
@@ -19,6 +19,8 @@ interface StoreContextProps {
   getReportById: (id: string | undefined) => IReport | undefined;
   login: (email: string, password: string) => Promise<boolean>;
   logout: () => void;
+  updateReport: (id: string, report: IReport) => Promise<IReport>;
+  deleteReport: (id: string) => Promise<void>;
 }
 
 const StoreContext = createContext({} as StoreContextProps);
@@ -91,6 +93,7 @@ const StoreContextProvider = ({ children }: StoreContextProviderProps) => {
     try {
       dispatch({ type: "GetReportsRequest" });
       const { reports } = await reportsApi.getAuthReports();
+
       dispatch({
         type: "GetReportsSuccess",
         payload: reports,
@@ -103,10 +106,16 @@ const StoreContextProvider = ({ children }: StoreContextProviderProps) => {
   const fetchData = useCallback(async () => {
     try {
       const user = await getSession();
+      if (!user) return;
 
-      if (user) {
-        await fetchReports();
-      }
+      const dataPerRole: Record<Roles, () => Promise<void>> = {
+        [Roles.ADMIN]: async () => {},
+        [Roles.REPORTER]: fetchReports,
+        [Roles.USER]: async () => {},
+        [Roles.GUEST]: async () => {},
+      };
+
+      await dataPerRole[user.role]?.();
     } catch (e) {
       dispatch({
         type: "getSessionError",
@@ -114,6 +123,16 @@ const StoreContextProvider = ({ children }: StoreContextProviderProps) => {
       });
     }
   }, []);
+
+  const updateReport = async (id: string, report: IReport) => {
+    const reportResponse = await reportsApi.update(id, report);
+    await fetchReports();
+    return reportResponse.report;
+  };
+  const deleteReport = async (id: string) => {
+    await reportsApi.remove(id);
+    await fetchReports();
+  };
 
   useEffect(() => {
     fetchData();
@@ -124,7 +143,10 @@ const StoreContextProvider = ({ children }: StoreContextProviderProps) => {
     return state.reports.data.find((report) => report._id === id);
   };
 
-  const isDataPending =  (state.user.isLoggedIn && isPendingStatus(state.reports.status));
+  const isDataPending =
+    state.user.isLoggedIn &&
+    isPendingStatus(state.reports.status) &&
+    !state.reports.data.length;
 
   const isAuthPending = isPendingStatus(state.user.status);
 
@@ -139,6 +161,8 @@ const StoreContextProvider = ({ children }: StoreContextProviderProps) => {
         getReportById,
         login,
         logout,
+        deleteReport,
+        updateReport,
       }}
     >
       {children}

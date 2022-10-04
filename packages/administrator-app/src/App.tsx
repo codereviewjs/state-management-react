@@ -1,12 +1,12 @@
 import { useEffect } from "react";
 import { Route, Routes } from "react-router-dom";
 import { ITheme } from "types";
-import { setCssVars } from "ui";
+import { setCssVars, Spinner } from "ui";
 import "./App.css";
 import { Navbar } from "./components";
 import { routes } from "./constants/routes.constants";
 import { useStoreContext } from "./context/store/Store.context";
-import { Reports, Report, Main, Login } from "./pages";
+import { Reports, Report, Main, Login, ReportEdit } from "./pages";
 
 const theme: ITheme = {
   backgroundColor: "#242424",
@@ -16,15 +16,15 @@ const theme: ITheme = {
 };
 
 function App() {
-  const { isDataPending, isLoggedIn } = useStoreContext();
-
-  if (isDataPending) {
-    return <h4>Loading</h4>;
-  }
+  const { isDataPending, isAuthPending, isLoggedIn } = useStoreContext();
 
   useEffect(() => {
     setCssVars(theme);
   }, [setCssVars]);
+
+  if (isDataPending || isAuthPending) {
+    return <Spinner fullscreen />;
+  }
 
   if (!isLoggedIn) {
     return <Login />;
@@ -37,6 +37,7 @@ function App() {
         <Route path={routes.main.root} element={<Main />} />
         <Route path={routes.reports.root} element={<Reports />} />
         <Route path={routes.reports.report} element={<Report />} />
+        <Route path={routes.reports.reportEdit} element={<ReportEdit />} />
       </Routes>
     </div>
   );

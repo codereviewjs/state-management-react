@@ -1,4 +1,5 @@
 import { disconnect } from "mongoose";
+import { Roles } from "types";
 import { connect } from "../config/mongo";
 import { AuthModule, ReportModule, ReporterModule } from "../models";
 import { reporters, reports, users } from "./data";
@@ -44,7 +45,7 @@ async function seed() {
       for (const user of users) {
         console.log(user.password);
 
-        if (!user.admin) {
+        if (user.role !== Roles.ADMIN) {
           const reportersDoc = await ReporterModule.findOne({
             email: user.email,
           });

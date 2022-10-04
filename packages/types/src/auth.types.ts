@@ -12,9 +12,8 @@ export interface IAuth {
   email: string;
   password: string;
   role: Roles;
-  admin?: boolean;
   reporter?: IReporter;
 }
 
 export interface IUser
-  extends Pick<IAuth, "admin" | "email" | "reporter" | "_id" | "role"> {}
+  extends Pick<IAuth, "email" | "reporter" | "_id" | "role"> {}
