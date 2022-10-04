@@ -1,7 +1,6 @@
 import {
   IReport,
   IReporter,
-  IMetadata,
   Categories,
   ITheme,
   IAuth,
@@ -25,16 +24,6 @@ export const admin: IAuth = {
   admin: true,
 };
 
-const theme: ITheme = {
-  backgroundColor: "#242424",
-  primaryColor: "#646cff",
-  secondaryColor: "#1a1a1a",
-  textColor: "#ffffff",
-};
-
-export const metadata: IMetadata = {
-  theme,
-};
 
 export const reporters: IReporter[] = [
   {

@@ -8,18 +8,23 @@ import { routes } from "./constants/routes.constants";
 import { useStoreContext } from "./context/store/Store.context";
 import { Reports, Report, Main, Login } from "./pages";
 
+const theme: ITheme = {
+  backgroundColor: "#242424",
+  primaryColor: "#646cff",
+  secondaryColor: "#1a1a1a",
+  textColor: "#ffffff",
+};
+
 function App() {
-  const { isDataPending, metadata, isLoggedIn } = useStoreContext();
+  const { isDataPending, isLoggedIn } = useStoreContext();
 
   if (isDataPending) {
     return <h4>Loading</h4>;
   }
 
   useEffect(() => {
-    if (metadata && metadata.theme) {
-      setCssVars(metadata.theme);
-    }
-  }, [metadata, setCssVars]);
+    setCssVars(theme);
+  }, [setCssVars]);
 
   if (!isLoggedIn) {
     return <Login />;

@@ -14,7 +14,6 @@
   "author": "codereviewjs <codereviewjs@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "init:project": "yarn seed & yarn build:types & yarn build:ui",
     "seed": "yarn workspace server seed",
     "BUILD SCRIPTS": "------------------------",
     "build:types": "yarn workspace types build",

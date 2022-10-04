@@ -2,8 +2,8 @@
   "name": "ui",
   "version": "1.0.0",
   "license": "MIT",
-  "types": "dist/types.d.ts",
-  "module": "dist/ui.mjs",
+  "main": "src/index.ts",
+  "module": "src/index.ts",
   "peerDependencies": {
     "react": "^18.2.0"
   },
@@ -20,18 +20,14 @@
     "@types/react": "^18.0.21",
     "@typescript-eslint/eslint-plugin": "^5.38.1",
     "@typescript-eslint/parser": "^5.38.1",
-    "@vitejs/plugin-react": "^2.1.0",
     "babel-loader": "^8.2.5",
     "eslint": "^8.24.0",
     "eslint-plugin-react": "^7.31.8",
     "typescript": "^4.6.4",
-    "vite": "^3.1.4",
-    "vite-plugin-dts": "^1.6.4",
     "types": "*"
   },
   "scripts": {
     "storybook": "start-storybook -p 6006",
-    "build-storybook": "build-storybook",
-    "build": "rm -rf dist && vite build"
+    "build-storybook": "build-storybook"
   }
 }

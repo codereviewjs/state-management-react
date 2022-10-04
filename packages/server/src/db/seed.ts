@@ -1,18 +1,11 @@
 import { disconnect } from "mongoose";
 import { connect } from "../config/mongo";
-import {
-  AuthModule,
-  MetadataModule,
-  ReportModule,
-  ReporterModule,
-} from "../models";
-import { metadata, reporters, reports, users } from "./data";
+import { AuthModule, ReportModule, ReporterModule } from "../models";
+import { reporters, reports, users } from "./data";
 
 async function cleanAll() {
   await AuthModule.remove();
   console.log("Removed auth");
-  await MetadataModule.remove();
-  console.log("Removed metadata");
   await ReportModule.remove();
   console.log("Removed reports");
   await ReporterModule.remove();
@@ -24,9 +17,6 @@ async function seed() {
     try {
       if (err) throw err;
       await cleanAll();
-
-      await MetadataModule.create(metadata);
-      console.log("Created metadata");
 
       await ReporterModule.insertMany(reporters);
       console.log("Created reporters");
@@ -54,12 +44,11 @@ async function seed() {
       for (const user of users) {
         console.log(user.password);
 
-
         if (!user.admin) {
           const reportersDoc = await ReporterModule.findOne({
             email: user.email,
           });
-          if(reportersDoc) {
+          if (reportersDoc) {
             user.reporter = reportersDoc;
           }
         }

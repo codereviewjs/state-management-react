@@ -5,14 +5,13 @@ import {
   useEffect,
   useReducer,
 } from "react";
-import { IMetadata, IReport, ITheme, IUser } from "types";
-import { reportsApi, authApi, metadataApi } from "../../api";
+import { IReport, IUser } from "types";
+import { reportsApi, authApi } from "../../api";
 import { initialState, storeReducer } from "./Store.reducer";
 import { HttpRequestStatus } from "./store.types";
 
 interface StoreContextProps {
   user?: IUser;
-  metadata?: IMetadata;
   reports: IReport[];
   isDataPending: boolean;
   isAuthPending: boolean;
@@ -103,24 +102,12 @@ const StoreContextProvider = ({ children }: StoreContextProviderProps) => {
 
   const fetchData = useCallback(async () => {
     try {
-      dispatch({ type: "GetMetadataRequest" });
-      const [metadataResponse, user] = await Promise.all([
-        metadataApi.getOne(),
-        getSession(),
-      ]);
-      dispatch({
-        type: "GetMetadataSuccess",
-        payload: metadataResponse.metadata,
-      });
+      const user = await getSession();
 
       if (user) {
         await fetchReports();
       }
     } catch (e) {
-      dispatch({
-        type: "GetMetadataError",
-        payload: "error",
-      });
       dispatch({
         type: "getSessionError",
         payload: "error",
@@ -137,9 +124,7 @@ const StoreContextProvider = ({ children }: StoreContextProviderProps) => {
     return state.reports.data.find((report) => report._id === id);
   };
 
-  const isDataPending =
-    isPendingStatus(state.metadata.status) ||
-    (state.user.isLoggedIn && isPendingStatus(state.reports.status));
+  const isDataPending =  (state.user.isLoggedIn && isPendingStatus(state.reports.status));
 
   const isAuthPending = isPendingStatus(state.user.status);
 
@@ -147,7 +132,6 @@ const StoreContextProvider = ({ children }: StoreContextProviderProps) => {
     <StoreContext.Provider
       value={{
         user: state.user.data,
-        metadata: state.metadata.data,
         isLoggedIn: state.user.isLoggedIn,
         reports: state.reports.data,
         isDataPending,

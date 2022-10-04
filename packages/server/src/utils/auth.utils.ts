@@ -44,6 +44,7 @@ function createToken(id: string) {
 function parseAuthToUser(auth: IAuth): IUser {
   return {
     _id: auth._id,
+    role: auth.role,
     email: auth.email,
     admin: auth.admin,
     reporter: auth.reporter,

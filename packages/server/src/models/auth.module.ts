@@ -1,4 +1,4 @@
-import { IAuth } from "types";
+import { IAuth, Roles } from "types";
 import mongoose from "mongoose";
 import type { Model, Schema } from "mongoose";
 import { authUtils } from "../utils";
@@ -20,9 +20,10 @@ const authSchema: Schema<IAuthDocument> = new mongoose.Schema({
     required: true,
     minlength: 6,
   },
-  admin: {
-    type: Boolean,
-    default: false,
+  role: {
+    type: String,
+    enum: Roles,
+    default: Roles.GUEST,
   },
   reporter: {
     type: mongoose.Schema.Types.ObjectId,
@@ -36,7 +37,7 @@ authSchema.pre("save", async function (next) {
 });
 
 authSchema.statics.login = async function (email: string, password: string) {
-  const user = await this.findOne({ email }).populate('reporter');
+  const user = await this.findOne({ email }).populate("reporter");
   if (user) {
     const isAuthenticated = await authUtils.comparePassword(
       password,

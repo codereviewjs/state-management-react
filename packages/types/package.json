@@ -3,11 +3,7 @@
   "version": "1.0.0",
   "main": "src/index.ts",
   "license": "MIT",
-  "types": "./dist/index.d.ts",
-  "scripts": {
-    "build": "tsc --build",
-    "clean": "tsc --build --clean"
-  },
+  "types": "./src/index.ts",
   "devDependencies": {
     "typescript": "^4.6.4"
   }
