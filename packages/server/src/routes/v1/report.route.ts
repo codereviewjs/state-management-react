@@ -13,5 +13,6 @@ router.get(
 router.get("/:id", reportController.getOne);
 router.put("/:id", authMiddleware.authUser, reportController.update);
 router.delete("/:id", authMiddleware.authUser, reportController.remove);
+router.post("/", authMiddleware.authUser, reportController.create);
 
 export default router;

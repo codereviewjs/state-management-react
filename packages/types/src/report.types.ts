@@ -15,3 +15,6 @@ export interface IReport {
   category: Categories;
   reporter: IReporter;
 }
+
+export interface ICreateReport
+  extends Pick<IReport, "category" | "title" | "description"> {}

@@ -1,5 +1,5 @@
 import { Response, Request } from "express";
-import { IAuth, IReport } from "types";
+import { IAuth, ICreateReport, IReport } from "types";
 import { ReporterModule, ReportModule } from "../models";
 
 async function getAll(req: Request, res: Response) {
@@ -62,10 +62,47 @@ async function remove(req: Request, res: Response) {
   }
 }
 
+async function create(req: Request, res: Response) {
+  const { report } = req.body as { report: ICreateReport };
+  const user: IAuth = res.locals.user;
+  if (!user) {
+    return res.status(400).json({ error: "Not valid operation" });
+  }
+
+  // should be validation ....
+
+  const createdReport = await ReportModule.create({
+    ...report,
+    date: new Date(),
+    reporter: user.reporter?._id,
+  });
+
+  const response: { report: IReport } = {
+    report: {
+      category: createdReport.category,
+      date: createdReport.date,
+      description: createdReport.description,
+      reporter: createdReport.reporter,
+      title: createdReport.title,
+      _id: createdReport._id,
+    },
+  };
+  console.log("HERE?");
+
+  const reporter = await ReporterModule.findById(user.reporter?._id);
+  console.log(reporter?.firstName);
+
+  reporter?.reports.push(response.report);
+  await reporter?.save();
+
+  return res.status(201).json(response);
+}
+
 export const reportController = {
   getAll,
   getOne,
   getReportsByAuth,
   update,
   remove,
+  create,
 };

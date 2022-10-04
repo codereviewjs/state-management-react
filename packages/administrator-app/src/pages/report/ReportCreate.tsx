@@ -1,25 +1,20 @@
 import React, { useState } from "react";
-import { Link, useNavigate, useParams } from "react-router-dom";
-import { Categories, IReport } from "types";
+import { useNavigate, useParams } from "react-router-dom";
+import { Categories, ICreateReport, IReport } from "types";
 import { Button, Dropdown, Input, Label, Layout, Textarea } from "ui";
-import { reportsApi } from "../../api";
 import { routes } from "../../constants/routes.constants";
 import { useStoreContext } from "../../context/store/Store.context";
 import { routeUtils } from "../../utils/route.utils";
 import styles from "./Report.module.css";
 
 const ReportEdit = () => {
-  const { getReportById, updateReport } = useStoreContext();
+  const { createReport } = useStoreContext();
   const navigate = useNavigate();
-  const { id } = useParams();
-  const originalReport = getReportById(id);
-  const [report, setReport] = useState<IReport>({
-    ...originalReport,
-  } as IReport);
-
-  if (!id || !report || !originalReport) {
-    return <div>Report not found</div>;
-  }
+  const [report, setReport] = useState<ICreateReport>({
+    category: Categories.FOOD,
+    description: "",
+    title: "",
+  } as ICreateReport);
 
   const handleCategoryChange = (category: Categories) => {
     setReport((prev) => ({
@@ -44,24 +39,26 @@ const ReportEdit = () => {
     }));
   };
 
-  const isReportChanged =
-    originalReport.title !== report.title ||
-    originalReport.description !== report.description ||
-    originalReport.category !== report.category;
+  const isValidReport = report.title && report.description;
 
   const handleSubmit = async (e: React.ChangeEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (!report?._id || !isReportChanged) return;
+    if (!isValidReport) return;
 
-    await updateReport(report._id, report);
-    navigate(routeUtils.replaceIdParamWithValue(routes.reports.report, id));
+    const reportResponse = await createReport(report);
+
+    if (reportResponse._id) {
+      navigate(
+        routeUtils.replaceIdParamWithValue(
+          routes.reports.report,
+          reportResponse._id
+        )
+      );
+    }
   };
 
   return (
-    <Layout
-      className={styles.container}
-      title={`Edit report ${originalReport.title}`}
-    >
+    <Layout className={styles.container} title='Report Creation'>
       <form onSubmit={handleSubmit} className={styles.body}>
         <div className={styles.formInputsContainer}>
           <Label label='Category'>
@@ -88,8 +85,8 @@ const ReportEdit = () => {
           </Label>
         </div>
         <div className={styles.buttonsContainer}>
-          <Button size='large' disabled={!isReportChanged}>
-            Save
+          <Button size='large' disabled={!isValidReport}>
+            Create
           </Button>
 
           <Button

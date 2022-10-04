@@ -5,7 +5,7 @@ import {
   useEffect,
   useReducer,
 } from "react";
-import { IReport, IUser, Roles } from "types";
+import { ICreateReport, IReport, IUser, Roles } from "types";
 import { reportsApi, authApi } from "../../api";
 import { initialState, storeReducer } from "./Store.reducer";
 import { HttpRequestStatus } from "./store.types";
@@ -21,6 +21,7 @@ interface StoreContextProps {
   logout: () => void;
   updateReport: (id: string, report: IReport) => Promise<IReport>;
   deleteReport: (id: string) => Promise<void>;
+  createReport: (report: ICreateReport) => Promise<IReport>;
 }
 
 const StoreContext = createContext({} as StoreContextProps);
@@ -124,6 +125,11 @@ const StoreContextProvider = ({ children }: StoreContextProviderProps) => {
     }
   }, []);
 
+  const createReport = async (report: ICreateReport) => {
+    const reportResponse = await reportsApi.create(report);
+    await fetchReports();
+    return reportResponse.report;
+  };
   const updateReport = async (id: string, report: IReport) => {
     const reportResponse = await reportsApi.update(id, report);
     await fetchReports();
@@ -163,6 +169,7 @@ const StoreContextProvider = ({ children }: StoreContextProviderProps) => {
         logout,
         deleteReport,
         updateReport,
+        createReport,
       }}
     >
       {children}

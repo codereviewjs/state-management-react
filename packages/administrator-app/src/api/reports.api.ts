@@ -1,4 +1,4 @@
-import { IReport } from "types";
+import { ICreateReport, IReport } from "types";
 import { api } from "./api";
 
 export const reportsApi = {
@@ -7,6 +7,7 @@ export const reportsApi = {
   remove: (id: string) => api.delete<{ report: IReport }>(`/report/${id}`),
   update: (id: string, report: IReport) =>
     api.put<{ report: IReport }>(`/report/${id}`, { report }),
-  create: (body: IReport) => api.post<{ report: IReport }>(`/report`, body),
+  create: (report: ICreateReport) =>
+    api.post<{ report: IReport }>(`/report`, { report }),
   getAuthReports: () => api.get<{ reports: IReport[] }>(`/report/authReports`),
 };

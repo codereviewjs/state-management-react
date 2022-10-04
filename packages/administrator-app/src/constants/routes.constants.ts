@@ -6,5 +6,6 @@ export const routes = {
     root: "/report",
     report: "/report/:id",
     reportEdit: "/report/:id/edit",
+    reportCreate: "/report/create",
   },
 };

@@ -1,4 +1,5 @@
 import { IUser } from "types";
+import { initialState } from "./Store.reducer";
 import { StoreState } from "./store.types";
 
 export type LoginRequest = {
@@ -109,11 +110,10 @@ export const authSliceReducer = (
 
     case "logoutSuccess": {
       return {
-        ...state,
+        ...initialState,
         user: {
-          data: undefined,
-          status: "idle",
-          isLoggedIn: false,
+          ...initialState.user,
+          status: "success",
         },
       };
     }

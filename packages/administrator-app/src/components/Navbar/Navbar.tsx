@@ -17,6 +17,11 @@ const Navbar = () => {
 
       {isLoggedIn && (
         <div className={styles.actions}>
+          <Link to={routes.reports.reportCreate}>
+            <Button type='button' variant='primary'>
+              Create report
+            </Button>
+          </Link>
           <Button type='button' outline variant='primary' onClick={logout}>
             Logout
           </Button>
