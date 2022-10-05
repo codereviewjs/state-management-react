@@ -1,4 +1,4 @@
-import { BE_URL } from "../constants/url.constants";
+import { BE_URL } from "./constants";
 
 async function customFetch<D>(path: string, options?: RequestInit) {
   const result = await fetch(`${BE_URL}${path}`, {
@@ -6,7 +6,10 @@ async function customFetch<D>(path: string, options?: RequestInit) {
     headers: {
       ...options?.headers,
       "Content-Type": "application/json",
-      authorization: `Bearer ${localStorage.getItem("token")}`,
+      authorization:
+        typeof window !== "undefined"
+          ? `Bearer ${localStorage.getItem("token")}`
+          : "",
     },
   });
   if (result.ok) {

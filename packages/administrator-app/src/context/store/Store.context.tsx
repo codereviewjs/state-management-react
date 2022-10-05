@@ -5,8 +5,8 @@ import {
   useEffect,
   useReducer,
 } from "react";
-import { ICreateReport, IReport, IUser, Roles } from "types";
-import { reportsApi, authApi, reportersApi } from "../../api";
+import { ICreateReport, IReport, Roles } from "types";
+import { reportsApi, authApi, reportersApi } from "api";
 import { initialState, storeReducer } from "./Store.reducer";
 import { StoreState } from "./store.types";
 

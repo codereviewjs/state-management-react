@@ -4,6 +4,6 @@
   color: var(--textColor);
   text-align: left;
   flex-direction: column;
-  justify-content: start;
+  justify-content: flex-start;
   gap: 8px;
 }
