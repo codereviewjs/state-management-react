@@ -60,7 +60,7 @@ const CardFooter = ({
   flex = "start",
   style,
   ...rest
-}: CardProps & { flex: React.CSSProperties["justifyContent"] }) => {
+}: CardProps & { flex?: React.CSSProperties["justifyContent"] }) => {
   return (
     <footer
       className={`${styles.footer} ${className}`}

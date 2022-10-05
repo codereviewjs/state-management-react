@@ -14,7 +14,11 @@ function MyApp({ Component, pageProps }: AppProps) {
   useEffect(() => {
     setCssVars(theme);
   }, []);
-  return <Component {...pageProps} />;
+  return (
+    <div className='root'>
+      <Component {...pageProps} />
+    </div>
+  );
 }
 
 export default MyApp;

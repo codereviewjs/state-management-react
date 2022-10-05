@@ -1,23 +1,53 @@
 import type { NextPage, GetStaticProps } from "next";
-import { reportsApi, reportersApi } from "api";
+import { reportsApi } from "api";
+import { IReport } from "types";
+import styles from "../styles/index.module.css";
+import { Card, Layout } from "ui";
+import Link from "next/link";
 
-export const getStaticProps: GetStaticProps = async () => {
-  const reportersResponse = await reportersApi.getAll();
+interface Props {
+  reports: IReport[];
+}
+
+export const getStaticProps: GetStaticProps<Props> = async () => {
   const reportsResponse = await reportsApi.getAll();
 
   return {
     props: {
       reports: reportsResponse.reports,
-      reporters: reportersResponse.reporters,
     },
   };
 };
-const Home: NextPage = ({ reports, reporters }) => {
+
+const Home: NextPage<Props> = ({ reports }) => {
   return (
-    <div className='app'>
-      <pre>{JSON.stringify(reports, null, 2)}</pre>
-      <pre>{JSON.stringify(reporters, null, 2)}</pre>
-    </div>
+    <Layout title='Reports'>
+      <div className={styles.container}>
+        {reports.map((report) => (
+          <Card className={styles.card} key={report._id}>
+            <Card.Header>
+              <Link href={`/report/${report._id}`} passHref>
+                {report.title}
+              </Link>
+              -{" "}
+              <small>
+                by{" "}
+                <Link href={`/reporters/${report.reporter._id}`} passHref>
+                  <a>
+                    {report.reporter.firstName} {report.reporter.lastName}
+                  </a>
+                </Link>
+              </small>
+            </Card.Header>
+            <Card.Content>{report.description}</Card.Content>
+            <Card.Footer flex='space-between'>
+              <div>Category - {report.category}</div>
+              <div>{new Date(report.date).toDateString()}</div>
+            </Card.Footer>
+          </Card>
+        ))}
+      </div>
+    </Layout>
   );
 };
 
