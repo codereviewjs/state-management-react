@@ -1,4 +1,4 @@
-import { IUser, IReport } from "types";
+import { IUser, IReport, IReporter } from "types";
 
 export type HttpRequestStatus = "idle" | "loading" | "success" | "error";
 
@@ -13,4 +13,5 @@ export interface StoreState {
     isLoggedIn: boolean;
   };
   reports: StoreData<IReport[]>;
+  reporters: StoreData<IReporter[]>;
 }

@@ -16,7 +16,7 @@ const RequiredRole = ({
   const { user } = useStoreContext();
   const location = useLocation();
 
-  if (user?.role !== role) {
+  if (user.data?.role !== role) {
     return <Navigate to={redirectToRoute} state={{ from: location }} replace />;
   }
 

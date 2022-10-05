@@ -6,22 +6,20 @@ import {
   useReducer,
 } from "react";
 import { ICreateReport, IReport, IUser, Roles } from "types";
-import { reportsApi, authApi } from "../../api";
+import { reportsApi, authApi, reportersApi } from "../../api";
 import { initialState, storeReducer } from "./Store.reducer";
-import { HttpRequestStatus } from "./store.types";
+import { StoreState } from "./store.types";
 
 interface StoreContextProps {
-  user?: IUser;
-  reports: IReport[];
-  isDataPending: boolean;
-  isAuthPending: boolean;
-  isLoggedIn: boolean;
-  getReportById: (id: string | undefined) => IReport | undefined;
+  user: StoreState["user"];
+  reports: StoreState["reports"];
+  reporters: StoreState["reporters"];
   login: (email: string, password: string) => Promise<boolean>;
   logout: () => void;
   updateReport: (id: string, report: IReport) => Promise<IReport>;
   deleteReport: (id: string) => Promise<void>;
   createReport: (report: ICreateReport) => Promise<IReport>;
+  deleteReporter: (id: string) => Promise<void>;
 }
 
 const StoreContext = createContext({} as StoreContextProps);
@@ -40,12 +38,55 @@ export const useStoreContext = () => {
   return storeContext;
 };
 
-function isPendingStatus(status: HttpRequestStatus) {
-  return status === "idle" || status === "loading";
-}
-
 const StoreContextProvider = ({ children }: StoreContextProviderProps) => {
   const [state, dispatch] = useReducer(storeReducer, initialState);
+
+  const fetchReports = async (type: "auth" | "all" = "auth") => {
+    try {
+      dispatch({ type: "GetReportsRequest" });
+      const fetchReportsType: Record<
+        typeof type,
+        () => Promise<{ reports: IReport[] }>
+      > = {
+        auth: reportsApi.getAuthReports,
+        all: reportsApi.getAll,
+      };
+
+      const { reports } = await fetchReportsType[type]();
+
+      dispatch({
+        type: "GetReportsSuccess",
+        payload: reports,
+      });
+    } catch (e) {
+      dispatch({ type: "GetReportsError", payload: "error" });
+    }
+  };
+
+  const fetchReporters = async () => {
+    try {
+      dispatch({ type: "GetReportersRequest" });
+      const { reporters } = await reportersApi.getAll();
+
+      dispatch({
+        type: "GetReportersSuccess",
+        payload: reporters,
+      });
+    } catch (e) {
+      dispatch({ type: "GetReportersError", payload: "error" });
+    }
+  };
+
+  const fetchAdminData = () => {
+    return Promise.all([fetchReporters(), fetchReports("all")]);
+  };
+
+  const dataPerRole: Record<Roles, () => Promise<any>> = {
+    [Roles.ADMIN]: fetchAdminData,
+    [Roles.REPORTER]: fetchReports,
+    [Roles.USER]: async () => {},
+    [Roles.GUEST]: async () => {},
+  };
 
   const getSession = async () => {
     dispatch({ type: "getSessionRequest" });
@@ -77,7 +118,7 @@ const StoreContextProvider = ({ children }: StoreContextProviderProps) => {
       localStorage.setItem("token", token);
       dispatch({ type: "loginSuccess", payload: user });
 
-      fetchReports();
+      await dataPerRole[user.role]();
       return true;
     } catch (e: any) {
       dispatch({ type: "loginError", payload: e.message });
@@ -90,31 +131,10 @@ const StoreContextProvider = ({ children }: StoreContextProviderProps) => {
     dispatch({ type: "logoutSuccess" });
   };
 
-  const fetchReports = async () => {
-    try {
-      dispatch({ type: "GetReportsRequest" });
-      const { reports } = await reportsApi.getAuthReports();
-
-      dispatch({
-        type: "GetReportsSuccess",
-        payload: reports,
-      });
-    } catch (e) {
-      dispatch({ type: "GetReportsError", payload: "error" });
-    }
-  };
-
   const fetchData = useCallback(async () => {
     try {
       const user = await getSession();
       if (!user) return;
-
-      const dataPerRole: Record<Roles, () => Promise<void>> = {
-        [Roles.ADMIN]: async () => {},
-        [Roles.REPORTER]: fetchReports,
-        [Roles.USER]: async () => {},
-        [Roles.GUEST]: async () => {},
-      };
 
       await dataPerRole[user.role]?.();
     } catch (e) {
@@ -140,36 +160,27 @@ const StoreContextProvider = ({ children }: StoreContextProviderProps) => {
     await fetchReports();
   };
 
+  const deleteReporter = async (id: string) => {
+    await reportersApi.remove(id);
+    await fetchAdminData();
+  };
+
   useEffect(() => {
     fetchData();
   }, [fetchData]);
 
-  const getReportById: StoreContextProps["getReportById"] = (id) => {
-    if (!id) return undefined;
-    return state.reports.data.find((report) => report._id === id);
-  };
-
-  const isDataPending =
-    state.user.isLoggedIn &&
-    isPendingStatus(state.reports.status) &&
-    !state.reports.data.length;
-
-  const isAuthPending = isPendingStatus(state.user.status);
-
   return (
     <StoreContext.Provider
       value={{
-        user: state.user.data,
-        isLoggedIn: state.user.isLoggedIn,
-        reports: state.reports.data,
-        isDataPending,
-        isAuthPending,
-        getReportById,
+        user: state.user,
+        reports: state.reports,
+        reporters: state.reporters,
         login,
         logout,
         deleteReport,
         updateReport,
         createReport,
+        deleteReporter,
       }}
     >
       {children}

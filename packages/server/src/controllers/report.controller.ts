@@ -87,10 +87,8 @@ async function create(req: Request, res: Response) {
       _id: createdReport._id,
     },
   };
-  console.log("HERE?");
 
   const reporter = await ReporterModule.findById(user.reporter?._id);
-  console.log(reporter?.firstName);
 
   reporter?.reports.push(response.report);
   await reporter?.save();

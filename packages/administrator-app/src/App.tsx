@@ -14,6 +14,7 @@ import {
   ReportEdit,
   ReportCreate,
 } from "./pages";
+import { storeUtils } from "./utils/store.utils";
 
 const theme: ITheme = {
   backgroundColor: "#242424",
@@ -23,17 +24,23 @@ const theme: ITheme = {
 };
 
 function App() {
-  const { isDataPending, isAuthPending, isLoggedIn } = useStoreContext();
+  const { user, reporters, reports } = useStoreContext();
 
   useEffect(() => {
     setCssVars(theme);
   }, [setCssVars]);
 
-  if (isDataPending || isAuthPending) {
+  if (
+    storeUtils.isPendingStatus(user.status) ||
+    (user.isLoggedIn &&
+      ((user.data?.role === Roles.ADMIN &&
+        storeUtils.isPendingStatus(reporters.status)) ||
+        storeUtils.isPendingStatus(reports.status)))
+  ) {
     return <Spinner fullscreen />;
   }
 
-  if (!isLoggedIn) {
+  if (!user.isLoggedIn) {
     return <Login />;
   }
 

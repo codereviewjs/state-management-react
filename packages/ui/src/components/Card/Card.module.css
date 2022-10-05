@@ -26,7 +26,7 @@
 
 .content {
   margin: 8px 0;
-  max-height: 294px;
+  height: 100%;
   overflow: auto;
 }
 

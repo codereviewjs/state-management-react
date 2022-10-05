@@ -1,8 +1,15 @@
 import { AuthSliceActions, authSliceReducer } from "./auth.slice";
+import {
+  ReportersSliceActions,
+  ReportersSliceReducer,
+} from "./reporters.slice";
 import { ReportSliceActions, reportsSliceReducer } from "./reports.slice";
 import { StoreState } from "./store.types";
 
-type Actions = AuthSliceActions | ReportSliceActions;
+export type Actions =
+  | AuthSliceActions
+  | ReportSliceActions
+  | ReportersSliceActions;
 
 export const initialState: StoreState = {
   user: {
@@ -11,6 +18,10 @@ export const initialState: StoreState = {
     isLoggedIn: false,
   },
   reports: {
+    data: [],
+    status: "idle",
+  },
+  reporters: {
     data: [],
     status: "idle",
   },
@@ -23,6 +34,7 @@ export const storeReducer = (
   return (
     authSliceReducer(state, action as AuthSliceActions) ||
     reportsSliceReducer(state, action as ReportSliceActions) ||
+    ReportersSliceReducer(state, action as ReportersSliceActions) ||
     state
   );
 };

@@ -8,7 +8,7 @@ const Reports = () => {
   return (
     <Layout title='Reports'>
       <div>
-        {reports.map((report) => {
+        {reports.data.map((report) => {
           return <div>a</div>;
         })}
       </div>

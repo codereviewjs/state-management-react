@@ -9,10 +9,10 @@ import { routeUtils } from "../../utils/route.utils";
 import styles from "./Report.module.css";
 
 const ReportEdit = () => {
-  const { getReportById, updateReport } = useStoreContext();
+  const { reports, updateReport } = useStoreContext();
   const navigate = useNavigate();
   const { id } = useParams();
-  const originalReport = getReportById(id);
+  const originalReport = reports.data.find((report) => report._id === id);
   const [report, setReport] = useState<IReport>({
     ...originalReport,
   } as IReport);
