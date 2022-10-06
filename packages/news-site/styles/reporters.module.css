@@ -1,0 +1,43 @@
+.cards {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 16px;
+}
+
+.card {
+  min-width: 300px;
+  max-width: 32%;
+}
+
+.cardContent {
+  color: black;
+}
+
+.cardContentHeader {
+  display: flex;
+  justify-content: space-between;
+  padding: 0 16px;
+  font-size: 12px;
+}
+
+.cardHeader {
+}
+
+.listsContainer ul {
+  padding: 0;
+}
+
+.reportsList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.reportsList li {
+  padding: 4px 0;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+}
+
+.reportsList li:last-of-type {
+  border-bottom: none;
+}

@@ -3,7 +3,7 @@ import { IReporter } from "types";
 import { Card } from "ui";
 import { routes } from "../../../constants/routes.constants";
 import { useStoreContext } from "../../../context/store/Store.context";
-import { routeUtils } from "../../../utils/route.utils";
+import { routesWithParams } from "../../../utils/route.utils";
 import styles from "../Main.module.css";
 
 interface ReporterCardProps {
@@ -20,12 +20,7 @@ const ReporterCard = ({ reporter, onDeleteClick }: ReporterCardProps) => {
         <ul className={styles.reportsList}>
           {reporter.reports.map((report) => (
             <li key={report._id}>
-              <Link
-                to={routeUtils.replaceIdParamWithValue(
-                  routes.reports.report,
-                  report._id || ""
-                )}
-              >
+              <Link to={routesWithParams.reports.report(report._id || "")}>
                 {report.title}
               </Link>
               <div>

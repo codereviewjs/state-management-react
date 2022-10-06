@@ -3,7 +3,7 @@ import { IReport } from "types";
 import { Card } from "ui";
 import { routes } from "../../../constants/routes.constants";
 import { useStoreContext } from "../../../context/store/Store.context";
-import { routeUtils } from "../../../utils/route.utils";
+import { routesWithParams } from "../../../utils/route.utils";
 import styles from "../Main.module.css";
 
 interface ReportCardProps {
@@ -29,12 +29,7 @@ const ReportCard = ({
         </div>
       </Card.Content>
       <Card.Footer style={{ fontSize: 14 }} flex='space-between'>
-        <Link
-          to={routeUtils.replaceIdParamWithValue(
-            routes.reports.report,
-            report._id || ""
-          )}
-        >
+        <Link to={routesWithParams.reports.report(report._id || "")}>
           Read more
         </Link>
         <Card.ActionButtons
@@ -64,12 +59,7 @@ const ReportsList = () => {
             key={report._id}
             report={report}
             onEditClick={(id) =>
-              navigate(
-                routeUtils.replaceIdParamWithValue(
-                  routes.reports.reportEdit,
-                  id
-                )
-              )
+              navigate(routesWithParams.reports.reportEdit(id))
             }
             onDeleteClick={(id) => deleteReport(id)}
           />

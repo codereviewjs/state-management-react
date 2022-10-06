@@ -8,4 +8,4 @@ export const routes = {
     reportEdit: "/report/:id/edit",
     reportCreate: "/report/create",
   },
-};
+} as const;

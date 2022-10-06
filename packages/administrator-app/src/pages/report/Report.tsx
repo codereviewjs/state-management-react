@@ -3,7 +3,7 @@ import { Roles } from "types";
 import { Button, Layout } from "ui";
 import { routes } from "../../constants/routes.constants";
 import { useStoreContext } from "../../context/store/Store.context";
-import { routeUtils } from "../../utils/route.utils";
+import { routesWithParams } from "../../utils/route.utils";
 import styles from "./Report.module.css";
 
 const Report = () => {
@@ -31,12 +31,7 @@ const Report = () => {
 
       <div className={styles.buttonsContainer}>
         {user.data?.role === Roles.REPORTER && (
-          <Link
-            to={routeUtils.replaceIdParamWithValue(
-              routes.reports.reportEdit,
-              id
-            )}
-          >
+          <Link to={routesWithParams.reports.reportEdit(id)}>
             <Button size='large'>Edit</Button>
           </Link>
         )}

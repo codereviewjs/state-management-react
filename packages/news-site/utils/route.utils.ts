@@ -9,7 +9,9 @@ const replaceIdParamWithValue = (url: string, value: string) =>
 export const routesWithParams = {
   reports: {
     report: (id: string) => replaceIdParamWithValue(routes.reports.report, id),
-    reportEdit: (id: string) =>
-      replaceIdParamWithValue(routes.reports.reportEdit, id),
+  },
+  reporters: {
+    reporter: (id: string) =>
+      replaceIdParamWithValue(routes.reporters.reporter, id),
   },
 } as const;

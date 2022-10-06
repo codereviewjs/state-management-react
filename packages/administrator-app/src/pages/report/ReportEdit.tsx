@@ -1,11 +1,9 @@
 import React, { useState } from "react";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { Categories, IReport } from "types";
 import { Button, Dropdown, Input, Label, Layout, Textarea } from "ui";
-import { reportsApi } from "../../api";
-import { routes } from "../../constants/routes.constants";
 import { useStoreContext } from "../../context/store/Store.context";
-import { routeUtils } from "../../utils/route.utils";
+import { routesWithParams } from "../../utils/route.utils";
 import styles from "./Report.module.css";
 
 const ReportEdit = () => {
@@ -54,7 +52,7 @@ const ReportEdit = () => {
     if (!report?._id || !isReportChanged) return;
 
     await updateReport(report._id, report);
-    navigate(routeUtils.replaceIdParamWithValue(routes.reports.report, id));
+    navigate(routesWithParams.reports.report(id));
   };
 
   return (

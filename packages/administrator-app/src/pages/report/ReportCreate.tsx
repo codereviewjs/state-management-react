@@ -4,7 +4,7 @@ import { Categories, ICreateReport, IReport } from "types";
 import { Button, Dropdown, Input, Label, Layout, Textarea } from "ui";
 import { routes } from "../../constants/routes.constants";
 import { useStoreContext } from "../../context/store/Store.context";
-import { routeUtils } from "../../utils/route.utils";
+import { routesWithParams } from "../../utils/route.utils";
 import styles from "./Report.module.css";
 
 const ReportEdit = () => {
@@ -48,12 +48,7 @@ const ReportEdit = () => {
     const reportResponse = await createReport(report);
 
     if (reportResponse._id) {
-      navigate(
-        routeUtils.replaceIdParamWithValue(
-          routes.reports.report,
-          reportResponse._id
-        )
-      );
+      navigate(routesWithParams.reports.report(reportResponse._id));
     }
   };
 
