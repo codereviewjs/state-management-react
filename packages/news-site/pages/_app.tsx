@@ -3,6 +3,7 @@ import type { AppProps } from "next/app";
 import { useEffect } from "react";
 import { setCssVars } from "ui";
 import { ITheme } from "types";
+import { Navbar } from "../components";
 
 const theme: ITheme = {
   backgroundColor: "#242424",
@@ -16,6 +17,7 @@ function MyApp({ Component, pageProps }: AppProps) {
   }, []);
   return (
     <div className='root'>
+      <Navbar />
       <Component {...pageProps} />
     </div>
   );

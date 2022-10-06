@@ -49,6 +49,7 @@ export const reporters: IReporter[] = [
     email: "devinEaston@gmail.com",
     reports: [],
   },
+  
   {
     firstName: "Nana",
     lastName: "Wells",

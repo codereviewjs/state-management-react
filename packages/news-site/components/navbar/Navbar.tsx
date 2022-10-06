@@ -1,39 +1,36 @@
-import { Link } from "react-router-dom";
-import Logo from "../../assets/logo.svg";
-import { Button } from "ui";
+import {Button} from "ui";
 import styles from "./Navbar.module.css";
-import { Roles } from "types";
+import { routes } from "../../constants/routes.constants";
+import Link from "next/link";
+import Image from "next/image";
 
 const Navbar = () => {
   return (
     <nav className={styles.nav}>
       <div>
-        <Link to={routes.main.root}>
-          <img src={Logo} alt='logo' />
+        <Link href={routes.main.root}>
+          <Image src='/logo.svg' width={130} height={30} alt='logo' />
         </Link>
       </div>
-
-      {user.isLoggedIn && (
-        <div className={styles.actions}>
-          {user.data?.role === Roles.REPORTER ? (
-            <Link to={routes.reports.reportCreate}>
-              <Button type='button' variant='primary'>
-                Create report
-              </Button>
-            </Link>
-          ) : (
-            <Link to={routes.reports.reportCreate}>
-              <Button type='button' variant='primary'>
-                Add reporter
-              </Button>
-            </Link>
-          )}
-          <Button type='button' outline variant='primary' onClick={logout}>
-            Logout
-          </Button>
-          <div className={styles.profile} />
-        </div>
-      )}
+      <div>
+        <ul className={styles.links}>
+          <li>
+            <Link href={routes.reporters.root}>Reporters</Link>
+          </li>
+          <li>
+            <Link href={routes.main.root}>Reports</Link>
+          </li>
+          <li>
+            <Link href={routes.reports.root}>Favorites</Link>
+          </li>
+        </ul>
+      </div>
+      <div className={styles.actions}>
+        <Button type='button' outline variant='primary'>
+          Logout
+        </Button>
+        <div className={styles.profile} />
+      </div>
     </nav>
   );
 };

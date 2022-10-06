@@ -1,5 +1,5 @@
 {
-  "name": "state-management-react",
+  "name": "news-app",
   "private": true,
   "workspaces": [
     "administrator-app",

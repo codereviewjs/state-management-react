@@ -1,7 +1,7 @@
 import { reportsApi } from "api";
 import { GetStaticPaths, GetStaticProps, NextPage } from "next";
 import { IReport } from "types";
-import { Layout } from "ui";
+import Layout from "ui/src/components/Layout/Layout";
 
 interface Props {
   report: IReport;
