@@ -1,4 +1,5 @@
-import { IReporter } from "./reporter.types";
+import { IReporterPure } from "./reporter.types";
+import { IUserPure } from "./user.types";
 
 export enum Roles {
   ADMIN = "ADMIN",
@@ -10,10 +11,17 @@ export enum Roles {
 export interface IAuth {
   _id?: string;
   email: string;
+  firstName: string;
+  lastName: string;
   password: string;
   role: Roles;
-  reporter?: IReporter;
 }
 
-export interface IUser
-  extends Pick<IAuth, "email" | "reporter" | "_id" | "role"> {}
+export interface IAuthWithoutSensitiveData extends Omit<IAuth, "password"> {}
+
+export interface AuthResponse {
+  auth: IAuthWithoutSensitiveData;
+  token: string;
+  reporter?: IReporterPure;
+  user?: IUserPure;
+}

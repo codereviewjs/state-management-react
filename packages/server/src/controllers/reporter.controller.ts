@@ -18,8 +18,8 @@ async function remove(req: Request, res: Response) {
   try {
     const { id } = req.params as { id: string };
 
-    const user: IAuth = res.locals.user;
-    if (!user) {
+    const auth: IAuth = res.locals.auth;
+    if (!auth) {
       return res.status(400).json({ error: "Not valid operation" });
     }
 

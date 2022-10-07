@@ -1,7 +1,6 @@
 import { Link } from "react-router-dom";
 import { IReporter } from "types";
 import { Card } from "ui";
-import { routes } from "../../../constants/routes.constants";
 import { useStoreContext } from "../../../context/store/Store.context";
 import { routesWithParams } from "../../../utils/route.utils";
 import styles from "../Main.module.css";
@@ -14,7 +13,7 @@ const ReporterCard = ({ reporter, onDeleteClick }: ReporterCardProps) => {
   return (
     <Card key={reporter._id} className={styles.card}>
       <Card.Header className={styles.cardHeader}>
-        {reporter.firstName} {reporter.lastName}
+        TODO pass auth name
       </Card.Header>
       <Card.Content className={styles.cardContent}>
         <ul className={styles.reportsList}>

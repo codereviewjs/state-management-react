@@ -12,7 +12,7 @@ export type Actions =
   | ReportersSliceActions;
 
 export const initialState: StoreState = {
-  user: {
+  auth: {
     data: undefined,
     status: "idle",
     isLoggedIn: false,

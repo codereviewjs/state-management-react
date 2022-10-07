@@ -1,8 +1,14 @@
 import { disconnect } from "mongoose";
-import { Roles } from "types";
+import { IAuth, Roles } from "types";
 import { connect } from "../config/mongo";
-import { AuthModule, ReportModule, ReporterModule } from "../models";
-import { reporters, reports, users } from "./data";
+import {
+  AuthModule,
+  ReportModule,
+  ReporterModule,
+  UserModule,
+} from "../models";
+import { authUtils } from "../utils";
+import { reports, users } from "./data";
 
 async function cleanAll() {
   await AuthModule.remove();
@@ -19,44 +25,45 @@ async function seed() {
       if (err) throw err;
       await cleanAll();
 
-      await ReporterModule.insertMany(reporters);
-      console.log("Created reporters");
-
-      for (const report of reports) {
-        const reporter = await ReporterModule.findOne({
-          email: report.reporter.email,
-        });
-
-        if (!reporter) {
-          continue;
-        }
-
-        const reportDoc = await ReportModule.create({
-          ...report,
-          reporter,
-        });
-
-        reporter.reports.push(reportDoc);
-        await reporter.save();
-        console.log("Reporters reports", reporter.reports.length);
-      }
-      console.log("Created reports");
+      const authUsers: IAuth[] = [];
 
       for (const user of users) {
-        console.log(user.password);
-
-        if (user.role !== Roles.ADMIN) {
-          const reportersDoc = await ReporterModule.findOne({
-            email: user.email,
-          });
-          if (reportersDoc) {
-            user.reporter = reportersDoc;
-          }
-        }
-
-        await AuthModule.create(user);
+        user.password = await authUtils.hashPassword(user.password);
+        authUsers.push(user);
       }
-      console.log("Created users");
+
+      const authDoc = await AuthModule.insertMany(authUsers);
+      console.log("Created auth users");
+
+      for (const auth of authDoc) {
+        const userDoc = await UserModule.create({
+          auth,
+        });
+        console.log("Created user", auth.firstName + " " + auth.lastName);
+        if (auth.role === Roles.REPORTER) {
+          const reporterReports = reports.filter(
+            (report) => report.reporter.auth.email === auth.email
+          );
+
+          const reporterDoc = await ReporterModule.create({
+            reports: [],
+            auth,
+            user: userDoc,
+          });
+
+          const reportsDoc = await ReportModule.insertMany(
+            reporterReports.map((report) => ({
+              ...report,
+              reporter: reporterDoc,
+            }))
+          );
+
+          reporterDoc.reports.push(...reportsDoc);
+          await reporterDoc.save();
+          console.log("Created reporter", auth.firstName + " " + auth.lastName);
+          console.log("reporters reports length", reporterDoc.reports.length);
+        }
+      }
     } catch (e: any) {
       console.log(e.message);
     } finally {

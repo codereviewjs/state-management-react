@@ -1,7 +1,9 @@
 import { Request, Response, NextFunction } from "express";
 import { Roles } from "types";
-import Auth from "../models/auth.module";
+import { AuthModule } from "../models";
 import { authUtils } from "../utils";
+
+const findAuthByTokenId = (id: string) => AuthModule.findById(id);
 
 const requireAuth = async (req: Request, res: Response, next: NextFunction) => {
   const token = authUtils.getTokenFromRequest(req);
@@ -25,20 +27,18 @@ const getAuthUser = (req: Request, res: Response, next: NextFunction) => {
     if (token) {
       authUtils.verifyJwt(token, async (err, decodedToken) => {
         if (err || !decodedToken || typeof decodedToken !== "object") {
-          res.locals.user = null;
+          res.locals.auth = null;
           next();
         } else {
           // @ts-expect-error
-          const user = await Auth.findById(decodedToken.id).populate(
-            "reporter"
-          );
+          const auth = await findAuthByTokenId(decodedToken.id);
 
-          res.locals.user = user;
+          res.locals.auth = auth;
           next();
         }
       });
     } else {
-      res.locals.user = null;
+      res.locals.auth = null;
       next();
     }
   } catch (e) {
@@ -60,12 +60,10 @@ const requireRole =
           }
 
           // @ts-expect-error
-          const user = await Auth.findById(decodedToken.id).populate(
-            "reporter"
-          );
+          const auth = await findAuthByTokenId(decodedToken.id);
 
-          if (user && user.role === role) {
-            res.locals.user = user;
+          if (auth && auth.role === role) {
+            res.locals.auth = auth;
             next();
           } else {
             return res.status(403).json({ error: "not allowed" });

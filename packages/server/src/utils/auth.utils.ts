@@ -1,7 +1,17 @@
 import bcrypt from "bcrypt";
 import { Request } from "express";
 import jwt from "jsonwebtoken";
-import { IAuth, IUser } from "types";
+import {
+  AuthResponse,
+  IAuth,
+  IAuthWithoutSensitiveData,
+  IReporter,
+  IReporterPure,
+  IUser,
+  IUserPure,
+  Roles,
+} from "types";
+import { AuthModule, ReporterModule, UserModule } from "../models";
 
 async function hashPassword(password: string) {
   const salt = await bcrypt.genSalt();
@@ -41,13 +51,44 @@ function createToken(id: string) {
   });
 }
 
-function parseAuthToUser(auth: IAuth): IUser {
+function removeSensitiveData(auth: IAuth): IAuthWithoutSensitiveData {
   return {
-    _id: auth._id,
-    role: auth.role,
     email: auth.email,
-    reporter: auth.reporter,
+    firstName: auth.firstName,
+    lastName: auth.lastName,
+    role: auth.role,
   };
+}
+
+async function createAuthResponse(auth: IAuth): Promise<AuthResponse> {
+  const user = await UserModule.findOne({ auth: auth._id });
+
+  const response: AuthResponse = {
+    auth: authUtils.removeSensitiveData(auth),
+    token: authUtils.createToken(auth._id || ""),
+  };
+
+  if (user) {
+    response.user = {
+      likedReports: user.likedReports,
+      savedReporters: user.savedReporters,
+      _id: user._id,
+    };
+  }
+  if (auth.role === Roles.REPORTER) {
+    const reporter = await ReporterModule.findOne({
+      auth: auth._id,
+    }).populate("reports");
+
+    if (reporter) {
+      response.reporter = {
+        reports: reporter.reports,
+        _id: reporter._id,
+      };
+    }
+  }
+
+  return response;
 }
 
 export const authUtils = {
@@ -55,6 +96,7 @@ export const authUtils = {
   comparePassword,
   verifyJwt,
   getTokenFromRequest,
-  parseAuthToUser,
+  removeSensitiveData,
   createToken,
+  createAuthResponse,
 };

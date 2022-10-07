@@ -1,18 +1,16 @@
 import { Request, Response } from "express";
-import { IAuth, IUser } from "types";
-import { AuthModule } from "../models";
+import { IAuth, IUser, Roles } from "types";
+import { AuthModule, ReporterModule, UserModule } from "../models";
 import { authUtils } from "../utils";
 
 async function login(req: Request, res: Response) {
   const { email, password } = req.body;
 
   try {
-    const user = await AuthModule.login(email, password);
-    
-    const response: { user: IUser; token: string } = {
-      user: authUtils.parseAuthToUser(user),
-      token: authUtils.createToken(user._id || ""),
-    };
+    const auth = await AuthModule.login(email, password);
+    console.log(auth);
+
+    const response = await authUtils.createAuthResponse(auth);
 
     return res.json(response);
   } catch (e) {
@@ -29,15 +27,12 @@ async function logout(req: Request, res: Response) {
 }
 
 async function getSession(req: Request, res: Response) {
-  const user: IAuth = res.locals.user;
-  if (!user) {
-    return res.json({ user: null });
+  const auth: IAuth = res.locals.auth;
+  if (!auth) {
+    return res.json({ auth: null });
   }
 
-  const response: { user: IUser; token: string } = {
-    user: authUtils.parseAuthToUser(user),
-    token: authUtils.createToken(user._id || ""),
-  };
+  const response = await authUtils.createAuthResponse(auth);
   res.json(response);
 }
 

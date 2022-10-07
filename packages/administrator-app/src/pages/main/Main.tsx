@@ -5,9 +5,9 @@ import ReportersList from "./components/ReportersList";
 import ReportsList from "./components/ReportsList";
 
 const Main = () => {
-  const { user } = useStoreContext();
-  const isAdmin = user.data?.role === Roles.ADMIN;
-  const userName = isAdmin ? "Admin" : user.data?.reporter?.firstName || "";
+  const { auth } = useStoreContext();
+  const isAdmin = auth.data?.role === Roles.ADMIN;
+  const userName = isAdmin ? "Admin" : auth.data?.firstName || "";
 
   return (
     <Layout title={`Hello ${userName}`}>

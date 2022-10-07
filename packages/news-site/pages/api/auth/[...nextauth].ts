@@ -41,16 +41,16 @@ export const authOptions: NextAuthOptions = {
         password: { label: "Password", type: "password" },
       },
       async authorize(credentials, req) {
-        const { user, token } = await authApi.login({
+        const { auth, token } = await authApi.login({
           email: credentials?.email || "",
           password: credentials?.password || "",
         });
-        console.log("AFTER LOGIN", token, user);
+        console.log("AFTER LOGIN", token, auth);
 
-        if (user) {
+        if (auth) {
           // Any object returned will be saved in `user` property of the JWT
           return {
-            ...user,
+            ...auth,
             token,
           };
         } else {

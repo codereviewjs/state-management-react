@@ -1,4 +1,4 @@
-import { Navigate, Route, useLocation } from "react-router-dom";
+import { Navigate, useLocation } from "react-router-dom";
 import { Roles } from "types";
 import { useStoreContext } from "../../context/store/Store.context";
 
@@ -13,10 +13,10 @@ const RequiredRole = ({
   redirectToRoute = "/",
   children,
 }: RequiredRoleProps) => {
-  const { user } = useStoreContext();
+  const { auth } = useStoreContext();
   const location = useLocation();
 
-  if (user.data?.role !== role) {
+  if (auth.data?.role !== role) {
     return <Navigate to={redirectToRoute} state={{ from: location }} replace />;
   }
 

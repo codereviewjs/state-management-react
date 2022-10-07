@@ -1,8 +1,7 @@
 import React, { useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
-import { Categories, ICreateReport, IReport } from "types";
+import { useNavigate } from "react-router-dom";
+import { Categories, ICreateReport } from "types";
 import { Button, Dropdown, Input, Label, Layout, Textarea } from "ui";
-import { routes } from "../../constants/routes.constants";
 import { useStoreContext } from "../../context/store/Store.context";
 import { routesWithParams } from "../../utils/route.utils";
 import styles from "./Report.module.css";

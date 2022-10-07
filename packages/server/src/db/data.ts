@@ -14,16 +14,17 @@ const lorem = new LoremIpsum({
 
 export const admin: IAuth = {
   email: "admin@gmail.com",
+  firstName: "admin",
+  lastName: "admin",
   password: "password",
   role: Roles.ADMIN,
 };
 
-export const reporters: IReporter[] = [
+export const reportersAuth: IAuth[] = [
   {
     firstName: "Haiden",
     lastName: "Roberson",
     email: "haidenRoberson@gmail.com",
-    reports: [],
   },
   {
     firstName: "Imaad",
@@ -56,30 +57,35 @@ export const reporters: IReporter[] = [
     email: "nanaWells@gmail.com",
     reports: [],
   },
-];
+].map((reporter) => ({
+  ...reporter,
+  password: "Password123!",
+  role: Roles.REPORTER,
+}));
 
-export const users: IAuth[] = [
-  admin,
-  ...reporters.map(
-    (reporter) =>
-      ({
-        email: reporter.email,
-        admin: false,
-        password: "Password123!",
-        role: Roles.REPORTER,
-      } as IAuth)
-  ),
+export const reporters: IReporter[] = reportersAuth.map((reporterAuth) => ({
+  reports: [],
+  auth: reporterAuth,
+}));
+
+export const usersAuth: IAuth[] = [
   {
     email: "joni@gmail.com",
-    password: "Password123!",
-    role: Roles.USER,
+    firstName: "Joni",
+    lastName: "Something",
   },
   {
     email: "rebecca@gmail.com",
-    password: "Password123!",
-    role: Roles.USER,
+    firstName: "Rebecca",
+    lastName: "Else",
   },
-];
+].map((user) => ({
+  ...user,
+  password: "Password123!",
+  role: Roles.USER,
+}));
+
+export const users: IAuth[] = [admin, ...reportersAuth, ...usersAuth];
 
 function randomIntFromInterval(min: number, max: number) {
   // min and max included

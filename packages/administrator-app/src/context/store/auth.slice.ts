@@ -1,4 +1,4 @@
-import { IUser } from "types";
+import { IAuthWithoutSensitiveData } from "types";
 import { initialState } from "./Store.reducer";
 import { StoreState } from "./store.types";
 
@@ -8,7 +8,7 @@ export type LoginRequest = {
 
 export type LoginSuccess = {
   type: "loginSuccess";
-  payload: IUser;
+  payload: IAuthWithoutSensitiveData;
 };
 
 export type LoginError = {
@@ -32,7 +32,7 @@ export type getSessionError = {
 export type getSessionSuccess = {
   type: "getSessionSuccess";
   payload: {
-    user?: IUser;
+    auth?: IAuthWithoutSensitiveData;
     authenticated: boolean;
   };
 };
@@ -55,8 +55,8 @@ export const authSliceReducer = (
     case "getSessionRequest": {
       return {
         ...state,
-        user: {
-          ...state.user,
+        auth: {
+          ...state.auth,
           status: "loading",
           isLoggedIn: false,
         },
@@ -66,7 +66,7 @@ export const authSliceReducer = (
     case "loginSuccess": {
       return {
         ...state,
-        user: {
+        auth: {
           status: "success",
           data: action.payload,
           isLoggedIn: true,
@@ -77,8 +77,8 @@ export const authSliceReducer = (
     case "getSessionSuccess": {
       return {
         ...state,
-        user: {
-          data: action.payload.user,
+        auth: {
+          data: action.payload.auth,
           isLoggedIn: action.payload.authenticated,
           status: "success",
         },
@@ -87,7 +87,7 @@ export const authSliceReducer = (
     case "getSessionError": {
       return {
         ...state,
-        user: {
+        auth: {
           data: undefined,
           isLoggedIn: false,
           status: "error",
@@ -99,8 +99,8 @@ export const authSliceReducer = (
     case "loginError": {
       return {
         ...state,
-        user: {
-          ...state.user,
+        auth: {
+          ...state.auth,
           status: "error",
           error: action.payload,
           isLoggedIn: false,
@@ -111,8 +111,8 @@ export const authSliceReducer = (
     case "logoutSuccess": {
       return {
         ...initialState,
-        user: {
-          ...initialState.user,
+        auth: {
+          ...initialState.auth,
           status: "success",
         },
       };

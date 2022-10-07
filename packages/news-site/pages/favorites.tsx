@@ -9,10 +9,6 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
   if (response?.accessToken) {
     return {
       props: {},
-      redirect: {
-        permanent: false,
-        destination: "/",
-      },
     };
   }
 

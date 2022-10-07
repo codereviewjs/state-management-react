@@ -10,6 +10,16 @@ interface IAuthModel extends Model<IAuthDocument> {
 }
 
 const authSchema: Schema<IAuthDocument> = new mongoose.Schema({
+  firstName: {
+    type: String,
+    required: true,
+    unique: true,
+  },
+  lastName: {
+    type: String,
+    required: true,
+    unique: true,
+  },
   email: {
     type: String,
     required: true,
@@ -25,10 +35,6 @@ const authSchema: Schema<IAuthDocument> = new mongoose.Schema({
     enum: Roles,
     default: Roles.GUEST,
   },
-  reporter: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "Reporter",
-  },
 });
 
 authSchema.pre("save", async function (next) {
@@ -37,12 +43,13 @@ authSchema.pre("save", async function (next) {
 });
 
 authSchema.statics.login = async function (email: string, password: string) {
-  const user = await this.findOne({ email }).populate("reporter");
+  const user = await this.findOne({ email });
   if (user) {
     const isAuthenticated = await authUtils.comparePassword(
       password,
       user.password
     );
+    console.log("isAuthenticated", isAuthenticated);
 
     if (isAuthenticated) {
       return user;

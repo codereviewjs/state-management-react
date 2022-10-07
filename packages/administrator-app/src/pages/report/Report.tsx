@@ -7,7 +7,7 @@ import { routesWithParams } from "../../utils/route.utils";
 import styles from "./Report.module.css";
 
 const Report = () => {
-  const { reports, user, deleteReport } = useStoreContext();
+  const { reports, auth, deleteReport } = useStoreContext();
   const navigate = useNavigate();
   const { id } = useParams();
   const report = reports.data.find((report) => report._id === id);
@@ -30,7 +30,7 @@ const Report = () => {
       <p>{report.description}</p>
 
       <div className={styles.buttonsContainer}>
-        {user.data?.role === Roles.REPORTER && (
+        {auth.data?.role === Roles.REPORTER && (
           <Link to={routesWithParams.reports.reportEdit(id)}>
             <Button size='large'>Edit</Button>
           </Link>

@@ -24,23 +24,23 @@ const theme: ITheme = {
 };
 
 function App() {
-  const { user, reporters, reports } = useStoreContext();
+  const { auth, reporters, reports } = useStoreContext();
 
   useEffect(() => {
     setCssVars(theme);
   }, [setCssVars]);
 
   if (
-    storeUtils.isPendingStatus(user.status) ||
-    (user.isLoggedIn &&
-      ((user.data?.role === Roles.ADMIN &&
+    storeUtils.isPendingStatus(auth.status) ||
+    (auth.isLoggedIn &&
+      ((auth.data?.role === Roles.ADMIN &&
         storeUtils.isPendingStatus(reporters.status)) ||
         storeUtils.isPendingStatus(reports.status)))
   ) {
     return <Spinner fullscreen />;
   }
 
-  if (!user.isLoggedIn) {
+  if (!auth.isLoggedIn) {
     return <Login />;
   }
 

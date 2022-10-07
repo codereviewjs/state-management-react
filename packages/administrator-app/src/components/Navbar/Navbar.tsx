@@ -7,7 +7,7 @@ import styles from "./Navbar.module.css";
 import { Roles } from "types";
 
 const Navbar = () => {
-  const { logout, user } = useStoreContext();
+  const { logout, auth } = useStoreContext();
   return (
     <nav className={styles.nav}>
       <div>
@@ -16,9 +16,9 @@ const Navbar = () => {
         </Link>
       </div>
 
-      {user.isLoggedIn && (
+      {auth.isLoggedIn && (
         <div className={styles.actions}>
-          {user.data?.role === Roles.REPORTER ? (
+          {auth.data?.role === Roles.REPORTER ? (
             <Link to={routes.reports.reportCreate}>
               <Button type='button' variant='primary'>
                 Create report

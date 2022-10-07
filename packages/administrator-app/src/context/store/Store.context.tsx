@@ -11,7 +11,7 @@ import { initialState, storeReducer } from "./Store.reducer";
 import { StoreState } from "./store.types";
 
 interface StoreContextProps {
-  user: StoreState["user"];
+  auth: StoreState["auth"];
   reports: StoreState["reports"];
   reporters: StoreState["reporters"];
   login: (email: string, password: string) => Promise<boolean>;
@@ -91,8 +91,8 @@ const StoreContextProvider = ({ children }: StoreContextProviderProps) => {
   const getSession = async () => {
     dispatch({ type: "getSessionRequest" });
     try {
-      const { user, token } = await authApi.getSession();
-      const isAuthenticated = !!user;
+      const { auth, token } = await authApi.getSession();
+      const isAuthenticated = !!auth;
       if (!isAuthenticated) {
         localStorage.clear();
       }
@@ -101,11 +101,11 @@ const StoreContextProvider = ({ children }: StoreContextProviderProps) => {
       dispatch({
         type: "getSessionSuccess",
         payload: {
-          user,
+          auth,
           authenticated: isAuthenticated,
         },
       });
-      return user;
+      return auth;
     } catch (e: any) {
       dispatch({ type: "getSessionError", payload: e.message });
       return null;
@@ -114,11 +114,11 @@ const StoreContextProvider = ({ children }: StoreContextProviderProps) => {
   const login = async (email: string, password: string) => {
     try {
       dispatch({ type: "loginRequest" });
-      const { user, token } = await authApi.login({ email, password });
+      const { auth, token } = await authApi.login({ email, password });
       localStorage.setItem("token", token);
-      dispatch({ type: "loginSuccess", payload: user });
+      dispatch({ type: "loginSuccess", payload: auth });
 
-      await dataPerRole[user.role]();
+      await dataPerRole[auth.role]();
       return true;
     } catch (e: any) {
       dispatch({ type: "loginError", payload: e.message });
@@ -133,10 +133,10 @@ const StoreContextProvider = ({ children }: StoreContextProviderProps) => {
 
   const fetchData = useCallback(async () => {
     try {
-      const user = await getSession();
-      if (!user) return;
+      const auth = await getSession();
+      if (!auth) return;
 
-      await dataPerRole[user.role]?.();
+      await dataPerRole[auth.role]?.();
     } catch (e) {
       dispatch({
         type: "getSessionError",
@@ -172,7 +172,7 @@ const StoreContextProvider = ({ children }: StoreContextProviderProps) => {
   return (
     <StoreContext.Provider
       value={{
-        user: state.user,
+        auth: state.auth,
         reports: state.reports,
         reporters: state.reporters,
         login,
