@@ -1,7 +1,8 @@
 import { IAuth, Roles } from "types";
 import mongoose from "mongoose";
 import type { Model, Schema } from "mongoose";
-import { authUtils } from "../utils";
+import { authUtils } from "../utils/auth.utils";
+import { HttpException } from "../utils/HttpException";
 
 interface IAuthDocument extends IAuth, Document {}
 
@@ -49,15 +50,14 @@ authSchema.statics.login = async function (email: string, password: string) {
       password,
       user.password
     );
-    console.log("isAuthenticated", isAuthenticated);
 
     if (isAuthenticated) {
       return user;
     }
   }
 
-  throw Error("not valid credentials");
+  throw new HttpException(409, "not valid credentials");
 };
 
-const Auth = mongoose.model<IAuthDocument, IAuthModel>("Auth", authSchema);
-export default Auth;
+const AuthModel = mongoose.model<IAuthDocument, IAuthModel>("Auth", authSchema);
+export default AuthModel;

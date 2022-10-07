@@ -1,5 +1,5 @@
-import { IReporterPure } from "./reporter.types";
-import { IUserPure } from "./user.types";
+import { IReporterDTO } from "./reporter.types";
+import { IUserDTO } from "./user.types";
 
 export enum Roles {
   ADMIN = "ADMIN",
@@ -17,11 +17,11 @@ export interface IAuth {
   role: Roles;
 }
 
-export interface IAuthWithoutSensitiveData extends Omit<IAuth, "password"> {}
+export interface IAuthDTO extends Omit<IAuth, "password"> {}
 
 export interface AuthResponse {
-  auth: IAuthWithoutSensitiveData;
+  auth: IAuthDTO;
   token: string;
-  reporter?: IReporterPure;
-  user?: IUserPure;
+  reporter?: IReporterDTO;
+  user?: IUserDTO;
 }

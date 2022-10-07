@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Categories, ICreateReport } from "types";
+import { Categories, ICreateReportDTO } from "types";
 import { Button, Dropdown, Input, Label, Layout, Textarea } from "ui";
 import { useStoreContext } from "../../context/store/Store.context";
 import { routesWithParams } from "../../utils/route.utils";
@@ -9,11 +9,11 @@ import styles from "./Report.module.css";
 const ReportEdit = () => {
   const { createReport } = useStoreContext();
   const navigate = useNavigate();
-  const [report, setReport] = useState<ICreateReport>({
+  const [report, setReport] = useState<ICreateReportDTO>({
     category: Categories.FOOD,
     description: "",
     title: "",
-  } as ICreateReport);
+  } as ICreateReportDTO);
 
   const handleCategoryChange = (category: Categories) => {
     setReport((prev) => ({

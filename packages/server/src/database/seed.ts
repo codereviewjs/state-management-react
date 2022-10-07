@@ -1,19 +1,17 @@
 import { disconnect } from "mongoose";
 import { IAuth, Roles } from "types";
-import { connect } from "../config/mongo";
-import {
-  AuthModule,
-  ReportModule,
-  ReporterModule,
-  UserModule,
-} from "../models";
-import { authUtils } from "../utils";
+import { connect } from "../database";
+import AuthModel from "../models/auth.model";
+import ReportModel from "../models/report.model";
+import ReporterModule from "../models/reporter.module";
+import UserModule from "../models/user.model";
+import { authUtils } from "../utils/auth.utils";
 import { reports, users } from "./data";
 
 async function cleanAll() {
-  await AuthModule.remove();
+  await AuthModel.remove();
   console.log("Removed auth");
-  await ReportModule.remove();
+  await ReportModel.remove();
   console.log("Removed reports");
   await ReporterModule.remove();
   console.log("Removed reporters");
@@ -32,7 +30,7 @@ async function seed() {
         authUsers.push(user);
       }
 
-      const authDoc = await AuthModule.insertMany(authUsers);
+      const authDoc = await AuthModel.insertMany(authUsers);
       console.log("Created auth users");
 
       for (const auth of authDoc) {
@@ -51,7 +49,7 @@ async function seed() {
             user: userDoc,
           });
 
-          const reportsDoc = await ReportModule.insertMany(
+          const reportsDoc = await ReportModel.insertMany(
             reporterReports.map((report) => ({
               ...report,
               reporter: reporterDoc,
@@ -64,6 +62,7 @@ async function seed() {
           console.log("reporters reports length", reporterDoc.reports.length);
         }
       }
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (e: any) {
       console.log(e.message);
     } finally {

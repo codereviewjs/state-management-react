@@ -5,7 +5,7 @@ import {
   useEffect,
   useReducer,
 } from "react";
-import { ICreateReport, IReport, Roles } from "types";
+import { ICreateReportDTO, IReport, Roles } from "types";
 import { reportsApi, authApi, reportersApi } from "api";
 import { initialState, storeReducer } from "./Store.reducer";
 import { StoreState } from "./store.types";
@@ -18,7 +18,7 @@ interface StoreContextProps {
   logout: () => void;
   updateReport: (id: string, report: IReport) => Promise<IReport>;
   deleteReport: (id: string) => Promise<void>;
-  createReport: (report: ICreateReport) => Promise<IReport>;
+  createReport: (report: ICreateReportDTO) => Promise<IReport>;
   deleteReporter: (id: string) => Promise<void>;
 }
 
@@ -46,7 +46,7 @@ const StoreContextProvider = ({ children }: StoreContextProviderProps) => {
       dispatch({ type: "GetReportsRequest" });
       const fetchReportsType: Record<
         typeof type,
-        () => Promise<{ reports: IReport[] }>
+        () => Promise<{ reports: IReport[]; aborted: boolean }>
       > = {
         auth: reportsApi.getAuthReports,
         all: reportsApi.getAll,
@@ -66,12 +66,13 @@ const StoreContextProvider = ({ children }: StoreContextProviderProps) => {
   const fetchReporters = async () => {
     try {
       dispatch({ type: "GetReportersRequest" });
-      const { reporters } = await reportersApi.getAll();
-
-      dispatch({
-        type: "GetReportersSuccess",
-        payload: reporters,
-      });
+      const response = await reportersApi.getAll();
+      if (!response.aborted) {
+        dispatch({
+          type: "GetReportersSuccess",
+          payload: response.reporters,
+        });
+      }
     } catch (e) {
       dispatch({ type: "GetReportersError", payload: "error" });
     }
@@ -91,22 +92,27 @@ const StoreContextProvider = ({ children }: StoreContextProviderProps) => {
   const getSession = async () => {
     dispatch({ type: "getSessionRequest" });
     try {
-      const { auth, token } = await authApi.getSession();
-      const isAuthenticated = !!auth;
-      if (!isAuthenticated) {
-        localStorage.clear();
-      }
+      const sessionResponse = await authApi.getSession();
+      if (sessionResponse) {
+        const { auth, token } = sessionResponse;
+        const isAuthenticated = !!auth;
+        if (!isAuthenticated) {
+          localStorage.clear();
+        }
 
-      localStorage.setItem("token", token);
-      dispatch({
-        type: "getSessionSuccess",
-        payload: {
-          auth,
-          authenticated: isAuthenticated,
-        },
-      });
-      return auth;
+        localStorage.setItem("token", token);
+        dispatch({
+          type: "getSessionSuccess",
+          payload: {
+            auth,
+            authenticated: isAuthenticated,
+          },
+        });
+        return auth;
+      }
     } catch (e: any) {
+      console.log("HERE?");
+
       dispatch({ type: "getSessionError", payload: e.message });
       return null;
     }
@@ -114,7 +120,7 @@ const StoreContextProvider = ({ children }: StoreContextProviderProps) => {
   const login = async (email: string, password: string) => {
     try {
       dispatch({ type: "loginRequest" });
-      const { auth, token } = await authApi.login({ email, password });
+      const { token, auth } = await authApi.login({ email, password });
       localStorage.setItem("token", token);
       dispatch({ type: "loginSuccess", payload: auth });
 
@@ -145,7 +151,7 @@ const StoreContextProvider = ({ children }: StoreContextProviderProps) => {
     }
   }, []);
 
-  const createReport = async (report: ICreateReport) => {
+  const createReport = async (report: ICreateReportDTO) => {
     const reportResponse = await reportsApi.create(report);
     await fetchReports();
     return reportResponse.report;
@@ -156,8 +162,10 @@ const StoreContextProvider = ({ children }: StoreContextProviderProps) => {
     return reportResponse.report;
   };
   const deleteReport = async (id: string) => {
-    await reportsApi.remove(id);
-    await fetchReports();
+    try {
+      await reportsApi.remove(id);
+      await fetchReports();
+    } catch (e) {}
   };
 
   const deleteReporter = async (id: string) => {

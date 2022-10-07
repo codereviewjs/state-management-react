@@ -1,9 +1,9 @@
 import { Request, Response, NextFunction } from "express";
 import { Roles } from "types";
-import { AuthModule } from "../models";
-import { authUtils } from "../utils";
+import AuthModel from "../models/auth.model";
+import { authUtils } from "../utils/auth.utils";
 
-const findAuthByTokenId = (id: string) => AuthModule.findById(id);
+const findAuthByTokenId = (id: string) => AuthModel.findById(id);
 
 const requireAuth = async (req: Request, res: Response, next: NextFunction) => {
   const token = authUtils.getTokenFromRequest(req);

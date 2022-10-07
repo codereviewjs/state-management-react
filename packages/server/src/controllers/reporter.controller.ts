@@ -1,35 +1,42 @@
-import { Response, Request } from "express";
-import { IAuth } from "types";
-import { ReporterModule } from "../models";
+import { Response, Request, NextFunction } from "express";
+import { reporterService } from "../services/reporter.service";
+import { HttpException } from "../utils/HttpException";
+import { reporterUtils } from "../utils/reporter.utils";
 
-async function getAll(req: Request, res: Response) {
-  const reporters = await ReporterModule.find().populate("reports");
-  return res.json({ reporters });
+async function getAll(_: Request, res: Response, next: NextFunction) {
+  try {
+    const reportersDoc = await reporterService.getAll({
+      withReports: true,
+    });
+
+    return res.json({
+      reporters: reporterUtils.reportersToReportersDTO(reportersDoc),
+    });
+  } catch (e) {
+    next(e);
+  }
 }
 
-async function getOne(req: Request, res: Response) {
-  const reporter = await ReporterModule.findById(req.params.id).populate(
-    "reports"
-  );
-  return res.json({ reporter });
+async function getOne(req: Request, res: Response, next: NextFunction) {
+  try {
+    const reporterDoc = await reporterService.getById(req.params.id);
+    if (!reporterDoc) throw new HttpException(404, "not found");
+
+    return res.json({
+      reporter: reporterUtils.reporterToReporterDTO(reporterDoc),
+    });
+  } catch (e) {
+    next(e);
+  }
 }
 
-async function remove(req: Request, res: Response) {
+async function remove(req: Request, res: Response, next: NextFunction) {
   try {
     const { id } = req.params as { id: string };
-
-    const auth: IAuth = res.locals.auth;
-    if (!auth) {
-      return res.status(400).json({ error: "Not valid operation" });
-    }
-
-    const reporter = await ReporterModule.findById(id);
-
-    await reporter?.remove();
-
+    await reporterService.deleteById(id);
     return res.json({ message: "deleted report", reportId: id });
-  } catch (e: any) {
-    return res.status(500).json({ error: e.message });
+  } catch (e) {
+    next(e);
   }
 }
 

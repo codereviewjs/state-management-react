@@ -9,4 +9,4 @@ export interface IUser {
   savedReporters: IReporter[];
 }
 
-export interface IUserPure extends Omit<IUser, "auth"> {}
+export interface IUserDTO extends Omit<IUser, "auth"> {}

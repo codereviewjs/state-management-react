@@ -1,18 +1,14 @@
 import mongoose from "mongoose";
-import dotenv from "dotenv";
-
-dotenv.config();
-
-const uri = process.env.MONGO_URI;
+import { MONGO_URI } from "../config";
 
 export function connect(cb: mongoose.CallbackWithoutResult) {
-  if (!uri) throw new Error("NOT URI");
+  if (!MONGO_URI) throw new Error("NOT URI");
 
   if (mongoose.connection.db) {
     return mongoose.connection;
   }
 
-  mongoose.connect(uri, cb);
+  mongoose.connect(MONGO_URI, cb);
 
   const db = mongoose.connection;
 

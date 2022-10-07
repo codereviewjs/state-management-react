@@ -16,5 +16,5 @@ export interface IReport {
   reporter: IReporter;
 }
 
-export interface ICreateReport
+export interface ICreateReportDTO
   extends Pick<IReport, "category" | "title" | "description"> {}

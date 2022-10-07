@@ -1,21 +1,20 @@
 import express from "express";
 import cors from "cors";
-import dotenv from "dotenv";
 import routes from "./routes/v1";
-import morgan from 'morgan';
-
-dotenv.config();
+import morgan from "morgan";
+import cookieParser from "cookie-parser";
+import errorMiddleware from "./middleware/error.middleware";
 
 const app = express();
 
 // middleware
+app.use(morgan("tiny"));
+app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(morgan('tiny'))
+app.use(cookieParser());
 
-// enable cors
-app.use(cors());
-app.options("*", cors());
+app.use(errorMiddleware);
 
 // v1 api routes
 app.use("/v1", routes);

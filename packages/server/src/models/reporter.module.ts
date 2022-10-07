@@ -1,6 +1,8 @@
 import mongoose from "mongoose";
 import { IReport, IReporter } from "types";
-import { AuthModule, ReportModule, UserModule } from ".";
+import AuthModel from "./auth.model";
+import ReportModel from "./report.model";
+import UserModel from "./user.model";
 const { Schema } = mongoose;
 
 const reporterSchema = new Schema<IReporter>({
@@ -23,16 +25,16 @@ const reporterSchema = new Schema<IReporter>({
 reporterSchema.pre("remove", async function () {
   console.log(this.reports.map((report: IReport) => report._id));
 
-  await ReportModule.deleteMany({
+  await ReportModel.deleteMany({
     _id: { $in: this.reports.map((report: IReport) => report._id) },
   });
 
-  await AuthModule.findByIdAndDelete(this.auth._id);
+  await AuthModel.findByIdAndDelete(this.auth._id);
 
   if (this.user) {
-    await UserModule.findByIdAndDelete(this.user._id);
+    await UserModel.findByIdAndDelete(this.user._id);
   }
 });
 
-const Reporter = mongoose.model("Reporter", reporterSchema);
-export default Reporter;
+const ReporterModule = mongoose.model("Reporter", reporterSchema);
+export default ReporterModule;

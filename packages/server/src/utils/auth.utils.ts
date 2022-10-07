@@ -1,17 +1,9 @@
 import bcrypt from "bcrypt";
 import { Request } from "express";
 import jwt from "jsonwebtoken";
-import {
-  AuthResponse,
-  IAuth,
-  IAuthWithoutSensitiveData,
-  IReporter,
-  IReporterPure,
-  IUser,
-  IUserPure,
-  Roles,
-} from "types";
-import { AuthModule, ReporterModule, UserModule } from "../models";
+import { AuthResponse, IAuth, IAuthDTO, Roles } from "types";
+import ReporterModule from "../models/reporter.module";
+import UserModule from "../models/user.model";
 
 async function hashPassword(password: string) {
   const salt = await bcrypt.genSalt();
@@ -51,7 +43,7 @@ function createToken(id: string) {
   });
 }
 
-function removeSensitiveData(auth: IAuth): IAuthWithoutSensitiveData {
+function authToAuthDTO(auth: IAuth): IAuthDTO {
   return {
     email: auth.email,
     firstName: auth.firstName,
@@ -60,12 +52,15 @@ function removeSensitiveData(auth: IAuth): IAuthWithoutSensitiveData {
   };
 }
 
-async function createAuthResponse(auth: IAuth): Promise<AuthResponse> {
+async function createAuthResponse(
+  auth: IAuth,
+  token?: string
+): Promise<AuthResponse> {
   const user = await UserModule.findOne({ auth: auth._id });
 
   const response: AuthResponse = {
-    auth: authUtils.removeSensitiveData(auth),
-    token: authUtils.createToken(auth._id || ""),
+    auth: authUtils.authToAuthDTO(auth),
+    token: token || createToken(auth._id || ""),
   };
 
   if (user) {
@@ -96,7 +91,7 @@ export const authUtils = {
   comparePassword,
   verifyJwt,
   getTokenFromRequest,
-  removeSensitiveData,
+  authToAuthDTO,
   createToken,
   createAuthResponse,
 };
