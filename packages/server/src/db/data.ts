@@ -49,7 +49,7 @@ export const reporters: IReporter[] = [
     email: "devinEaston@gmail.com",
     reports: [],
   },
-  
+
   {
     firstName: "Nana",
     lastName: "Wells",
@@ -65,10 +65,20 @@ export const users: IAuth[] = [
       ({
         email: reporter.email,
         admin: false,
-        password: "Aa123456!",
+        password: "Password123!",
         role: Roles.REPORTER,
       } as IAuth)
   ),
+  {
+    email: "joni@gmail.com",
+    password: "Password123!",
+    role: Roles.USER,
+  },
+  {
+    email: "rebecca@gmail.com",
+    password: "Password123!",
+    role: Roles.USER,
+  },
 ];
 
 function randomIntFromInterval(min: number, max: number) {

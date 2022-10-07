@@ -25,10 +25,17 @@
   width: 32px;
   border-radius: 100%;
   background-color: white;
+  color: var(--primaryColor);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
 }
 
 .actions {
   display: flex;
+  justify-content: flex-end;
   align-items: center;
   gap: 16px;
+  width: 130px;
 }

@@ -9,7 +9,8 @@ async function customFetch<D>(path: string, options?: RequestInit) {
       authorization:
         typeof window !== "undefined"
           ? `Bearer ${localStorage.getItem("token")}`
-          : "",
+          : // @ts-expect-error
+            options?.headers?.authorization || "",
     },
   });
   if (result.ok) {

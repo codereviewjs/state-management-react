@@ -1,17 +1,18 @@
-import {Button} from "ui";
+import { Button } from "ui";
 import styles from "./Navbar.module.css";
 import { routes } from "../../constants/routes.constants";
 import Link from "next/link";
 import Image from "next/image";
+import { useSession, signOut } from "next-auth/react";
 
 const Navbar = () => {
+  const { data: session } = useSession();
+
   return (
     <nav className={styles.nav}>
-      <div>
-        <Link href={routes.main.root}>
-          <Image src='/logo.svg' width={130} height={30} alt='logo' />
-        </Link>
-      </div>
+      <Link href={routes.main.root}>
+        <Image src='/logo.svg' width={130} height={35} alt='logo' />
+      </Link>
       <div>
         <ul className={styles.links}>
           <li>
@@ -20,16 +21,33 @@ const Navbar = () => {
           <li>
             <Link href={routes.main.root}>Reports</Link>
           </li>
-          <li>
-            <Link href={routes.reports.root}>Favorites</Link>
-          </li>
+          {session?.user && (
+            <li>
+              <Link href={routes.favorites.root}>Favorites</Link>
+            </li>
+          )}
         </ul>
       </div>
       <div className={styles.actions}>
-        <Button type='button' outline variant='primary'>
-          Logout
-        </Button>
-        <div className={styles.profile} />
+        {session?.user ? (
+          <Button
+            onClick={() => signOut()}
+            type='button'
+            outline
+            variant='primary'
+          >
+            Logout
+          </Button>
+        ) : (
+          <Link href={routes.login.root} passHref>
+            <Button type='button' variant='primary'>
+              Login
+            </Button>
+          </Link>
+        )}
+        <div className={styles.profile}>
+          {session?.user?.email?.[0]?.toUpperCase()}
+        </div>
       </div>
     </nav>
   );
