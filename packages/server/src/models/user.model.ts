@@ -1,6 +1,15 @@
 import mongoose from "mongoose";
-import { IUser } from "types";
+import { IAuth } from "./auth.model";
+import { IReport } from "./report.model";
+import { IReporter } from "./reporter.model";
 const { Schema } = mongoose;
+
+export interface IUser {
+  _id?: mongoose.Types.ObjectId;
+  auth: IAuth;
+  likedReports: mongoose.PopulatedDoc<IReport>[];
+  savedReporters: mongoose.PopulatedDoc<IReporter>[];
+}
 
 const userSchema = new Schema<IUser>({
   auth: {

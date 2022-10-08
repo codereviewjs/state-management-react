@@ -11,4 +11,5 @@ export const reportsApi = {
     api.post<{ report: IReportDTO }>(`/report`, { report }),
   getAuthReports: () =>
     api.get<{ reports: IReportDTO[] }>(`/report/authReports`),
+  like: (id: string) => api.put<{ report: IReportDTO }>(`/report/like/${id}`),
 };

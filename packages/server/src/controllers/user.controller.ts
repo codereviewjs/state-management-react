@@ -1,18 +1,15 @@
 import { Request, Response, NextFunction } from "express";
-import { IAuth } from "types";
+import { IAuth } from "../models/auth.model";
 import { userService } from "../services/user.service";
 import { HttpException } from "../utils/HttpException";
 import { userUtils } from "../utils/user.utils";
 
-async function me(req: Request, res: Response, next: NextFunction) {
+async function me(_: Request, res: Response, next: NextFunction) {
   try {
     const auth: IAuth = res.locals.auth;
 
-    const user = await userService.getByAuth(auth, {
-      withLikedReports: true,
-    });
+    const user = await userService.getByAuth(auth);
 
-    console.log("found user", user);
     if (!user) throw new HttpException(404, "user not found");
 
     res.json({

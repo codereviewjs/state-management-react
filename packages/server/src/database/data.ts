@@ -1,5 +1,8 @@
-import { IReport, IReporter, Categories, IAuth, Roles } from "types";
+import { Categories, Roles } from "types";
 import { LoremIpsum } from "lorem-ipsum";
+import { IAuth } from "../models/auth.model";
+import { IReport } from "../models/report.model";
+import { IReporter } from "../models/reporter.model";
 
 const lorem = new LoremIpsum({
   sentencesPerParagraph: {

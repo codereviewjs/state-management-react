@@ -1,9 +1,13 @@
 import mongoose from "mongoose";
-import { IReport, IReporter } from "types";
-import AuthModel from "./auth.model";
-import ReportModel from "./report.model";
-import UserModel from "./user.model";
+import AuthModel, { IAuth } from "./auth.model";
+import ReportModel, { IReport } from "./report.model";
 const { Schema } = mongoose;
+
+export interface IReporter {
+  _id?: mongoose.Types.ObjectId;
+  reports: IReport[];
+  auth: mongoose.PopulatedDoc<IAuth>;
+}
 
 const reporterSchema = new Schema<IReporter>({
   reports: [
@@ -16,10 +20,6 @@ const reporterSchema = new Schema<IReporter>({
     type: Schema.Types.ObjectId,
     ref: "Auth",
   },
-  user: {
-    type: Schema.Types.ObjectId,
-    ref: "User",
-  },
 });
 
 reporterSchema.pre("remove", async function () {
@@ -27,10 +27,9 @@ reporterSchema.pre("remove", async function () {
     _id: { $in: this.reports.map((report: IReport) => report._id) },
   });
 
-  await AuthModel.findByIdAndDelete(this.auth._id);
-
-  if (this.user) {
-    await UserModel.findByIdAndDelete(this.user._id);
+  // TODO - need to check
+  if (this.auth) {
+    await AuthModel.findByIdAndDelete(this.auth._id);
   }
 });
 

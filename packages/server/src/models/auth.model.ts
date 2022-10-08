@@ -1,8 +1,21 @@
-import { IAuth, Roles } from "types";
-import mongoose from "mongoose";
+import { Roles } from "types";
+import mongoose, { PopulatedDoc } from "mongoose";
 import type { Model, Schema } from "mongoose";
 import { authUtils } from "../utils/auth.utils";
 import { HttpException } from "../utils/HttpException";
+import { IReporter } from "./reporter.model";
+import { IUser } from "./user.model";
+
+export interface IAuth {
+  _id?: mongoose.Types.ObjectId;
+  email: string;
+  firstName: string;
+  lastName: string;
+  password: string;
+  role: Roles;
+  user?: PopulatedDoc<IUser>;
+  reporter?: PopulatedDoc<IReporter>;
+}
 
 interface IAuthDocument extends IAuth, Document {}
 
@@ -35,6 +48,14 @@ const authSchema: Schema<IAuthDocument> = new mongoose.Schema({
     type: String,
     enum: Roles,
     default: Roles.GUEST,
+  },
+  user: {
+    type: mongoose.Types.ObjectId,
+    ref: "User",
+  },
+  reporter: {
+    type: mongoose.Types.ObjectId,
+    ref: "Reporter",
   },
 });
 

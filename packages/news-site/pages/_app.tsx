@@ -1,11 +1,15 @@
 import "../styles/globals.css";
 import type { AppProps } from "next/app";
-import { SessionProvider, SessionProviderProps } from "next-auth/react";
-import { useEffect } from "react";
+import {
+  SessionProvider,
+  SessionProviderProps,
+  useSession,
+  signOut,
+} from "next-auth/react";
+import React, { useEffect } from "react";
 import { setCssVars } from "ui";
 import { ITheme } from "types";
 import { Navbar } from "../components";
-import AuthContextProvider from "../context/Auth.context";
 
 const theme: ITheme = {
   backgroundColor: "#242424",
@@ -22,12 +26,27 @@ function MyApp({
   }, []);
   return (
     <SessionProvider session={session}>
-      <div className='root'>
-        <Navbar />
+      <Layout>
         <Component {...pageProps} />
-      </div>
+      </Layout>
     </SessionProvider>
   );
 }
 
+const Layout = ({ children }: { children: React.ReactNode }) => {
+  const { data, status } = useSession();
+
+  useEffect(() => {
+    if (status === "authenticated" && data.accessToken) {
+      localStorage.setItem("token", data.accessToken as string);
+    }
+  }, [status, data?.accessToken]);
+
+  return (
+    <div className='root'>
+      <Navbar />
+      {children}
+    </div>
+  );
+};
 export default MyApp;

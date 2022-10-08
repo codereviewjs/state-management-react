@@ -1,8 +1,6 @@
 import { BE_URL } from "./constants";
 
 async function customFetch<D>(path: string, options?: RequestInit) {
-  console.log("WINDWO", typeof window);
-
   const result = await fetch(`${BE_URL}${path}`, {
     ...options,
     headers: {
@@ -31,16 +29,19 @@ export const api = {
     customFetch<D>(path, options),
   post: <D>(path: string, body: unknown, options?: RequestInit) =>
     customFetch<D>(path, {
+      ...options,
       method: "POST",
       body: JSON.stringify(body),
     }),
-  put: <D>(path: string, body: unknown, options?: RequestInit) =>
+  put: <D>(path: string, body?: unknown, options?: RequestInit) =>
     customFetch<D>(path, {
+      ...options,
       method: "PUT",
       body: JSON.stringify(body),
     }),
   delete: <D>(path: string, options?: RequestInit) =>
     customFetch<D>(path, {
+      ...options,
       method: "DELETE",
     }),
 };

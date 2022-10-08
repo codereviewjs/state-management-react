@@ -8,16 +8,13 @@ export enum Roles {
   GUEST = "GUEST",
 }
 
-export interface IAuth {
+export interface IAuthDTO {
   _id?: string;
   email: string;
   firstName: string;
   lastName: string;
-  password: string;
   role: Roles;
 }
-
-export interface IAuthDTO extends Omit<IAuth, "password"> {}
 
 export interface AuthResponse {
   auth: IAuthDTO;

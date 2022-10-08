@@ -7,7 +7,7 @@ async function login(email: string, password: string) {
     throw new HttpException(400, "not valid credentials");
 
   const auth = await AuthModel.login(email, password);
-  const token = authUtils.createToken(auth._id || "");
+  const token = authUtils.createToken(auth._id?.toString() || "");
 
   return { auth, token };
 }

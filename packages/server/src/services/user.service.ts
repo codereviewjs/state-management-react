@@ -1,37 +1,18 @@
-import { Query } from "mongoose";
-import { IAuth } from "types";
+import { IAuth } from "../models/auth.model";
 import UserModel from "../models/user.model";
 import { HttpException } from "../utils/HttpException";
 
-type WithOptions = {
-  withLikedReports?: boolean;
-  withSavedReporters?: boolean;
-};
-
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-function withOptions<T extends Query<any, any, any, any>>(
-  doc: T,
-  options?: WithOptions
-) {
-  const docs = [];
-  if (options?.withLikedReports) {
-    docs.push("likedReports");
-  }
-  if (options?.withSavedReporters) {
-    docs.push("savedReporters");
-  }
-
-  if (docs.length) {
-    return doc.populate(docs);
-  }
-
-  return doc;
-}
-function getByAuth(auth: IAuth, options?: WithOptions) {
+function getByAuth(auth: IAuth) {
   if (!auth) throw new HttpException(403, "not allowed");
-  return withOptions(UserModel.findOne({ auth: auth._id }), options);
+  return UserModel.findOne({ auth: auth._id }).populate("likedReports");
+}
+
+function getOne(id: string) {
+  if (!id) throw new HttpException(403, "not allowed");
+  return UserModel.findById(id);
 }
 
 export const userService = {
   getByAuth,
+  getOne,
 };

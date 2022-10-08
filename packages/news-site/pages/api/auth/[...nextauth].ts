@@ -1,7 +1,6 @@
 import { authApi } from "api";
 import NextAuth, { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
-import { IUser } from "types";
 
 export const authOptions: NextAuthOptions = {
   pages: {

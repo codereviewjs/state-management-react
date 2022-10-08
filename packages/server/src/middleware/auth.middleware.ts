@@ -11,8 +11,6 @@ const requireAuth = async (req: Request, res: Response, next: NextFunction) => {
   if (token) {
     authUtils.verifyJwt(token, async (err, decodedToken) => {
       if (err) {
-        console.log("HERE", err.message);
-
         return res.status(403).json({ error: "not authenticated" });
       }
 

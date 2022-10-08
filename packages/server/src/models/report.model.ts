@@ -1,6 +1,18 @@
 import mongoose from "mongoose";
-import { IReport, Categories } from "types";
+import { Categories } from "types";
+import { IReporter } from "./reporter.model";
+import { IUser } from "./user.model";
 const { Schema } = mongoose;
+
+export interface IReport {
+  _id?: string;
+  title: string;
+  description: string;
+  date: Date;
+  category: Categories;
+  reporter: IReporter;
+  likes: mongoose.PopulatedDoc<IUser>[];
+}
 
 const reportSchema = new Schema<IReport>({
   title: String,
@@ -20,6 +32,13 @@ const reportSchema = new Schema<IReport>({
     type: Schema.Types.ObjectId,
     ref: "Reporter",
   },
+  likes: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: "User",
+      default: [],
+    },
+  ],
 });
 
 const ReportModel = mongoose.model("Report", reportSchema);

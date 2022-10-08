@@ -1,5 +1,6 @@
 import { NextFunction, Request, Response } from "express";
-import { AuthResponse, IAuth, Roles } from "types";
+import { AuthResponse, Roles } from "types";
+import { IAuth } from "../models/auth.model";
 import { authService } from "../services/auth.service";
 import { reporterService } from "../services/reporter.service";
 import { userService } from "../services/user.service";
@@ -15,7 +16,7 @@ async function createAuthResponse(
 
   const response: AuthResponse = {
     auth: authUtils.authToAuthDTO(auth),
-    token: token || authUtils.createToken(auth._id || ""),
+    token: token || authUtils.createToken(auth._id?.toString() || ""),
   };
 
   if (user) {

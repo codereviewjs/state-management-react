@@ -1,15 +1,8 @@
-import { IAuth } from "./auth.types";
-import { IReport } from "./report.types";
-import { IUser } from "./user.types";
+import { IReportDTO } from "./report.types";
 
-export interface IReporter {
+export interface IReporterDTO {
   _id?: string;
-  reports: IReport[];
-  auth: IAuth;
-  user?: IUser;
-}
-
-export interface IReporterDTO extends Omit<IReporter, "auth" | "user"> {
   name: string;
   email: string;
+  reports: IReportDTO[];
 }

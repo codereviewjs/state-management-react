@@ -1,53 +1,55 @@
-import { Query } from "mongoose";
-import { IAuth, ICreateReportDTO, IReport, IReporter } from "types";
-import ReportModel from "../models/report.model";
+import { ICreateReportDTO } from "types";
+import { IAuth } from "../models/auth.model";
+import ReportModel, { IReport } from "../models/report.model";
+import { IReporter } from "../models/reporter.model";
 import { HttpException } from "../utils/HttpException";
 import { reporterService } from "./reporter.service";
+import { userService } from "./user.service";
 
-type WithReporter = { withReporter?: boolean };
+type WithOptions = { withReporter?: boolean; withLikes?: boolean };
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-function withReporter<T extends Query<any, any, any, any>>(
-  doc: T,
-  options?: WithReporter
-): T {
+function withOptions(options?: WithOptions) {
+  const docs = [];
   if (options?.withReporter) {
-    return doc.populate({ path: "reporter", populate: { path: "auth" } });
+    docs.push({ path: "reporter", populate: { path: "auth" } });
+  }
+  if (options?.withLikes) {
+    docs.push({ path: "likes", populate: { path: "auth" } });
   }
 
-  return doc;
+  return docs;
 }
 
-async function getAll(options?: WithReporter) {
-  return withReporter(ReportModel.find(), options);
+async function getAll(options?: WithOptions) {
+  return ReportModel.find().populate(withOptions(options));
 }
 
-async function getOne(id: string, options?: WithReporter) {
+async function getOne(id: string, options?: WithOptions) {
   if (!id) throw new HttpException(400, "missing id");
-  return withReporter(ReportModel.findById(id), options);
+
+  return ReportModel.findById(id).populate(withOptions(options));
 }
 
-async function getReportsOfAuth(auth: IAuth, options?: WithReporter) {
+async function getReportsOfAuth(auth: IAuth, options?: WithOptions) {
   if (!auth) throw new HttpException(401, "not authenticated");
   const reporter = await reporterService.getByAuth(auth);
 
-  return withReporter(ReportModel.find({ reporter: reporter?._id }), options);
+  return ReportModel.find({ reporter: reporter?._id }).populate(
+    withOptions(options)
+  );
 }
 
 async function updateReportsOfAuth(
   updatedReport: IReport,
   auth: IAuth,
-  options?: WithReporter
+  options?: WithOptions
 ) {
   if (!auth) throw new HttpException(401, "not authenticated");
 
-  return withReporter(
-    ReportModel.findOneAndUpdate(
-      { "reporter.auth": auth._id, _id: updatedReport._id },
-      updatedReport
-    ),
-    options
-  );
+  return ReportModel.findOneAndUpdate(
+    { "reporter.auth": auth._id, _id: updatedReport._id },
+    updatedReport
+  ).populate(withOptions(options));
 }
 
 async function deleteById(id: string) {
@@ -66,6 +68,38 @@ async function create(report: ICreateReportDTO, reporter: IReporter) {
   });
 }
 
+async function like(reportId: string, auth: IAuth, options?: WithOptions) {
+  if (!auth) throw new HttpException(403, "not authorized");
+  if (!like) throw new HttpException(400, "missing report id");
+
+  const report = await getOne(reportId, {
+    withReporter: true,
+  });
+  if (!report) throw new HttpException(404, "report not found");
+
+  const user = await userService.getOne(auth.user?._id?.toString() || "");
+  if (!user) throw new HttpException(404, "user not found");
+
+  if (
+    report.likes.some((likeUserId) => user._id.equals(likeUserId?._id || ""))
+  ) {
+    report.likes = report.likes.filter(
+      (likeUserId) => !user._id.equals(likeUserId?._id || "")
+    );
+    user.likedReports = user.likedReports?.filter(
+      (report) => report !== reportId
+    );
+  } else {
+    report.likes.push(user);
+    user.likedReports.push(report as IReport);
+  }
+
+  await report.save();
+  await user.save();
+
+  return report.populate(withOptions(options));
+}
+
 export const reportService = {
   getAll,
   getOne,
@@ -73,4 +107,5 @@ export const reportService = {
   updateReportsOfAuth,
   deleteById,
   create,
+  like,
 };

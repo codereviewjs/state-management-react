@@ -1,4 +1,4 @@
-import { IAuthWithoutSensitiveData } from "types";
+import { IAuthDTO } from "types";
 import { initialState } from "./Store.reducer";
 import { StoreState } from "./store.types";
 
@@ -8,7 +8,7 @@ export type LoginRequest = {
 
 export type LoginSuccess = {
   type: "loginSuccess";
-  payload: IAuthWithoutSensitiveData;
+  payload: IAuthDTO;
 };
 
 export type LoginError = {
@@ -32,7 +32,7 @@ export type getSessionError = {
 export type getSessionSuccess = {
   type: "getSessionSuccess";
   payload: {
-    auth?: IAuthWithoutSensitiveData;
+    auth?: IAuthDTO;
     authenticated: boolean;
   };
 };

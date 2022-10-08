@@ -43,8 +43,6 @@ export const getServerSideProps: GetServerSideProps<Props> = async ({
 };
 
 const Favorites: NextPage<Props> = (props) => {
-  console.log(props.likedReports);
-
   return (
     <Layout title='Favorites'>
       <div>Favorites</div>

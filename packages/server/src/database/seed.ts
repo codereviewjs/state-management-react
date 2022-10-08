@@ -1,11 +1,10 @@
 import { disconnect } from "mongoose";
-import { IAuth, Roles } from "types";
+import { Roles } from "types";
 import { connect } from "../database";
 import AuthModel from "../models/auth.model";
 import ReportModel from "../models/report.model";
 import ReporterModel from "../models/reporter.model";
 import UserModule from "../models/user.model";
-import { authUtils } from "../utils/auth.utils";
 import { reports, users } from "./data";
 
 async function cleanAll() {
@@ -23,30 +22,23 @@ async function seed() {
       if (err) throw err;
       await cleanAll();
 
-      const authUsers: IAuth[] = [];
-
-      for (const user of users) {
-        user.password = await authUtils.hashPassword(user.password);
-        authUsers.push(user);
-      }
-
-      const authDoc = await AuthModel.insertMany(authUsers);
+      const authDoc = await AuthModel.insertMany(users);
       console.log("Created auth users");
 
       for (const auth of authDoc) {
         const userDoc = await UserModule.create({
           auth,
         });
-        console.log("Created user", auth.firstName + " " + auth.lastName);
+        auth.user = userDoc;
         if (auth.role === Roles.REPORTER) {
           const reporterReports = reports.filter(
-            (report) => report.reporter.auth.email === auth.email
+            // @ts-expect-error
+            (report) => report.reporter?.auth?.email === auth.email
           );
 
           const reporterDoc = await ReporterModel.create({
             reports: [],
             auth,
-            user: userDoc,
           });
 
           const reportsDoc = await ReportModel.insertMany(
@@ -56,11 +48,15 @@ async function seed() {
             }))
           );
 
+          auth.reporter = reporterDoc;
+
           reporterDoc.reports.push(...reportsDoc);
           await reporterDoc.save();
           console.log("Created reporter", auth.firstName + " " + auth.lastName);
           console.log("reporters reports length", reporterDoc.reports.length);
         }
+
+        await auth.save();
       }
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (e: any) {

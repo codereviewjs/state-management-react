@@ -1,6 +1,7 @@
 import type { Query } from "mongoose";
-import { IAuth, IReport, IReporter } from "types";
-import ReporterModule from "../models/reporter.model";
+import { IAuth } from "../models/auth.model";
+import { IReport } from "../models/report.model";
+import ReporterModule, { IReporter } from "../models/reporter.model";
 import { HttpException } from "../utils/HttpException";
 
 type WithOptions = {

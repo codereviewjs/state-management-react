@@ -1,13 +1,17 @@
-import { IReporter, IReporterDTO } from "types";
+import { IReporterDTO } from "types";
+import { IAuth } from "../models/auth.model";
+import { IReporter } from "../models/reporter.model";
+import { reportUtils } from "./report.utils";
 
 function reporterToReporterDTO(reporter: IReporter): IReporterDTO {
-  const hasAuth = !!reporter.auth;
+  const auth = reporter?.auth as IAuth;
+  const hasAuth = !!auth;
 
   return {
-    reports: reporter.reports,
-    _id: reporter._id,
-    name: hasAuth ? `${reporter.auth.firstName} ${reporter.auth.lastName}` : "",
-    email: hasAuth ? reporter.auth.email : "",
+    reports: reportUtils.reportsToReportsDTO(reporter.reports, null),
+    _id: reporter._id?.toString(),
+    name: hasAuth ? `${auth.firstName} ${auth.lastName}` : "",
+    email: hasAuth ? auth.email : "",
   };
 }
 

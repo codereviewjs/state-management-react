@@ -1,9 +1,8 @@
 import bcrypt from "bcrypt";
 import { Request } from "express";
 import jwt from "jsonwebtoken";
-import { AuthResponse, IAuth, IAuthDTO, Roles } from "types";
-import ReporterModel from "../models/reporter.model";
-import UserModule from "../models/user.model";
+import { IAuthDTO } from "types";
+import { IAuth } from "../models/auth.model";
 
 async function hashPassword(password: string) {
   const salt = await bcrypt.genSalt();
@@ -49,6 +48,7 @@ function authToAuthDTO(auth: IAuth): IAuthDTO {
     firstName: auth.firstName,
     lastName: auth.lastName,
     role: auth.role,
+    _id: auth._id?.toString(),
   };
 }
 
