@@ -1,4 +1,4 @@
-import { IReport, IReporter, IAuthWithoutSensitiveData } from "types";
+import { IAuthDTO, IReporterDTO, IReportDTO } from "types";
 
 export type HttpRequestStatus = "idle" | "loading" | "success" | "error";
 
@@ -9,9 +9,9 @@ type StoreData<T> = {
 };
 
 export interface StoreState {
-  auth: StoreData<IAuthWithoutSensitiveData | undefined> & {
+  auth: StoreData<IAuthDTO | undefined> & {
     isLoggedIn: boolean;
   };
-  reports: StoreData<IReport[]>;
-  reporters: StoreData<IReporter[]>;
+  reports: StoreData<IReportDTO[]>;
+  reporters: StoreData<IReporterDTO[]>;
 }

@@ -1,4 +1,4 @@
-import { AuthResponse, IUser } from "types";
+import { AuthResponse } from "types";
 import { api } from "./api";
 
 export const authApi = {

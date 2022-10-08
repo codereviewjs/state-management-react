@@ -23,8 +23,6 @@ const reporterSchema = new Schema<IReporter>({
 });
 
 reporterSchema.pre("remove", async function () {
-  console.log(this.reports.map((report: IReport) => report._id));
-
   await ReportModel.deleteMany({
     _id: { $in: this.reports.map((report: IReport) => report._id) },
   });
@@ -36,5 +34,5 @@ reporterSchema.pre("remove", async function () {
   }
 });
 
-const ReporterModule = mongoose.model("Reporter", reporterSchema);
-export default ReporterModule;
+const ReporterModel = mongoose.model("Reporter", reporterSchema);
+export default ReporterModel;

@@ -7,6 +7,7 @@ async function getAll(_: Request, res: Response, next: NextFunction) {
   try {
     const reportersDoc = await reporterService.getAll({
       withReports: true,
+      withAuth: true,
     });
 
     return res.json({
@@ -19,7 +20,10 @@ async function getAll(_: Request, res: Response, next: NextFunction) {
 
 async function getOne(req: Request, res: Response, next: NextFunction) {
   try {
-    const reporterDoc = await reporterService.getById(req.params.id);
+    const reporterDoc = await reporterService.getById(req.params.id, {
+      withAuth: true,
+      withReports: true,
+    });
     if (!reporterDoc) throw new HttpException(404, "not found");
 
     return res.json({

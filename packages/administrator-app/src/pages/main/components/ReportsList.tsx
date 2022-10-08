@@ -1,13 +1,12 @@
 import { useNavigate, Link } from "react-router-dom";
-import { IReport } from "types";
+import { IReportDTO } from "types";
 import { Card } from "ui";
-import { routes } from "../../../constants/routes.constants";
 import { useStoreContext } from "../../../context/store/Store.context";
 import { routesWithParams } from "../../../utils/route.utils";
 import styles from "../Main.module.css";
 
 interface ReportCardProps {
-  report: IReport;
+  report: IReportDTO;
   onEditClick: (id: string) => void;
   onDeleteClick: (id: string) => void;
 }

@@ -1,6 +1,8 @@
 import { BE_URL } from "./constants";
 
 async function customFetch<D>(path: string, options?: RequestInit) {
+  console.log("WINDWO", typeof window);
+
   const result = await fetch(`${BE_URL}${path}`, {
     ...options,
     headers: {
@@ -10,7 +12,7 @@ async function customFetch<D>(path: string, options?: RequestInit) {
         typeof window !== "undefined"
           ? `Bearer ${localStorage.getItem("token")}`
           : // @ts-expect-error
-            options?.headers?.authorization || "",
+            `Bearer ${options?.headers?.authorization}` || "",
     },
   });
   if (result.ok) {
@@ -25,18 +27,19 @@ async function customFetch<D>(path: string, options?: RequestInit) {
 }
 
 export const api = {
-  get: <D>(path: string) => customFetch<D>(path),
-  post: <D>(path: string, body: unknown) =>
+  get: <D>(path: string, options?: RequestInit) =>
+    customFetch<D>(path, options),
+  post: <D>(path: string, body: unknown, options?: RequestInit) =>
     customFetch<D>(path, {
       method: "POST",
       body: JSON.stringify(body),
     }),
-  put: <D>(path: string, body: unknown) =>
+  put: <D>(path: string, body: unknown, options?: RequestInit) =>
     customFetch<D>(path, {
       method: "PUT",
       body: JSON.stringify(body),
     }),
-  delete: <D>(path: string) =>
+  delete: <D>(path: string, options?: RequestInit) =>
     customFetch<D>(path, {
       method: "DELETE",
     }),

@@ -1,6 +1,5 @@
 import { Layout } from "ui";
 import { useStoreContext } from "../../context/store/Store.context";
-import styles from "./Reports.module.css";
 
 const Reports = () => {
   const { reports } = useStoreContext();

@@ -1,30 +1,41 @@
 import type { Query } from "mongoose";
 import { IAuth, IReport, IReporter } from "types";
-import ReporterModule from "../models/reporter.module";
+import ReporterModule from "../models/reporter.model";
 import { HttpException } from "../utils/HttpException";
 
-type WithReporters = { withReports?: boolean };
+type WithOptions = {
+  withReports?: boolean;
+  withAuth?: boolean;
+};
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-function withReporters<T extends Query<any, any, any, any>>(
+function withOptions<T extends Query<any, any, any, any>>(
   doc: T,
-  options?: WithReporters
-): T {
+  options?: WithOptions
+) {
+  const docs = [];
+  if (options?.withAuth) {
+    docs.push("auth");
+  }
   if (options?.withReports) {
-    return doc.populate("reports");
+    docs.push("reports");
+  }
+
+  if (docs.length) {
+    return doc.populate(docs);
   }
 
   return doc;
 }
 
-function getAll(options?: WithReporters) {
-  return withReporters(ReporterModule.find(), options);
+function getAll(options?: WithOptions) {
+  return withOptions(ReporterModule.find(), options);
 }
 
-function getByAuth(auth: IAuth, options?: WithReporters) {
+function getByAuth(auth: IAuth, options?: WithOptions) {
   if (!auth) throw new HttpException(400, "not allowed");
 
-  return withReporters(
+  return withOptions(
     ReporterModule.findOne({
       auth: auth._id,
     }),
@@ -32,10 +43,10 @@ function getByAuth(auth: IAuth, options?: WithReporters) {
   );
 }
 
-function getById(id: string, options?: WithReporters) {
+function getById(id: string, options?: WithOptions) {
   if (!id) throw new HttpException(400, "missing id");
 
-  return withReporters(ReporterModule.findById(id), options);
+  return withOptions(ReporterModule.findById(id), options);
 }
 
 function deleteById(id: string) {

@@ -1,10 +1,10 @@
 import { reportersApi } from "api";
 import { GetServerSideProps, NextPage } from "next";
-import { IReporter } from "types";
+import { IReporterDTO } from "types";
 import { Layout, Spinner } from "ui";
 
 interface Props {
-  reporter: IReporter;
+  reporter: IReporterDTO;
 }
 
 export const getServerSideProps: GetServerSideProps<Props, { id: string }> =
@@ -23,7 +23,7 @@ const Reporter: NextPage<Props> = ({ reporter }) => {
     return <Spinner fullscreen />;
   }
   return (
-    <Layout title={`${reporter.firstName} ${reporter.lastName}`}>
+    <Layout title={`${reporter.name}`}>
       <ul>
         {reporter.reports.map((report) => (
           <li key={report._id}>{report.title}</li>

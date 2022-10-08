@@ -1,4 +1,4 @@
-import { IReporter } from "types";
+import { IReporterDTO } from "types";
 import { StoreState } from "./store.types";
 
 type GetReportersRequest = {
@@ -6,7 +6,7 @@ type GetReportersRequest = {
 };
 type GetReportersSuccess = {
   type: "GetReportersSuccess";
-  payload: IReporter[];
+  payload: IReporterDTO[];
 };
 type GetReportersError = {
   type: "GetReportersError";

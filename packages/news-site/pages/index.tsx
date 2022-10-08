@@ -1,13 +1,13 @@
 import type { NextPage, GetStaticProps } from "next";
 import { reportsApi } from "api";
-import { IReport } from "types";
+import { IReportDTO } from "types";
 import styles from "../styles/index.module.css";
 import { Card, Layout } from "ui";
 import Link from "next/link";
 import { routesWithParams } from "../utils/route.utils";
 
 interface Props {
-  reports: IReport[];
+  reports: IReportDTO[];
 }
 
 export const getStaticProps: GetStaticProps<Props> = async () => {
@@ -38,13 +38,11 @@ const Home: NextPage<Props> = ({ reports }) => {
                 by{" "}
                 <Link
                   href={routesWithParams.reporters.reporter(
-                    report.reporter._id || ""
+                    report.reporterId || ""
                   )}
                   passHref
                 >
-                  <a>
-                    {report.reporter.firstName} {report.reporter.lastName}
-                  </a>
+                  <a>{report.reporterName}</a>
                 </Link>
               </small>
             </Card.Header>

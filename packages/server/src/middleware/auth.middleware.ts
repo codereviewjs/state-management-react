@@ -9,10 +9,16 @@ const requireAuth = async (req: Request, res: Response, next: NextFunction) => {
   const token = authUtils.getTokenFromRequest(req);
 
   if (token) {
-    authUtils.verifyJwt(token, (err) => {
+    authUtils.verifyJwt(token, async (err, decodedToken) => {
       if (err) {
+        console.log("HERE", err.message);
+
         return res.status(403).json({ error: "not authenticated" });
       }
+
+      // @ts-expect-error
+      const auth = await findAuthByTokenId(decodedToken.id);
+      res.locals.auth = auth;
       next();
     });
   } else {
@@ -32,7 +38,6 @@ const getAuthUser = (req: Request, res: Response, next: NextFunction) => {
         } else {
           // @ts-expect-error
           const auth = await findAuthByTokenId(decodedToken.id);
-
           res.locals.auth = auth;
           next();
         }
@@ -83,7 +88,7 @@ const requireAdmin = requireRole(Roles.ADMIN);
 const requireReporter = requireRole(Roles.REPORTER);
 
 export const authMiddleware = {
-  required: requireAuth,
+  requireAuth,
   requireAdmin,
   requireReporter,
   authUser: getAuthUser,

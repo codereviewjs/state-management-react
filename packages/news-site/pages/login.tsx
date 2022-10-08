@@ -40,8 +40,6 @@ const Login = () => {
       password,
     });
 
-    console.log({ response });
-
     if (response) {
       router.push(routes.main.root);
     }

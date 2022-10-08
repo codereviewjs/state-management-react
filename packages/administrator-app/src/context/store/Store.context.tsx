@@ -5,7 +5,7 @@ import {
   useEffect,
   useReducer,
 } from "react";
-import { ICreateReportDTO, IReport, Roles } from "types";
+import { ICreateReportDTO, IReportDTO, Roles } from "types";
 import { reportsApi, authApi, reportersApi } from "api";
 import { initialState, storeReducer } from "./Store.reducer";
 import { StoreState } from "./store.types";
@@ -16,9 +16,9 @@ interface StoreContextProps {
   reporters: StoreState["reporters"];
   login: (email: string, password: string) => Promise<boolean>;
   logout: () => void;
-  updateReport: (id: string, report: IReport) => Promise<IReport>;
+  updateReport: (id: string, report: IReportDTO) => Promise<IReportDTO>;
   deleteReport: (id: string) => Promise<void>;
-  createReport: (report: ICreateReportDTO) => Promise<IReport>;
+  createReport: (report: ICreateReportDTO) => Promise<IReportDTO>;
   deleteReporter: (id: string) => Promise<void>;
 }
 
@@ -46,7 +46,7 @@ const StoreContextProvider = ({ children }: StoreContextProviderProps) => {
       dispatch({ type: "GetReportsRequest" });
       const fetchReportsType: Record<
         typeof type,
-        () => Promise<{ reports: IReport[]; aborted: boolean }>
+        () => Promise<{ reports: IReportDTO[] }>
       > = {
         auth: reportsApi.getAuthReports,
         all: reportsApi.getAll,
@@ -67,12 +67,10 @@ const StoreContextProvider = ({ children }: StoreContextProviderProps) => {
     try {
       dispatch({ type: "GetReportersRequest" });
       const response = await reportersApi.getAll();
-      if (!response.aborted) {
-        dispatch({
-          type: "GetReportersSuccess",
-          payload: response.reporters,
-        });
-      }
+      dispatch({
+        type: "GetReportersSuccess",
+        payload: response.reporters,
+      });
     } catch (e) {
       dispatch({ type: "GetReportersError", payload: "error" });
     }
@@ -111,8 +109,6 @@ const StoreContextProvider = ({ children }: StoreContextProviderProps) => {
         return auth;
       }
     } catch (e: any) {
-      console.log("HERE?");
-
       dispatch({ type: "getSessionError", payload: e.message });
       return null;
     }
@@ -156,7 +152,7 @@ const StoreContextProvider = ({ children }: StoreContextProviderProps) => {
     await fetchReports();
     return reportResponse.report;
   };
-  const updateReport = async (id: string, report: IReport) => {
+  const updateReport = async (id: string, report: IReportDTO) => {
     const reportResponse = await reportsApi.update(id, report);
     await fetchReports();
     return reportResponse.report;

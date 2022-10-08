@@ -16,5 +16,15 @@ export interface IReport {
   reporter: IReporter;
 }
 
+export interface IReportDTO {
+  _id?: string;
+  title: string;
+  description: string;
+  date: Date;
+  category: Categories;
+  reporterId: string;
+  reporterName: string;
+}
+
 export interface ICreateReportDTO
   extends Pick<IReport, "category" | "title" | "description"> {}

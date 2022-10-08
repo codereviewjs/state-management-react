@@ -10,8 +10,10 @@ const Navbar = () => {
 
   return (
     <nav className={styles.nav}>
-      <Link href={routes.main.root}>
-        <Image src='/logo.svg' width={130} height={35} alt='logo' />
+      <Link href={routes.main.root} passHref>
+        <a>
+          <Image src='/logo.svg' width={130} height={35} alt='logo' />
+        </a>
       </Link>
       <div>
         <ul className={styles.links}>

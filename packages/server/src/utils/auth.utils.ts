@@ -2,7 +2,7 @@ import bcrypt from "bcrypt";
 import { Request } from "express";
 import jwt from "jsonwebtoken";
 import { AuthResponse, IAuth, IAuthDTO, Roles } from "types";
-import ReporterModule from "../models/reporter.module";
+import ReporterModel from "../models/reporter.model";
 import UserModule from "../models/user.model";
 
 async function hashPassword(password: string) {
@@ -52,40 +52,6 @@ function authToAuthDTO(auth: IAuth): IAuthDTO {
   };
 }
 
-async function createAuthResponse(
-  auth: IAuth,
-  token?: string
-): Promise<AuthResponse> {
-  const user = await UserModule.findOne({ auth: auth._id });
-
-  const response: AuthResponse = {
-    auth: authUtils.authToAuthDTO(auth),
-    token: token || createToken(auth._id || ""),
-  };
-
-  if (user) {
-    response.user = {
-      likedReports: user.likedReports,
-      savedReporters: user.savedReporters,
-      _id: user._id,
-    };
-  }
-  if (auth.role === Roles.REPORTER) {
-    const reporter = await ReporterModule.findOne({
-      auth: auth._id,
-    }).populate("reports");
-
-    if (reporter) {
-      response.reporter = {
-        reports: reporter.reports,
-        _id: reporter._id,
-      };
-    }
-  }
-
-  return response;
-}
-
 export const authUtils = {
   hashPassword,
   comparePassword,
@@ -93,5 +59,4 @@ export const authUtils = {
   getTokenFromRequest,
   authToAuthDTO,
   createToken,
-  createAuthResponse,
 };

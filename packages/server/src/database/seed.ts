@@ -3,7 +3,7 @@ import { IAuth, Roles } from "types";
 import { connect } from "../database";
 import AuthModel from "../models/auth.model";
 import ReportModel from "../models/report.model";
-import ReporterModule from "../models/reporter.module";
+import ReporterModel from "../models/reporter.model";
 import UserModule from "../models/user.model";
 import { authUtils } from "../utils/auth.utils";
 import { reports, users } from "./data";
@@ -13,7 +13,7 @@ async function cleanAll() {
   console.log("Removed auth");
   await ReportModel.remove();
   console.log("Removed reports");
-  await ReporterModule.remove();
+  await ReporterModel.remove();
   console.log("Removed reporters");
 }
 
@@ -43,7 +43,7 @@ async function seed() {
             (report) => report.reporter.auth.email === auth.email
           );
 
-          const reporterDoc = await ReporterModule.create({
+          const reporterDoc = await ReporterModel.create({
             reports: [],
             auth,
             user: userDoc,

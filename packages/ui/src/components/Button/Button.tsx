@@ -1,4 +1,4 @@
-import React from "react";
+import React, { forwardRef } from "react";
 import styles from "./Button.module.css";
 
 export interface ButtonProps
@@ -9,24 +9,31 @@ export interface ButtonProps
   outline?: boolean;
 }
 
-const Button = ({
-  variant = "primary",
-  className,
-  fluid,
-  outline,
-  size = "medium",
-  ...buttonProps
-}: ButtonProps) => {
-  return (
-    <button
-      className={`${styles.button} ${className} ${styles[variant] || ""} 
+const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
+  (
+    {
+      variant = "primary",
+      className,
+      fluid,
+      outline,
+      size = "medium",
+      ...buttonProps
+    },
+    ref
+  ) => {
+    return (
+      <button
+        ref={ref}
+        className={`${styles.button} ${className} ${styles[variant] || ""} 
       ${(fluid && styles.fluid) || ""}
       ${(outline && styles.outline) || ""}
       ${styles[size] || ""}
       `}
-      {...buttonProps}
-    />
-  );
-};
+        {...buttonProps}
+      />
+    );
+  }
+);
 
+Button.displayName = "Button";
 export default Button;

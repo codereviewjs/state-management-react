@@ -1,20 +1,18 @@
 import { Link } from "react-router-dom";
-import { IReporter } from "types";
+import { IReporterDTO } from "types";
 import { Card } from "ui";
 import { useStoreContext } from "../../../context/store/Store.context";
 import { routesWithParams } from "../../../utils/route.utils";
 import styles from "../Main.module.css";
 
 interface ReporterCardProps {
-  reporter: IReporter;
+  reporter: IReporterDTO;
   onDeleteClick: (id: string) => void;
 }
 const ReporterCard = ({ reporter, onDeleteClick }: ReporterCardProps) => {
   return (
     <Card key={reporter._id} className={styles.card}>
-      <Card.Header className={styles.cardHeader}>
-        TODO pass auth name
-      </Card.Header>
+      <Card.Header className={styles.cardHeader}>{reporter.name}</Card.Header>
       <Card.Content className={styles.cardContent}>
         <ul className={styles.reportsList}>
           {reporter.reports.map((report) => (

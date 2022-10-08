@@ -2,11 +2,13 @@ import { Response, Request, NextFunction } from "express";
 import { IAuth, ICreateReportDTO, IReport } from "types";
 import { reportService } from "../services/report.service";
 import { reporterService } from "../services/reporter.service";
+import { HttpException } from "../utils/HttpException";
+import { reportUtils } from "../utils/report.utils";
 
 async function getAll(_: Request, res: Response, next: NextFunction) {
   try {
-    const reports = await reportService.getAll();
-    return res.json({ reports });
+    const reports = await reportService.getAll({ withReporter: true });
+    return res.json({ reports: reportUtils.reportsToReportsDTO(reports) });
   } catch (e) {
     next(e);
   }
@@ -14,8 +16,14 @@ async function getAll(_: Request, res: Response, next: NextFunction) {
 
 async function getOne(req: Request, res: Response, next: NextFunction) {
   try {
-    const report = await reportService.getOne(req.params.id);
-    return res.json({ report });
+    const report = await reportService.getOne(req.params.id, {
+      withReporter: true,
+    });
+    if (!report) throw new HttpException(404, "report not found");
+
+    res.json({
+      report: reportUtils.reportToReportDTO(report),
+    });
   } catch (e) {
     next(e);
   }
@@ -24,10 +32,13 @@ async function getOne(req: Request, res: Response, next: NextFunction) {
 async function getReportsByAuth(_: Request, res: Response, next: NextFunction) {
   try {
     const auth: IAuth = res.locals.auth;
-    const authReports = await reportService.getReportsOfAuth(auth);
-    console.log(authReports);
+    const authReports = await reportService.getReportsOfAuth(auth, {
+      withReporter: true,
+    });
 
-    return res.json({ reports: authReports || [] });
+    return res.json({
+      reports: reportUtils.reportsToReportsDTO(authReports) || [],
+    });
   } catch (e) {
     next(e);
   }
@@ -37,8 +48,10 @@ async function update(req: Request, res: Response, next: NextFunction) {
   try {
     const { report } = req.body as { report: IReport };
     const auth: IAuth = res.locals.auth;
-    await reportService.updateReportsOfAuth(report, auth);
-    return res.json({ report });
+    await reportService.updateReportsOfAuth(report, auth, {
+      withReporter: true,
+    });
+    return res.json({ report: reportUtils.reportToReportDTO(report) });
   } catch (e) {
     next(e);
   }
@@ -68,19 +81,10 @@ async function create(req: Request, res: Response, next: NextFunction) {
 
     const createdReport = await reportService.create(report, reporter);
 
-    const response: { report: IReport } = {
-      report: {
-        category: createdReport.category,
-        date: createdReport.date,
-        description: createdReport.description,
-        reporter: createdReport.reporter,
-        title: createdReport.title,
-        _id: createdReport._id,
-      },
-    };
-
     await reporterService.addReport(reporter, createdReport);
-    return res.status(201).json(response);
+    return res
+      .status(201)
+      .json({ report: reportUtils.reportToReportDTO(createdReport) });
   } catch (e) {
     next(e);
   }

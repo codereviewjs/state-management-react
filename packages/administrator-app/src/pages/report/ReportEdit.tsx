@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { Categories, IReport } from "types";
+import { Categories, IReportDTO } from "types";
 import { Button, Dropdown, Input, Label, Layout, Textarea } from "ui";
 import { useStoreContext } from "../../context/store/Store.context";
 import { routesWithParams } from "../../utils/route.utils";
@@ -11,9 +11,9 @@ const ReportEdit = () => {
   const navigate = useNavigate();
   const { id } = useParams();
   const originalReport = reports.data.find((report) => report._id === id);
-  const [report, setReport] = useState<IReport>({
+  const [report, setReport] = useState<IReportDTO>({
     ...originalReport,
-  } as IReport);
+  } as IReportDTO);
 
   if (!id || !report || !originalReport) {
     return <div>Report not found</div>;

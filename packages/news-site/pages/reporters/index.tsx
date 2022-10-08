@@ -1,12 +1,12 @@
 import { reportersApi } from "api";
 import { GetServerSideProps, NextPage } from "next";
 import Link from "next/link";
-import { IReporter } from "types";
+import { IReporterDTO } from "types";
 import { Card, Layout } from "ui";
 import styles from "../../styles/reporters.module.css";
 import { routesWithParams } from "../../utils/route.utils";
 interface Props {
-  reporters: IReporter[];
+  reporters: IReporterDTO[];
 }
 
 export const getServerSideProps: GetServerSideProps<Props> = async () => {
@@ -30,9 +30,7 @@ const Reporters: NextPage<Props> = ({ reporters }) => {
                 href={routesWithParams.reporters.reporter(reporter._id || "")}
                 passHref
               >
-                <a>
-                  {reporter.firstName} {reporter.lastName}
-                </a>
+                <a>{reporter.name}</a>
               </Link>
             </Card.Header>
             <Card.Content className={styles.cardContent}>
@@ -42,7 +40,7 @@ const Reporters: NextPage<Props> = ({ reporters }) => {
                     <Link
                       href={routesWithParams.reports.report(report._id || "")}
                     >
-                      {report.title}
+                      <a>{report.title}</a>
                     </Link>
                     <div>
                       <small>{new Date(report.date).toDateString()}</small>

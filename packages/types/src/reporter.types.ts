@@ -9,4 +9,7 @@ export interface IReporter {
   user?: IUser;
 }
 
-export interface IReporterDTO extends Omit<IReporter, "auth" | "user"> {}
+export interface IReporterDTO extends Omit<IReporter, "auth" | "user"> {
+  name: string;
+  email: string;
+}
