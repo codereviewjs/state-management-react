@@ -1,8 +1,8 @@
-import { userService } from "../../services/user.service";
-import { userController } from "../user.controller";
-import { AUTH, USER } from "../../test-utils/mockData";
-import { request } from "../../test-utils/request";
-import { userUtils } from "../../utils/user.utils";
+import { expressRequestResponse } from "../../../test-utils/expressRequestResponse";
+import { userController } from "../../../controllers/user.controller";
+import { userService } from "../../../services/user.service";
+import { USER, AUTH } from "../../../test-utils/mockData";
+import { userUtils } from "../../../utils/user.utils";
 
 describe("User controller", () => {
   it("me", async () => {
@@ -13,7 +13,7 @@ describe("User controller", () => {
         return USER;
       });
 
-    const { next, req, res, resJsonMockFn } = request({
+    const { next, req, res, resJsonMockFn } = expressRequestResponse({
       res: {
         locals: {
           auth: AUTH,

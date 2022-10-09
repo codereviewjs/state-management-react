@@ -16,7 +16,7 @@ interface Props {
   req?: ReqProps;
   res?: ResProps;
 }
-export function request(props: Props = {}) {
+export function expressRequestResponse(props: Props = {}) {
   const resJsonMockFn = jest.fn();
   const req = {
     ...props.req,

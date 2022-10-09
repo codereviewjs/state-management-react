@@ -1,8 +1,8 @@
-import { reportService } from "../../services/report.service";
-import { reportController } from "../report.controller";
-import { reportUtils } from "../../utils/report.utils";
-import { REPORT } from "../../test-utils/mockData";
-import { request } from "../../test-utils/request";
+import { expressRequestResponse } from "../../../test-utils/expressRequestResponse";
+import { reportController } from "../../../controllers/report.controller";
+import { reportService } from "../../../services/report.service";
+import { REPORT } from "../../../test-utils/mockData";
+import { reportUtils } from "../../../utils/report.utils";
 
 describe("Report controller", () => {
   it("Should get all", async () => {
@@ -13,7 +13,7 @@ describe("Report controller", () => {
         return [REPORT];
       });
 
-    const { next, req, res, resJsonMockFn } = request({
+    const { next, req, res, resJsonMockFn } = expressRequestResponse({
       res: {
         locals: {
           auth: null,
@@ -38,7 +38,7 @@ describe("Report controller", () => {
         return REPORT;
       });
 
-    const { next, req, res, resJsonMockFn } = request({
+    const { next, req, res, resJsonMockFn } = expressRequestResponse({
       req: {
         params: {
           id: "1",
@@ -65,7 +65,7 @@ describe("Report controller", () => {
       .spyOn(reportService, "deleteById")
       .mockImplementation(jest.fn());
 
-    const { next, req, res, resJsonMockFn } = request({
+    const { next, req, res, resJsonMockFn } = expressRequestResponse({
       req: {
         params: {
           id: "1",

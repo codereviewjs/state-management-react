@@ -1,14 +1,14 @@
 import { AuthResponse } from "types";
-import { IAuthDocument } from "../../models/auth.model";
-import { authService } from "../../services/auth.service";
-import { authController } from "../auth.controller";
-import { userService } from "../../services/user.service";
-import { IUser } from "../../models/user.model";
-import "../../config";
-import { authUtils } from "../../utils/auth.utils";
-import { userUtils } from "../../utils/user.utils";
-import { AUTH, TOKEN, USER } from "../../test-utils/mockData";
-import { request } from "../../test-utils/request";
+import { IAuthDocument } from "../../../models/auth.model";
+import { authService } from "../../../services/auth.service";
+import { authController } from "../../../controllers/auth.controller";
+import { userService } from "../../../services/user.service";
+import { IUser } from "../../../models/user.model";
+import "../../../config";
+import { authUtils } from "../../../utils/auth.utils";
+import { userUtils } from "../../../utils/user.utils";
+import { AUTH, TOKEN, USER } from "../../../test-utils/mockData";
+import { expressRequestResponse } from "../../../test-utils/expressRequestResponse";
 
 describe("Auth controller", () => {
   it("Should login regular user and return dto response", async () => {
@@ -38,7 +38,7 @@ describe("Auth controller", () => {
         return user;
       });
 
-    const { next, req, res, resJsonMockFn } = request({
+    const { next, req, res, resJsonMockFn } = expressRequestResponse({
       req: {
         body: {
           email: AUTH.email,
@@ -74,7 +74,7 @@ describe("Auth controller", () => {
         return user;
       });
 
-    const { next, req, res, resJsonMockFn } = request({
+    const { next, req, res, resJsonMockFn } = expressRequestResponse({
       res: {
         locals: {
           auth: AUTH,

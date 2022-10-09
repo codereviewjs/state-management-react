@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from "express";
-import { AuthResponse, Roles } from "types";
+import { AuthResponse, ICreateAuthDTO, Roles } from "types";
 import { IAuth } from "../models/auth.model";
 import { authService } from "../services/auth.service";
 import { reporterService } from "../services/reporter.service";
@@ -67,7 +67,19 @@ async function getSession(_: Request, res: Response, next: NextFunction) {
   }
 }
 
+async function create(req: Request, res: Response, next: NextFunction) {
+  try {
+    const { auth } = req.body as { auth: ICreateAuthDTO };
+    const createdAuth = await authService.create(auth);
+
+    res.status(201).json({ auth: authUtils.authToAuthDTO(createdAuth) });
+  } catch (e) {
+    next(e);
+  }
+}
+
 export const authController = {
   login,
   getSession,
+  create,
 };

@@ -9,6 +9,8 @@ import { reportUtils } from "../utils/report.utils";
 
 async function getAll(_: Request, res: Response, next: NextFunction) {
   const auth: IAuth = res.locals.auth;
+  console.log(auth, "ATH");
+
   try {
     const reports = await reportService.getAll({
       withReporter: true,
