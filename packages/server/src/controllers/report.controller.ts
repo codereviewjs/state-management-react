@@ -27,10 +27,11 @@ async function getOne(req: Request, res: Response, next: NextFunction) {
     const report = await reportService.getOne(req.params.id, {
       withReporter: true,
     });
+
     if (!report) throw new HttpException(404, "report not found");
 
     res.json({
-      report: reportUtils.reportToReportDTO(report, auth.user),
+      report: reportUtils.reportToReportDTO(report, auth?.user || null),
     });
   } catch (e) {
     next(e);

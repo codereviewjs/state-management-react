@@ -17,7 +17,7 @@ export interface IAuth {
   reporter?: PopulatedDoc<IReporter>;
 }
 
-interface IAuthDocument extends IAuth, Document {}
+export interface IAuthDocument extends IAuth, Document {}
 
 interface IAuthModel extends Model<IAuthDocument> {
   login: (email: string, password: string) => Promise<IAuthDocument>;

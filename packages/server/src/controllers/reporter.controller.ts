@@ -38,7 +38,7 @@ async function remove(req: Request, res: Response, next: NextFunction) {
   try {
     const { id } = req.params as { id: string };
     await reporterService.deleteById(id);
-    return res.json({ message: "deleted report", reportId: id });
+    return res.json({ message: "deleted reporter", reporterId: id });
   } catch (e) {
     next(e);
   }

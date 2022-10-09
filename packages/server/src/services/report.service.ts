@@ -55,7 +55,7 @@ async function updateReportsOfAuth(
 async function deleteById(id: string) {
   if (!id) throw new HttpException(400, "missing id");
 
-  return ReportModel.findByIdAndDelete(id);
+  await ReportModel.findByIdAndDelete(id);
 }
 
 async function create(report: ICreateReportDTO, reporter: IReporter) {

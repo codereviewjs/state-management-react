@@ -5,6 +5,7 @@ import { authService } from "../services/auth.service";
 import { reporterService } from "../services/reporter.service";
 import { userService } from "../services/user.service";
 import { authUtils } from "../utils/auth.utils";
+import { HttpException } from "../utils/HttpException";
 import { reporterUtils } from "../utils/reporter.utils";
 import { userUtils } from "../utils/user.utils";
 
@@ -37,10 +38,12 @@ async function createAuthResponse(
 }
 
 async function login(req: Request, res: Response, next: NextFunction) {
-  const { email, password } = req.body;
-
   try {
+    const { email, password } = req.body;
+    if (!email || !password) throw new HttpException(400, "bad request");
+
     const { auth, token } = await authService.login(email, password);
+
     const response = await createAuthResponse(auth, token);
 
     return res.json(response);
@@ -52,6 +55,7 @@ async function login(req: Request, res: Response, next: NextFunction) {
 async function getSession(_: Request, res: Response, next: NextFunction) {
   try {
     const auth: IAuth = res.locals.auth;
+
     if (!auth) {
       return res.json({ auth: null });
     }
