@@ -69,7 +69,11 @@ const Home: NextPage<Props> = ({ reports }) => {
     <Layout title='Reports'>
       <div className={styles.container}>
         {reportsLocal.map((report) => (
-          <Card className={styles.card} key={report._id}>
+          <Card
+            data-testid={`report-card-${report._id}`}
+            className={styles.card}
+            key={report._id}
+          >
             <Card.Header>
               <Link
                 href={routesWithParams.reports.report(report._id || "")}
@@ -98,8 +102,11 @@ const Home: NextPage<Props> = ({ reports }) => {
                 <span>{new Date(report.date).toDateString()}</span>
               </div>
               {!isLoading && (
-                <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
-                  <span>{report.likesCount}</span>
+                <div
+                  data-testid='likes-container'
+                  style={{ display: "flex", gap: 8, alignItems: "center" }}
+                >
+                  <span>{report.likesCount} likes</span>
                   <Button
                     size='small'
                     onClick={() => handleLike(report._id || "")}
