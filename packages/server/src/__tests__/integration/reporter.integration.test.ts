@@ -11,9 +11,9 @@ const mainRoute = "/v1/reporter";
 
 beforeAll(async () => {
   await connectDB();
-  const createdData = await testUtils.createData();
+  const data = await testUtils.createData();
 
-  reporter = createdData.reporter;
+  reporter = data.reporter as IReporter;
 });
 
 afterAll(async () => {

@@ -1,5 +1,5 @@
 import request from "supertest";
-import { ICreateReportDTO } from "types";
+import { ICreateReportDTO, Roles } from "types";
 import app from "../app";
 import { IAuth } from "../models/auth.model";
 import { IReporter } from "../models/reporter.model";
@@ -49,13 +49,21 @@ async function createReporter(auth: IAuth) {
 
 async function createData(auth = AUTH_REPORTER, report = REPORT) {
   const createdAuth = await createAuth(auth);
-  const createdReporter = await createReporter(createdAuth);
-  const createdReport = await createReport(createdReporter, report);
+  if (auth.role === Roles.REPORTER) {
+    const createdReporter = await createReporter(createdAuth);
+    const createdReport = await createReport(createdReporter, report);
+
+    return {
+      report: createdReport,
+      auth: createdAuth,
+      reporter: createdReporter,
+    };
+  }
 
   return {
-    report: createdReport,
+    report: null,
     auth: createdAuth,
-    reporter: createdReporter,
+    reporter: null,
   };
 }
 

@@ -1,17 +1,15 @@
 import request from "supertest";
 import { ICreateAuthDTO, Roles } from "types";
 import app from "../../app";
-import { connectDB, dropCollections, dropDB } from "../../test-utils/database";
+import { connectDB, dropDB } from "../../test-utils/database";
 import { AUTH } from "../../test-utils/mockData";
 import { testUtils } from "../../test-utils/test.utils";
+
+const mainRoute = `/v1/auth`;
 
 beforeAll(async () => {
   await connectDB();
   await testUtils.createAuth();
-});
-
-beforeEach(async () => {
-  await dropCollections();
 });
 
 afterAll(async () => {
@@ -19,7 +17,7 @@ afterAll(async () => {
 });
 
 describe("Auth integration", () => {
-  describe("POST /v1/auth", () => {
+  describe(`POST ${mainRoute}`, () => {
     it("should create", async () => {
       const requestBody: ICreateAuthDTO = {
         email: "test123@email.com",
@@ -30,17 +28,17 @@ describe("Auth integration", () => {
       };
 
       const response = await request(app)
-        .post("/v1/auth/")
+        .post(mainRoute)
         .send({ auth: requestBody });
 
       expect(response.status).toBe(201);
     });
   });
 
-  describe("POST /v1/auth/login", () => {
+  describe(`POST ${mainRoute}/login`, () => {
     it("should login", async () => {
       const response = await request(app)
-        .post("/v1/auth/login")
+        .post(`${mainRoute}/login`)
         .send({ email: AUTH.email, password: AUTH.password });
 
       expect(response.status).toBe(200);

@@ -13,10 +13,10 @@ const mainRoute = "/v1/report";
 
 beforeAll(async () => {
   await connectDB();
-  const createdData = await testUtils.createData();
+  const data = await testUtils.createData();
 
-  report = createdData.report;
-  reporter = createdData.reporter;
+  report = data.report as IReport;
+  reporter = data.reporter as IReporter;
 });
 
 afterAll(async () => {
