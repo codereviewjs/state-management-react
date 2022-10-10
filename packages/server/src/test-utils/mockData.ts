@@ -22,6 +22,15 @@ export const AUTH_REPORTER: IAuth = {
   _id: undefined,
 };
 
+export const AUTH_ADMIN: IAuth = {
+  email: "test233@gmail.com",
+  password: "password233",
+  firstName: "something33",
+  lastName: "lorem33",
+  role: Roles.ADMIN,
+  _id: undefined,
+};
+
 export const REPORT: IReport = {
   category: Categories.FOOD,
   date: new Date("02, 02, 2020"),

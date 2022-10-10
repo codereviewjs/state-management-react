@@ -29,6 +29,7 @@ describe("Report integration", () => {
       const response = await request(app).get(mainRoute);
 
       expect(response.status).toBe(200);
+      expect(response.body.reports).toHaveLength(1);
     });
   });
 
@@ -37,7 +38,7 @@ describe("Report integration", () => {
       const response = await request(app).get(`${mainRoute}/${report?._id}`);
 
       expect(response.status).toBe(200);
-      expect(response.body.report?._id).toEqual(report?._id?.toString());
+      expect(response.body.report._id).toEqual(report?._id?.toString());
     });
   });
 
@@ -132,6 +133,24 @@ describe("Report integration", () => {
       expect(response.body.report.category).toBe(newReport.category);
       expect(response.body.report.description).toBe(newReport.description);
       expect(response.body.report.reporterId).toBe(reporter._id?.toString());
+    });
+  });
+
+  describe(`DELETE ${mainRoute}/:id`, () => {
+    it("should delete report", async () => {
+      const getAllResponse1 = await request(app).get(mainRoute);
+      expect(getAllResponse1.body.reports).toHaveLength(2);
+
+      const { authHeader } = await testUtils.login(AUTH_REPORTER);
+
+      const deleteResponse = await request(app)
+        .delete(`${mainRoute}/${report._id?.toString()}`)
+        .set(...authHeader);
+
+      expect(deleteResponse.status).toBe(200);
+
+      const getAllResponse2 = await request(app).get(mainRoute);
+      expect(getAllResponse2.body.reports).toHaveLength(1);
     });
   });
 });
