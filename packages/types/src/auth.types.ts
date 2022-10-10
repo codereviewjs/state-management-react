@@ -16,6 +16,14 @@ export interface IAuthDTO {
   role: Roles;
 }
 
+export interface ICreateAuthDTO {
+  email: string;
+  firstName: string;
+  lastName: string;
+  password: string;
+  role: Roles;
+}
+
 export interface AuthResponse {
   auth: IAuthDTO;
   token: string;
