@@ -8,3 +8,7 @@
 .card {
   width: 400px;
 }
+
+.card footer {
+  min-height: 48px;
+}

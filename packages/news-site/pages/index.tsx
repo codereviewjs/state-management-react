@@ -1,5 +1,4 @@
 import type { NextPage, GetStaticProps } from "next";
-import { useSession } from "next-auth/react";
 import { reportsApi } from "api";
 import { IReportDTO } from "types";
 import styles from "../styles/index.module.css";
@@ -19,31 +18,40 @@ export const getStaticProps: GetStaticProps<Props> = async () => {
     props: {
       reports: reportsResponse.reports,
     },
+    revalidate: 10,
   };
 };
 
 const Home: NextPage<Props> = ({ reports }) => {
   const [reportsLocal, setReportsLocal] = useState(reports);
+  const [isLoading, setIsLoading] = useState(false);
 
   const fetchReports = async () => {
+    setIsLoading(true);
     const { reports } = await reportsApi.getAll();
     setReportsLocal(reports);
+    setIsLoading(false);
   };
 
   const handleLike = async (reportId: string) => {
-    const { report } = await reportsApi.like(reportId);
     setReportsLocal((prevReports) =>
       prevReports.map((prevReport) => {
-        if (prevReport._id === report._id) {
+        if (prevReport._id === reportId) {
+          const isAlreadyLiked = prevReport.isLiked;
+
           return {
             ...prevReport,
-            ...report,
+            isLiked: !isAlreadyLiked,
+            likesCount: isAlreadyLiked
+              ? prevReport.likesCount - 1
+              : prevReport.likesCount + 1,
           };
         }
 
         return prevReport;
       })
     );
+    const { report } = await reportsApi.like(reportId);
   };
 
   useEffect(() => {
@@ -82,12 +90,17 @@ const Home: NextPage<Props> = ({ reports }) => {
                 <span>|</span>
                 <span>{new Date(report.date).toDateString()}</span>
               </div>
-              <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
-                <span>{report.likesCount}</span>
-                <Button onClick={() => handleLike(report._id || "")}>
-                  {report.isLiked ? "unlike" : "Like"}
-                </Button>
-              </div>
+              {!isLoading && (
+                <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
+                  <span>{report.likesCount}</span>
+                  <Button
+                    size='small'
+                    onClick={() => handleLike(report._id || "")}
+                  >
+                    {report.isLiked ? "unlike" : "Like"}
+                  </Button>
+                </div>
+              )}
             </Card.Footer>
           </Card>
         ))}

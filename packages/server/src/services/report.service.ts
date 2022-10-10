@@ -92,8 +92,10 @@ async function like(reportId: string, auth: IAuth, options?: WithOptions) {
     report.likes = report.likes.filter(
       (likeUserId) => !user._id.equals(likeUserId?._id || "")
     );
+
     user.likedReports = user.likedReports?.filter(
-      (report) => report !== reportId
+      // @ts-expect-error
+      (report) => !report.equals(reportId)
     );
   } else {
     report.likes.push(user);
