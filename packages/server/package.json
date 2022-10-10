@@ -6,8 +6,8 @@
   "scripts": {
     "start": "nodemon src/server.ts",
     "seed": "ts-node src/database/seed.ts",
-    "test": "jest",
-    "test:watch": "jest --watch"
+    "test": "NODE_ENV=test && jest",
+    "test:watch": "NODE_ENV=test && jest --watch"
   },
   "keywords": [],
   "author": "",

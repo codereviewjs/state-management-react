@@ -7,8 +7,8 @@ import { IUser } from "../models/user.model";
 export const AUTH: IAuth = {
   email: "test@gmail.com",
   password: "password",
-  firstName: "something",
-  lastName: "lorem",
+  firstName: "something1",
+  lastName: "lorem1",
   role: Roles.ADMIN,
   _id: undefined,
 };

@@ -3,9 +3,11 @@ import { ICreateAuthDTO, Roles } from "types";
 import app from "../../app";
 import { connectDB, dropCollections, dropDB } from "../../test-utils/database";
 import { AUTH } from "../../test-utils/mockData";
+import { testUtils } from "../../test-utils/test.utils";
 
 beforeAll(async () => {
   await connectDB();
+  await testUtils.createAuth();
 });
 
 beforeEach(async () => {

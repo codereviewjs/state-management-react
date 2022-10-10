@@ -40,6 +40,7 @@ async function getReportsOfAuth(auth: IAuth, options?: WithOptions) {
 }
 
 async function updateReportsOfAuth(
+  reportId: string,
   updatedReport: IReport,
   auth: IAuth,
   options?: WithOptions
@@ -47,8 +48,13 @@ async function updateReportsOfAuth(
   if (!auth) throw new HttpException(401, "not authenticated");
 
   return ReportModel.findOneAndUpdate(
-    { "reporter.auth": auth._id, _id: updatedReport._id },
-    updatedReport
+    { reporter: auth.reporter, _id: reportId },
+    {
+      title: updatedReport.title,
+      description: updatedReport.description,
+      category: updatedReport.category,
+    },
+    { new: true }
   ).populate(withOptions(options));
 }
 

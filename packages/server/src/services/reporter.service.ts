@@ -1,7 +1,6 @@
-import type { Query } from "mongoose";
-import { IAuth } from "../models/auth.model";
+import AuthModel, { IAuth } from "../models/auth.model";
 import { IReport } from "../models/report.model";
-import ReporterModule, { IReporter } from "../models/reporter.model";
+import ReporterModule from "../models/reporter.model";
 import { HttpException } from "../utils/HttpException";
 
 type WithOptions = {
@@ -9,11 +8,7 @@ type WithOptions = {
   withAuth?: boolean;
 };
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-function withOptions<T extends Query<any, any, any, any>>(
-  doc: T,
-  options?: WithOptions
-) {
+function withOptions(options?: WithOptions) {
   const docs = [];
   if (options?.withAuth) {
     docs.push("auth");
@@ -22,32 +17,24 @@ function withOptions<T extends Query<any, any, any, any>>(
     docs.push("reports");
   }
 
-  if (docs.length) {
-    return doc.populate(docs);
-  }
-
-  return doc;
+  return docs;
 }
 
 function getAll(options?: WithOptions) {
-  return withOptions(ReporterModule.find(), options);
+  return ReporterModule.find().populate(withOptions(options));
 }
 
 function getByAuth(auth: IAuth, options?: WithOptions) {
   if (!auth) throw new HttpException(400, "not allowed");
-
-  return withOptions(
-    ReporterModule.findOne({
-      auth: auth._id,
-    }),
-    options
-  );
+  return ReporterModule.findOne({
+    auth: auth._id,
+  }).populate(withOptions(options));
 }
 
 function getById(id: string, options?: WithOptions) {
   if (!id) throw new HttpException(400, "missing id");
 
-  return withOptions(ReporterModule.findById(id), options);
+  return ReporterModule.findById(id).populate(withOptions(options));
 }
 
 function deleteById(id: string) {
@@ -56,10 +43,24 @@ function deleteById(id: string) {
   return ReporterModule.findByIdAndDelete(id);
 }
 
-function addReport(reporterId: IReporter, report: IReport) {
+function addReport(reporterId: string, report: IReport) {
   return ReporterModule.findByIdAndUpdate(reporterId, {
-    $push: report,
+    $push: {
+      reports: report,
+    },
   });
+}
+
+async function create(auth: IAuth) {
+  if (auth.reporter) throw new HttpException(400, "already a reporter");
+  const reporter = await ReporterModule.create({
+    auth,
+    reports: [],
+  });
+
+  await AuthModel.findByIdAndUpdate(auth._id, { reporter });
+
+  return reporter;
 }
 
 export const reporterService = {
@@ -68,4 +69,5 @@ export const reporterService = {
   getById,
   getAll,
   deleteById,
+  create,
 };

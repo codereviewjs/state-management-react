@@ -23,7 +23,6 @@ async function seed() {
       await cleanAll();
 
       const authDoc = await AuthModel.insertMany(users);
-      console.log("Created auth users");
 
       for (const auth of authDoc) {
         const userDoc = await UserModule.create({

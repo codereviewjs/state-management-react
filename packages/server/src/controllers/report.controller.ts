@@ -9,12 +9,12 @@ import { reportUtils } from "../utils/report.utils";
 
 async function getAll(_: Request, res: Response, next: NextFunction) {
   const auth: IAuth = res.locals.auth;
-  console.log(auth, "ATH");
 
   try {
     const reports = await reportService.getAll({
       withReporter: true,
     });
+
     return res.json({
       reports: reportUtils.reportsToReportsDTO(reports, auth?.user || null),
     });
@@ -43,6 +43,7 @@ async function getOne(req: Request, res: Response, next: NextFunction) {
 async function getReportsByAuth(_: Request, res: Response, next: NextFunction) {
   try {
     const auth: IAuth = res.locals.auth;
+
     const authReports = await reportService.getReportsOfAuth(auth);
 
     return res.json({
@@ -55,12 +56,23 @@ async function getReportsByAuth(_: Request, res: Response, next: NextFunction) {
 
 async function update(req: Request, res: Response, next: NextFunction) {
   try {
+    const { id } = req.params as { id: string };
     const { report } = req.body as { report: IReport };
     const auth: IAuth = res.locals.auth;
 
-    await reportService.updateReportsOfAuth(report, auth);
+    const updatedReport = await reportService.updateReportsOfAuth(
+      id,
+      report,
+      auth,
+      {
+        withReporter: true,
+      }
+    );
+
+    if (!updatedReport) throw new HttpException(404, "report not found");
+
     return res.json({
-      report: reportUtils.reportToReportDTO(report, auth.user),
+      report: reportUtils.reportToReportDTO(updatedReport, auth.user),
     });
   } catch (e) {
     next(e);
@@ -108,7 +120,7 @@ async function create(req: Request, res: Response, next: NextFunction) {
 
     const createdReport = await reportService.create(report, reporter);
 
-    await reporterService.addReport(reporter, createdReport);
+    await reporterService.addReport(reporter._id.toString(), createdReport);
     return res.status(201).json({
       report: reportUtils.reportToReportDTO(createdReport, auth.user),
     });

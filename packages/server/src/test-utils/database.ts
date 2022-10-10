@@ -1,7 +1,5 @@
 import mongoose from "mongoose";
 import { MongoMemoryServer } from "mongodb-memory-server";
-import { authService } from "../services/auth.service";
-import { AUTH } from "./mockData";
 import "../config";
 
 let mongo: MongoMemoryServer | null = null;
@@ -11,14 +9,6 @@ export const connectDB = async () => {
   const uri = mongo.getUri();
 
   await mongoose.connect(uri);
-
-  await authService.create({
-    email: AUTH.email,
-    firstName: AUTH.firstName,
-    lastName: AUTH.lastName,
-    password: AUTH.password,
-    role: AUTH.role,
-  });
 };
 
 export const dropDB = async () => {
