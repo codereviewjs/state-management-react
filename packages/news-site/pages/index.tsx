@@ -51,13 +51,20 @@ const Home: NextPage<Props> = ({ reports }) => {
         return prevReport;
       })
     );
-    const { report } = await reportsApi.like(reportId);
+    await reportsApi.like(reportId);
   };
 
   useEffect(() => {
     fetchReports();
   }, []);
 
+  if (!reports.length) {
+    return (
+      <Layout title='No reports'>
+        <p>Please verify your internet connection</p>
+      </Layout>
+    );
+  }
   return (
     <Layout title='Reports'>
       <div className={styles.container}>

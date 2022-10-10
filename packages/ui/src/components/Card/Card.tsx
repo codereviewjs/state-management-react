@@ -27,7 +27,7 @@ const CardActionButtons = ({
   ...rest
 }: CardActionButtonProps) => {
   return (
-    <div className={`${styles.actionButtons} ${className}`} {...rest}>
+    <div className={`${styles.actionButtons} ${className || ""}`} {...rest}>
       {primaryButtonProps && (
         <Button {...primaryButtonProps} size='small'>
           {primaryButtonProps.content}
@@ -48,11 +48,11 @@ const CardActionButtons = ({
 };
 
 const CardHeader = ({ className, ...rest }: CardProps) => {
-  return <header className={`${styles.header} ${className}`} {...rest} />;
+  return <header className={`${styles.header} ${className || ""}`} {...rest} />;
 };
 
 const CardContent = ({ className, ...rest }: CardProps) => {
-  return <div className={`${styles.content} ${className}`} {...rest} />;
+  return <div className={`${styles.content} ${className || ""}`} {...rest} />;
 };
 
 const CardFooter = ({
@@ -63,7 +63,7 @@ const CardFooter = ({
 }: CardProps & { flex?: React.CSSProperties["justifyContent"] }) => {
   return (
     <footer
-      className={`${styles.footer} ${className}`}
+      className={`${styles.footer} ${className || ""}`}
       style={{ justifyContent: flex, ...style }}
       {...rest}
     />
@@ -71,7 +71,7 @@ const CardFooter = ({
 };
 
 const Card = ({ className, ...rest }: CardProps) => {
-  return <article className={`${styles.card} ${className}`} {...rest} />;
+  return <article className={`${styles.card} ${className || ""}`} {...rest} />;
 };
 
 Card.Header = CardHeader;
