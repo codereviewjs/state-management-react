@@ -4,8 +4,8 @@ import { useStoreContext } from "../../context/store/Store.context";
 import styles from "./Login.module.css";
 
 const Login = () => {
-  const [email, setEmail] = useState("admin@gmail.com");
-  const [password, setPassword] = useState("password");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const { login } = useStoreContext();
 
   const handleSubmit = async (e: React.ChangeEvent<HTMLFormElement>) => {
