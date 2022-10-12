@@ -74,12 +74,16 @@ const ReportEdit = () => {
             <Textarea
               value={report.description}
               onChange={handleDescriptionChange}
-              rows={25}
+              rows={20}
             />
           </Label>
         </div>
         <div className={styles.buttonsContainer}>
-          <Button size='large' disabled={!isValidReport}>
+          <Button
+            data-testid='btn-create-report'
+            size='large'
+            disabled={!isValidReport}
+          >
             Create
           </Button>
 

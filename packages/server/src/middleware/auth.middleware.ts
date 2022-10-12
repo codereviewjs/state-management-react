@@ -55,6 +55,7 @@ const requireRole =
   (role: Roles) => (req: Request, res: Response, next: NextFunction) => {
     try {
       const token = authUtils.getTokenFromRequest(req);
+      console.log("TOKEN?", token);
 
       if (token) {
         authUtils.verifyJwt(token, async (err, decodedToken) => {

@@ -20,6 +20,7 @@
     "start:ui": "yarn workspace ui storybook",
     "start:server": "yarn workspace server start",
     "start:news": "yarn workspace news-site dev",
-    "start:administrator": "yarn workspace administrator-app dev"
+    "start:administrator": "yarn workspace administrator-app dev",
+    "start:e2e": "yarn workspace e2e cypress:open"
   }
 }
